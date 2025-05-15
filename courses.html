@@ -99,17 +99,53 @@
 
           const imagePath = `images/${course['שם התמונה'] || 'default.jpg'}`;
 
-          courseEl.innerHTML = `
-            <img src="${imagePath}" alt="${course['שם הקורס']}" />
-            <div class="course-content">
-              <h2>${course['שם הקורס']}</h2>
-              <p><strong>כמות מפגשים:</strong> ${course['כמות מפגשים']}</p>
-              <p><strong>תאריכים:</strong> ${course['תאריכים']}</p>
-              <p><strong>ימי המפגשים:</strong> ${course['ימי המפגשים']}</p>
-              <p><strong>שעות המפגשים:</strong> ${course['שעות המפגשים']}</p>
-              <p><strong>מיקום:</strong> ${course['מיקום']}</p>
-            </div>
-          `;
+data.forEach((row) => {
+  const courseName = row["שם קורס"];
+  const startDate = row["תאריך התחלה"];
+  const meetingDays = row["ימי מפגשים"];
+  const notes = row["הערות"];
+  const imageName = row["תמונה"];
+  const courseId = row["מזהה קורס"]; // זה יישמר אבל לא יוצג
+
+  if (!courseName || !startDate) return; // דילוג על שורות ריקות
+
+  const courseDiv = document.createElement("div");
+  courseDiv.className = "course-card";
+  courseDiv.setAttribute("data-id", courseId || "no-id");
+
+  function displayCourses(data) {
+  const container = document.getElementById('courses-container');
+  container.innerHTML = ''; // נקה קודם
+
+  data.forEach(row => {
+    const courseName = row['שם הקורס'] || '';
+    const dates = row['בין התאריכים'] || '';
+    const meetingDays = row['ימי מפגשים'] || '';
+    const hours = row['שעות'] || '';
+    const price = row['מחיר'] || '';
+    const notes = row['הערות'] || '';
+    const training = row['הכשרה'] || '';
+    const imageName = row['תמונה'] || '';
+    const courseId = row['מזהה קורס'] || ''; // לא יוצג באתר
+
+    const courseDiv = document.createElement('div');
+    courseDiv.className = 'course';
+
+    courseDiv.innerHTML = `
+      <img src="images/${imageName}" alt="תמונה של הקורס" class="course-image" />
+      <h3>${courseName}</h3>
+      <p><strong>בין התאריכים:</strong> ${dates}</p>
+      <p><strong>ימי מפגשים:</strong> ${meetingDays}</p>
+      <p><strong>שעות:</strong> ${hours}</p>
+      <p><strong>מחיר:</strong> ${price}</p>
+      <p><strong>הערות:</strong> ${notes}</p>
+      <p><strong>הכשרה:</strong> ${training}</p>
+    `;
+
+    container.appendChild(courseDiv);
+  });
+}
+
 
           coursesContainer.appendChild(courseEl);
         });
