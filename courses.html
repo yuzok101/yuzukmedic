@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>הקורסים הקרובים</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    body {
+      font-family: 'Heebo', sans-serif;
+      margin: 0;
+      background-image: url('images/background.jpg');
+      background-size: cover;
+      background-attachment: fixed;
+      background-position: center;
+      color: #222;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: auto;
+      padding: 40px 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 12px;
+    }
+
+    .course {
+      display: flex;
+      flex-direction: column;
+      background: white;
+      border-radius: 16px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    .course img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+
+    .course-content {
+      padding: 20px;
+    }
+
+    .course-content h2 {
+      margin-top: 0;
+      font-size: 1.8em;
+      color: #003366;
+    }
+
+    .course-content p {
+      margin: 5px 0;
+      font-size: 1.1em;
+    }
+
+    @media (min-width: 768px) {
+      .course {
+        flex-direction: row;
+      }
+
+      .course img {
+        width: 300px;
+        height: 100%;
+      }
+
+      .course-content {
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 style="text-align: center; color: #003366;">הקורסים הקרובים</h1>
+    <div id="courses"></div>
+  </div>
+
+  <script>
+    async function loadCourses() {
+      try {
+        const response = await fetch('data/courses.xlsx');
+        if (!response.ok) throw new Error('שגיאה בטעינת הקובץ');
+
+        const arrayBuffer = await response.arrayBuffer();
+        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+        const sheet = workbook.Sheets[workbook.SheetNames[0]];
+        const data = XLSX.utils.sheet_to_json(sheet);
+
+        const coursesContainer = document.getElementById('courses');
+        coursesContainer.innerHTML = '';
+
+        data.forEach(course => {
+          const courseEl = document.createElement('div');
+          courseEl.className = 'course';
+
+          const imagePath = `images/${course['שם התמונה'] || 'default.jpg'}`;
+
+          courseEl.innerHTML = `
+            <img src="${imagePath}" alt="${course['שם הקורס']}" />
+            <div class="course-content">
+              <h2>${course['שם הקורס']}</h2>
+              <p><strong>כמות מפגשים:</strong> ${course['כמות מפגשים']}</p>
+              <p><strong>תאריכים:</strong> ${course['תאריכים']}</p>
+              <p><strong>ימי המפגשים:</strong> ${course['ימי המפגשים']}</p>
+              <p><strong>שעות המפגשים:</strong> ${course['שעות המפגשים']}</p>
+              <p><strong>מיקום:</strong> ${course['מיקום']}</p>
+            </div>
+          `;
+
+          coursesContainer.appendChild(courseEl);
+        });
+      } catch (error) {
+        document.getElementById('courses').innerHTML = '<p style="color: red; text-align: center;">שגיאה בטעינת הקורסים</p>';
+        console.error(error);
+      }
+    }
+
+    loadCourses();
+  </script>
+</body>
+</html>
