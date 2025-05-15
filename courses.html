@@ -94,6 +94,14 @@
   </div>
 
   <script>
+    // מפה של מזהה קורס => שם תמונה סטטי (שמתאים לקבצים בתיקיית images)
+    const courseImages = {
+      "KRS001": "1.jpg",
+      "KRS002": "2.jpg",
+      "KRS003": "3.jpg",
+      // הוסף כאן עוד מיפויים לפי הצורך
+    };
+
     async function loadCourses() {
       try {
         const response = await fetch('data/courses.xlsx');
@@ -115,10 +123,12 @@
           const price = course['מחיר'] || '';
           const notes = course['הערות'] || '';
           const training = course['הכשרה'] || '';
-          const imageName = course['תמונה'] || 'default.jpg';  // משתמש בשם התמונה מתוך העמודה 'תמונה'
+          const courseId = course['מזהה קורס'] || '';
 
           if (!courseName) return;
 
+          // בחר תמונה לפי המזהה מתוך המפה
+          const imageName = courseImages[courseId] || 'default.jpg';
           const imagePath = `images/${imageName}`;
 
           const courseDiv = document.createElement('div');
