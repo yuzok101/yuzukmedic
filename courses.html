@@ -2,9 +2,9 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>הקורסים הקרובים</title>
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
     body {
@@ -17,7 +17,6 @@
       color: #222;
       background-color: #f4f4f4;
     }
-
     .container {
       max-width: 1200px;
       margin: auto;
@@ -25,7 +24,11 @@
       background: rgba(255, 255, 255, 0.9);
       border-radius: 12px;
     }
-
+    h1 {
+      text-align: center;
+      color: #003366;
+      margin-bottom: 30px;
+    }
     .course {
       display: flex;
       flex-direction: column;
@@ -35,38 +38,31 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       overflow: hidden;
     }
-
     .course img {
       width: 100%;
       height: auto;
       object-fit: cover;
     }
-
     .course-content {
       padding: 20px;
     }
-
     .course-content h2 {
       margin-top: 0;
       font-size: 1.8em;
       color: #003366;
     }
-
     .course-content p {
       margin: 5px 0;
       font-size: 1.1em;
     }
-
     @media (min-width: 768px) {
       .course {
         flex-direction: row;
       }
-
       .course img {
         width: 300px;
         height: 100%;
       }
-
       .course-content {
         flex: 1;
       }
@@ -75,7 +71,7 @@
 </head>
 <body>
   <div class="container">
-    <h1 style="text-align: center; color: #003366;">הקורסים הקרובים</h1>
+    <h1>הקורסים הקרובים</h1>
     <div id="courses"></div>
   </div>
 
@@ -93,61 +89,32 @@
         const coursesContainer = document.getElementById('courses');
         coursesContainer.innerHTML = '';
 
-        data.forEach(course => {
-          const courseEl = document.createElement('div');
-          courseEl.className = 'course';
+        data.forEach(row => {
+          if (!row['שם הקורס'] || !row['בין התאריכים']) return;
 
-          const imagePath = `images/${course['שם התמונה'] || 'default.jpg'}`;
+          const courseDiv = document.createElement('div');
+          courseDiv.className = 'course';
 
-data.forEach((row) => {
-  const courseName = row["שם קורס"];
-  const startDate = row["תאריך התחלה"];
-  const meetingDays = row["ימי מפגשים"];
-  const notes = row["הערות"];
-  const imageName = row["תמונה"];
-  const courseId = row["מזהה קורס"]; // זה יישמר אבל לא יוצג
+          const imageName = row['תמונה'] ? row['תמונה'] : 'default.jpg';
+          const imagePath = `images/${imageName}`;
 
-  if (!courseName || !startDate) return; // דילוג על שורות ריקות
+          courseDiv.innerHTML = `
+            <img src="${imagePath}" alt="תמונה של הקורס" onerror="this.src='images/default.jpg'" />
+            <div class="course-content">
+              <h2>${row['שם הקורס']}</h2>
+              <p><strong>בין התאריכים:</strong> ${row['בין התאריכים'] || ''}</p>
+              <p><strong>ימי מפגשים:</strong> ${row['ימי מפגשים'] || ''}</p>
+              <p><strong>שעות:</strong> ${row['שעות'] || ''}</p>
+              <p><strong>מחיר:</strong> ${row['מחיר'] || ''}</p>
+              <p><strong>הערות:</strong> ${row['הערות'] || ''}</p>
+              <p><strong>הכשרה:</strong> ${row['הכשרה'] || ''}</p>
+            </div>
+          `;
 
-  const courseDiv = document.createElement("div");
-  courseDiv.className = "course-card";
-  courseDiv.setAttribute("data-id", courseId || "no-id");
+          // מזהה קורס נשמר ב-data attribute, לא מוצג
+          courseDiv.dataset.courseId = row['מזהה קורס'] || '';
 
-  function displayCourses(data) {
-  const container = document.getElementById('courses-container');
-  container.innerHTML = ''; // נקה קודם
-
-  data.forEach(row => {
-    const courseName = row['שם הקורס'] || '';
-    const dates = row['בין התאריכים'] || '';
-    const meetingDays = row['ימי מפגשים'] || '';
-    const hours = row['שעות'] || '';
-    const price = row['מחיר'] || '';
-    const notes = row['הערות'] || '';
-    const training = row['הכשרה'] || '';
-    const imageName = row['תמונה'] || '';
-    const courseId = row['מזהה קורס'] || ''; // לא יוצג באתר
-
-    const courseDiv = document.createElement('div');
-    courseDiv.className = 'course';
-
-    courseDiv.innerHTML = `
-      <img src="images/${imageName}" alt="תמונה של הקורס" class="course-image" />
-      <h3>${courseName}</h3>
-      <p><strong>בין התאריכים:</strong> ${dates}</p>
-      <p><strong>ימי מפגשים:</strong> ${meetingDays}</p>
-      <p><strong>שעות:</strong> ${hours}</p>
-      <p><strong>מחיר:</strong> ${price}</p>
-      <p><strong>הערות:</strong> ${notes}</p>
-      <p><strong>הכשרה:</strong> ${training}</p>
-    `;
-
-    container.appendChild(courseDiv);
-  });
-}
-
-
-          coursesContainer.appendChild(courseEl);
+          coursesContainer.appendChild(courseDiv);
         });
       } catch (error) {
         document.getElementById('courses').innerHTML = '<p style="color: red; text-align: center;">שגיאה בטעינת הקורסים</p>';
