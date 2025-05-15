@@ -115,12 +115,11 @@
           const price = course['מחיר'] || '';
           const notes = course['הערות'] || '';
           const training = course['הכשרה'] || '';
-          const courseId = course['מזהה קורס'] || ''; // מזהה הקורס – חובה עבור התמונה
+          const imageName = course['תמונה'] || 'default.jpg';  // משתמש בשם התמונה מתוך העמודה 'תמונה'
 
-          // דילוג אם אין מזהה קורס או שם קורס
-          if (!courseId || !courseName) return;
+          if (!courseName) return;
 
-          const imagePath = `images/${courseId}.jpg`;
+          const imagePath = `images/${imageName}`;
 
           const courseDiv = document.createElement('div');
           courseDiv.className = 'course';
