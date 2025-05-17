@@ -1,0 +1,79 @@
+body {
+  font-family: 'Heebo', sans-serif;
+  margin: 0;
+  background: url('images/bg.jpg') no-repeat center center fixed;
+  background-size: cover;
+}
+
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 40px 20px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+}
+
+h1 {
+  text-align: center;
+  color: #003366;
+  margin-bottom: 40px;
+}
+
+.course {
+  display: flex;
+  flex-direction: column;
+  background: white;
+  border-radius: 16px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.course img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.course-content {
+  padding: 20px;
+}
+
+.course-content h2 {
+  margin-top: 0;
+  font-size: 1.8em;
+  color: #003366;
+}
+
+.course-content p {
+  margin: 5px 0;
+  font-size: 1.1em;
+}
+
+.register-button {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #003366;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 1em;
+}
+
+@media (min-width: 768px) {
+  .course {
+    flex-direction: row;
+  }
+
+  .course img {
+    width: 300px;
+    height: 100%;
+  }
+
+  .course-content {
+    flex: 1;
+  }
+}
