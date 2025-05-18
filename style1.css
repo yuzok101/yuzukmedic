@@ -10,14 +10,25 @@ body {
 }
 
 .container {
-  max-width: 1400px; /* או כל רוחב שתרצה */
+  max-width: 1200px;
   margin: auto;
   padding: 40px 20px;
   background: transparent;
   border-radius: 12px;
+}
+
+h1 {
+  text-align: center;
+  color: #003366;
+  margin-bottom: 40px;
+  font-size: 2.5em;
+  font-weight: 700;
+}
+
+.courses-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 30px;
+  gap: 30px; /* רווח בין הכרטיסים */
   justify-content: center;
 }
 
@@ -28,9 +39,9 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: 400px; /* כרטיס גבוה ומרווח */
-  width: 48%; /* חצי פחות קצת רווח */
-  min-width: 600px; /* ודא שהוא לא מתכווץ יותר מדי */
+  width: calc(50% - 15px); /* חצי רוחב מינוס חצי מה-gap */
+  height: 400px; /* גובה אחיד */
+  min-width: 500px; /* מונע שהכרטיס יהיה קטן מדי */
 }
 
 .course img {
@@ -81,12 +92,11 @@ body {
   background-color: #001f4d;
 }
 
-/* במכשירים קטנים (טלפונים) נוריד ל-100% */
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
   .course {
     width: 100%;
-    height: auto;
     min-width: unset;
+    height: auto;
   }
 
   .course img {
