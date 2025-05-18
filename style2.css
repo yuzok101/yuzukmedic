@@ -1,6 +1,6 @@
 body {
   font-family: 'Heebo', sans-serif;
-  background-color: #f9f9f9;
+  background: #f9f9f9;
   margin: 0;
   padding: 0;
   direction: rtl;
@@ -9,29 +9,30 @@ body {
 
 .top-banner {
   display: block;
-  background: #004d40;
+  background: #222;
   color: white;
-  padding: 12px 20px;
   text-align: center;
+  padding: 10px;
   text-decoration: none;
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1rem;
 }
 
 .container {
-  max-width: 480px;
+  max-width: 600px;
   margin: 30px auto 60px;
-  padding: 20px;
   background: white;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  padding: 25px 30px 40px;
   border-radius: 8px;
+  box-shadow: 0 4px 15px rgb(0 0 0 / 0.1);
 }
 
 .page-title {
-  text-align: center;
   margin-bottom: 25px;
+  text-align: center;
   font-weight: 700;
-  color: #00695c;
+  font-size: 2rem;
+  color: #2a2a2a;
 }
 
 .form-group {
@@ -40,14 +41,10 @@ body {
 
 label {
   display: block;
-  font-weight: 600;
   margin-bottom: 6px;
-  color: #004d40;
-}
-
-.required {
-  color: #d32f2f;
-  margin-right: 4px;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #444;
 }
 
 input[type="text"],
@@ -56,13 +53,12 @@ input[type="email"],
 textarea {
   width: 100%;
   padding: 10px 12px;
-  font-size: 1rem;
-  border: 1.8px solid #bbb;
+  border: 1.8px solid #ccc;
   border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
   box-sizing: border-box;
-  transition: border-color 0.3s;
   font-family: 'Heebo', sans-serif;
-  resize: vertical;
 }
 
 input[type="text"]:focus,
@@ -70,79 +66,106 @@ input[type="tel"]:focus,
 input[type="email"]:focus,
 textarea:focus {
   outline: none;
-  border-color: #00796b;
+  border-color: #0a84ff;
+  background-color: #f0f8ff;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 90px;
 }
 
 .error-message {
-  color: #d32f2f;
-  font-size: 0.85rem;
+  color: #d93025;
+  font-size: 0.9rem;
   margin-top: 4px;
   min-height: 18px;
+  display: block;
+}
+
+.required {
+  color: #d93025;
+  margin-left: 4px;
 }
 
 .btn-submit {
-  background-color: #00796b;
+  background-color: #0a84ff;
   color: white;
-  border: none;
-  padding: 14px;
-  width: 100%;
-  font-size: 1.1rem;
   font-weight: 700;
-  border-radius: 6px;
+  font-size: 1.2rem;
+  padding: 12px 0;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
   cursor: pointer;
-  transition: background-color 0.3s;
-  font-family: 'Heebo', sans-serif;
+  transition: background-color 0.3s ease;
 }
 
-.btn-submit:hover:enabled {
-  background-color: #004d40;
+.btn-submit:hover:not(:disabled) {
+  background-color: #0669d6;
 }
 
 .btn-submit:disabled {
-  background-color: #999;
-  cursor: default;
+  background-color: #aac8ff;
+  cursor: not-allowed;
 }
 
 .form-response {
-  margin-top: 20px;
+  margin-top: 18px;
   font-weight: 600;
+  font-size: 1.1rem;
+  min-height: 26px;
   text-align: center;
-  min-height: 24px;
 }
 
 .form-response.success {
-  color: #2e7d32;
+  color: #2a9d8f;
 }
 
 .form-response.error {
-  color: #d32f2f;
+  color: #d93025;
 }
 
 .side-buttons {
   position: fixed;
-  top: 40%;
+  top: 35%;
   right: 10px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 18px;
   z-index: 9999;
 }
 
 .side-btn {
-  background-color: #004d40;
-  color: white;
-  font-size: 24px;
-  padding: 12px;
-  border-radius: 50%;
-  text-align: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-  transition: background-color 0.3s;
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 50px;
+  height: 50px;
+  background-color: #0a84ff;
+  color: white;
+  border-radius: 50%;
   text-decoration: none;
+  font-size: 1.8rem;
+  box-shadow: 0 4px 8px rgb(10 132 255 / 0.4);
+  transition: background-color 0.3s ease;
+}
+
+.side-btn.whatsapp {
+  background-color: #25d366;
+  box-shadow: 0 4px 8px rgb(37 211 102 / 0.4);
+}
+
+.side-btn.phone {
+  background-color: #0a84ff;
+  box-shadow: 0 4px 8px rgb(10 132 255 / 0.4);
+}
+
+.side-btn.mail {
+  background-color: #ff5e57;
+  box-shadow: 0 4px 8px rgb(255 94 87 / 0.4);
 }
 
 .side-btn:hover {
-  background-color: #00796b;
+  filter: brightness(85%);
 }
