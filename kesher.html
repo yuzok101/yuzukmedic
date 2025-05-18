@@ -4,16 +4,23 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>צור קשר - יוז'וק מדיק</title>
+
+<!-- גופן Heebo -->
 <link href="https://fonts.googleapis.com/css2?family=Heebo&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="style2.css" />
+
 <!-- FontAwesome לאייקונים -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<!-- CSS -->
+<link rel="stylesheet" href="style2.css" />
+
+<!-- EmailJS -->
 <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
 </head>
 <body>
 
-<!-- באנר עליון עם טלפון -->
-<a href="tel:+972533562608" class="top-banner" aria-label="ליצירת קשר רפי">
+<!-- באנר עליון -->
+<a href="tel:+972533562608" class="top-banner" aria-label="ליצירת קשר עם רפי">
   ליצירת קשר: רפי 053-3562608
 </a>
 
@@ -30,7 +37,7 @@
 
     <div class="form-group">
       <label for="phone">טלפון<span class="required">*</span></label>
-      <input type="tel" id="phone" name="phone" required pattern="^\+?\d{9,15}$" />
+      <input type="tel" id="phone" name="phone" required pattern="^05\d{8}$" />
       <span class="error-message"></span>
     </div>
 
@@ -56,11 +63,10 @@
   </form>
 
   <div id="formResponse" class="form-response" role="alert" aria-live="polite"></div>
-
 </div>
 
 <!-- כפתורי צד צפים -->
-<div class="side-buttons" aria-label="כפתורי יצירת קשר צדדיים">
+<div class="side-buttons">
   <a href="https://wa.me/972533562608" target="_blank" class="side-btn whatsapp" aria-label="וואטסאפ">
     <i class="fab fa-whatsapp"></i>
   </a>
@@ -72,6 +78,7 @@
   </a>
 </div>
 
+<!-- JS -->
 <script src="script.js"></script>
 </body>
 </html>
