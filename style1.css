@@ -17,7 +17,7 @@ body {
   border-radius: 12px;
   display: flex;
   flex-direction: column;
-  align-items: center; /* מרכז את התוכן אופקית */
+  align-items: center;
 }
 
 h1 {
@@ -30,12 +30,12 @@ h1 {
 }
 
 #courses {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 2 באנרים בכל שורה */
-  gap: 30px 30px; /* רווח אופקי ואנכי בין הבאנרים */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 30px 20px; /* רווח אופקי 30px ואנכי 20px */
   width: 100%;
   max-width: 1200px;
-  justify-items: center; /* מרכז כל באנר בתא שלו */
 }
 
 .course {
@@ -45,9 +45,10 @@ h1 {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  width: 100%; /* יתפוס את רוחב התא בגריד */
-  max-width: 560px; /* אפשר להגדיר רוחב מקסימלי לבאנר */
-  height: 400px;
+  width: calc(50% - 20px); /* כל באנר תופס חצי רוחב מינוס רווח */
+  max-width: 560px;
+  height: 380px;
+  margin-bottom: 20px; /* רווח אנכי נוסף מתחת לבאנר */
 }
 
 .course img {
@@ -99,11 +100,12 @@ h1 {
 
 @media (max-width: 900px) {
   #courses {
-    grid-template-columns: 1fr; /* באנר אחד בכל שורה במסכים קטנים */
+    justify-content: center;
   }
 
   .course {
-    max-width: 100%;
+    width: 90%; /* באנר אחד לכל שורה בנייד */
+    max-width: none;
     height: auto;
   }
 
