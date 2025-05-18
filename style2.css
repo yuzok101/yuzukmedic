@@ -1,132 +1,166 @@
+/* גופן Heebo */
+@import url('https://fonts.googleapis.com/css2?family=Heebo&display=swap');
+
 body {
   margin: 0;
   font-family: 'Heebo', sans-serif;
-  background-color: #f7f9fb;
+  background: #f9fafb;
   color: #222;
   direction: rtl;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .top-banner {
-  background-color: #003366;
-  color: #fff;
-  padding: 15px;
-  text-align: center;
   display: block;
-  font-size: 1.2em;
-  font-weight: bold;
+  background: #004aad;
+  color: white;
+  font-weight: 700;
+  font-size: 1.3rem;
+  text-align: center;
+  padding: 15px 0;
   text-decoration: none;
   transition: background-color 0.3s ease;
 }
 
-.top-banner:hover {
-  background-color: #005599;
+.top-banner:hover,
+.top-banner:focus {
+  background: #00357a;
+  outline: none;
 }
 
 .container {
   max-width: 600px;
-  margin: 40px auto;
+  margin: 40px auto 80px;
   background: white;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  padding: 30px 40px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
 }
 
 .page-title {
-  text-align: center;
-  font-size: 2em;
   margin-bottom: 30px;
-  color: #003366;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #004aad;
+  text-align: center;
 }
 
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  position: relative;
 }
 
 label {
   display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-input, textarea {
-  width: 100%;
-  padding: 10px;
-  font-size: 1em;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-input:invalid, textarea:invalid {
-  border-color: #e74c3c;
-}
-
-.error-message {
-  color: #e74c3c;
-  font-size: 0.9em;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #003366;
 }
 
 .required {
-  color: red;
+  color: #d93025;
+  margin-left: 4px;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="email"],
+textarea {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #ccd6f6;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'Heebo', sans-serif;
+  transition: border-color 0.3s ease;
+  resize: vertical;
+}
+
+input[type="text"]:focus,
+input[type="tel"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+  border-color: #004aad;
+  outline: none;
+  box-shadow: 0 0 8px rgba(0, 74, 173, 0.4);
+}
+
+.error-message {
+  color: #d93025;
+  font-size: 0.9rem;
+  margin-top: 4px;
+  min-height: 18px;
 }
 
 .btn-submit {
-  background-color: #0077cc;
+  background-color: #004aad;
   color: white;
   border: none;
-  padding: 12px 20px;
-  font-size: 1.1em;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  font-weight: 700;
+  font-size: 1.2rem;
+  padding: 14px 0;
   width: 100%;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.btn-submit:hover {
-  background-color: #005fa3;
+.btn-submit:hover,
+.btn-submit:focus {
+  background-color: #002f70;
+  outline: none;
 }
 
+/* תגובת הפורם */
 .form-response {
+  margin-top: 25px;
+  font-weight: 600;
+  font-size: 1.15rem;
   text-align: center;
-  margin-top: 20px;
-  font-weight: bold;
+  color: #004aad;
 }
+
+/* כפתורי צד צפים */
 
 .side-buttons {
   position: fixed;
   top: 40%;
-  left: 20px;
+  right: 15px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  z-index: 999;
+  gap: 18px;
+  z-index: 1000;
 }
 
 .side-btn {
-  width: 55px;
-  height: 55px;
-  background-color: #0077cc;
+  background: #004aad;
   color: white;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  font-size: 26px;
   text-decoration: none;
-  font-size: 24px;
-  transition: transform 0.3s ease;
+  box-shadow: 0 6px 15px rgba(0, 74, 173, 0.4);
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-.side-btn:hover {
-  transform: scale(0.9);
+.side-btn:hover,
+.side-btn:focus {
+  transform: scale(0.88);
+  background-color: #00357a;
+  outline: none;
 }
 
-.whatsapp {
-  background-color: #25D366;
+.side-btn:focus {
+  box-shadow: 0 0 0 3px #002e60;
 }
 
-.phone {
-  background-color: #0077cc;
-}
-
-.mail {
-  background-color: #D44638;
+/* הסרת קו תחתון מאובייקטים */
+.side-btn,
+.top-banner {
+  text-decoration: none !important;
 }
