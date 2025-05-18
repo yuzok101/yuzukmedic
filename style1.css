@@ -6,40 +6,35 @@ body {
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
-  direction: rtl; /* כדי לוודא כיוון טקסט נכון */
+  direction: rtl;
 }
 
 .container {
   max-width: 1200px;
   margin: auto;
   padding: 40px 20px;
-  /* נשאיר את הרקע שקוף כדי שהרקע ייראה */
   background: transparent;
   border-radius: 12px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* גריד רספונסיבי */
+  display: flex;
+  flex-wrap: wrap;
   gap: 20px; /* רווח בין הכרטיסים */
-}
-
-h1 {
-  text-align: center;
-  color: #003366;
-  margin-bottom: 40px;
+  justify-content: center;
 }
 
 .course {
-  background: rgba(255, 255, 255, 0.85); /* רקע לבן עם שקיפות */
+  background: rgba(255, 255, 255, 0.85);
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  height: 280px; /* גובה קבוע כדי ליצור ריבוע בערך */
+  height: 300px; /* גובה קבוע ליצירת ריבוע בערך */
+  width: calc(50% - 10px); /* תופס חצי רוחב פחות קצת מרווח */
 }
 
 .course img {
   width: 100%;
-  height: 140px; /* חצי מהגובה לכיסוי חלק העליון */
+  height: 150px; /* חצי מהגובה */
   object-fit: cover;
   border-bottom: 1px solid #ddd;
 }
@@ -85,14 +80,14 @@ h1 {
   background-color: #001f4d;
 }
 
-/* ביטול ה-flex row בגדול */
-@media (min-width: 768px) {
+/* רספונסיבי למכשירים קטנים: בכמה שורות */
+@media (max-width: 600px) {
   .course {
-    flex-direction: column;
-    height: 280px;
+    width: 100%;
+    height: auto;
   }
 
   .course img {
-    height: 140px;
+    height: 180px;
   }
 }
