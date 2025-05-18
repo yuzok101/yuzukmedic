@@ -1,59 +1,77 @@
-emailjs.init("miOp6iToFLfbH1jk5"); // Public key
+(function(){
+  emailjs.init('miOp6iToFLfbH1jk5');
+})();
 
-document.getElementById("contactForm").addEventListener("submit", function (e) {
-  e.preventDefault();
+const form = document.getElementById('contactForm');
+const responseBox = document.getElementById('formResponse');
 
-  const name = document.getElementById("name");
-  const phone = document.getElementById("phone");
-  const email = document.getElementById("email");
-  const area = document.getElementById("area");
-  const message = document.getElementById("message");
-  const responseEl = document.getElementById("formResponse");
+form.addEventListener('submit', function(event) {
+  event.preventDefault();
 
-  // ניקוי הודעה קודמת
-  responseEl.textContent = "";
-  responseEl.style.color = "";
+  clearErrors();
+  responseBox.textContent = '';
+  responseBox.style.color = '#004aad';
 
-  // בדיקות
-  if (name.value.length < 4) {
-    showError(name, "נא להזין שם מלא עם לפחות 4 תווים");
+  if(!validateForm()) {
     return;
   }
 
-  if (!/^\d{9,}$/.test(phone.value)) {
-    showError(phone, "נא להזין מספר טלפון תקין (לפחות 9 ספרות)");
-    return;
-  }
+  const sendBtn = document.getElementById('sendBtn');
+  sendBtn.disabled = true;
+  sendBtn.textContent = 'שולח...';
 
-  if (!/^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/.test(email.value)) {
-    showError(email, "נא להזין כתובת אימייל תקינה");
-    return;
-  }
+  const formData = {
+    name: form.name.value.trim(),
+    phone: form.phone.value.trim(),
+    email: form.email.value.trim(),
+    area: form.area.value.trim(),
+    message: form.message.value.trim()
+  };
 
-  if (area.value.length < 2) {
-    showError(area, "נא להזין אזור מגורים");
-    return;
-  }
-
-  // שליחה ל־EmailJS
-  emailjs.send("service_45f1wyc", "template_e02sg8p", {
-    name: name.value,
-    phone: phone.value,
-    email: email.value,
-    area: area.value,
-    message: message.value
-  }).then(function () {
-    responseEl.textContent = "פנייתך התקבלה אצלנו, נחזור אליך בהקדם.";
-    responseEl.style.color = "green";
-    document.getElementById("contactForm").reset();
-  }, function (error) {
-    responseEl.textContent = "אירעה שגיאה בשליחת ההודעה. נסה שוב או פנה ישירות.";
-    responseEl.style.color = "red";
-  });
+  emailjs.send('service_45f1wyc', 'template_e02sg8p', formData)
+    .then(() => {
+      responseBox.textContent = 'פנייתך התקבלה אצלינו. נשמח לחזור אליך מייד כשנתפנה.';
+      form.reset();
+      sendBtn.disabled = false;
+      sendBtn.textContent = 'שלח';
+    }, (error) => {
+      responseBox.style.color = '#d93025';
+      responseBox.textContent = 'אירעה שגיאה בשליחת ההודעה, אנא נסה שוב מאוחר יותר.';
+      sendBtn.disabled = false;
+      sendBtn.textContent = 'שלח';
+      console.error('EmailJS error:', error);
+    });
 });
 
-function showError(field, message) {
-  const errorSpan = field.nextElementSibling;
-  errorSpan.textContent = message;
-  field.focus();
+function clearErrors() {
+  const errors = form.querySelectorAll('.error-message');
+  errors.forEach(err => err.textContent = '');
 }
+
+function validateForm() {
+  let valid = true;
+
+  // שם - מינימום 4 תווים
+  const name = form.name.value.trim();
+  if (name.length < 4) {
+    setError('name', 'נא להכניס לפחות 4 תווים בשם');
+    valid = false;
+  }
+
+  // טלפון - מינימום 9 ספרות, יכול להתחיל ב+
+  const phone = form.phone.value.trim();
+  const phoneRegex = /^\+?\d{9,15}$/;
+  if (!phoneRegex.test(phone)) {
+    setError('phone', 'אנא הכנס מספר טלפון חוקי (לפחות 9 ספרות)');
+    valid = false;
+  }
+
+  // אימייל - בדיקה בסיסית
+  const email = form.email.value.trim();
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    setError('email', 'אנא הכנס כתובת מייל תקינה');
+    valid = false;
+  }
+
+  // איזור - מינימום 2 תווים
