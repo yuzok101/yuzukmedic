@@ -1,111 +1,84 @@
-@import url('https://fonts.googleapis.com/css2?family=Heebo&display=swap');
-
 body {
   margin: 0;
   font-family: 'Heebo', sans-serif;
-  background-color: #f9f9f9;
+  background-color: #f7f9fb;
   color: #222;
   direction: rtl;
-  line-height: 1.6;
 }
 
 .top-banner {
-  display: block;
-  background-color: #004d99;
-  color: white;
-  font-weight: 700;
-  font-size: 1.3rem;
-  padding: 15px 0;
+  background-color: #003366;
+  color: #fff;
+  padding: 15px;
   text-align: center;
+  display: block;
+  font-size: 1.2em;
+  font-weight: bold;
   text-decoration: none;
-  letter-spacing: 0.05em;
   transition: background-color 0.3s ease;
-  user-select: none;
 }
 
 .top-banner:hover {
-  background-color: #0066cc;
+  background-color: #005599;
 }
 
 .container {
   max-width: 600px;
-  margin: 40px auto 100px;
-  padding: 0 20px;
+  margin: 40px auto;
   background: white;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-  border-radius: 12px;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
 }
 
 .page-title {
-  font-size: 2.8rem;
-  font-weight: 800;
-  margin-bottom: 30px;
   text-align: center;
-  color: #004d99;
-  letter-spacing: 0.1em;
+  font-size: 2em;
+  margin-bottom: 30px;
+  color: #003366;
 }
 
 .form-group {
-  margin-bottom: 22px;
+  margin-bottom: 20px;
 }
 
 label {
   display: block;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: #004d99;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 
-input[type="text"],
-input[type="tel"],
-input[type="email"],
-textarea {
+input, textarea {
   width: 100%;
-  padding: 12px 15px;
-  font-size: 1.1rem;
-  border: 2px solid #c0c0c0;
-  border-radius: 8px;
-  transition: border-color 0.3s ease;
-  font-family: 'Heebo', sans-serif;
+  padding: 10px;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
-input[type="text"]:focus,
-input[type="tel"]:focus,
-input[type="email"]:focus,
-textarea:focus {
-  border-color: #0077cc;
-  outline: none;
-}
-
-textarea {
-  resize: vertical;
-}
-
-.required {
-  color: #cc0000;
-  margin-left: 5px;
+input:invalid, textarea:invalid {
+  border-color: #e74c3c;
 }
 
 .error-message {
-  color: #cc0000;
-  font-size: 0.9rem;
-  margin-top: 4px;
-  display: block;
-  min-height: 18px;
+  color: #e74c3c;
+  font-size: 0.9em;
+}
+
+.required {
+  color: red;
 }
 
 .btn-submit {
   background-color: #0077cc;
   color: white;
   border: none;
-  padding: 14px 0;
-  font-size: 1.3rem;
-  font-weight: 700;
-  width: 100%;
-  border-radius: 10px;
+  padding: 12px 20px;
+  font-size: 1.1em;
+  border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  user-select: none;
+  transition: all 0.3s ease;
+  width: 100%;
 }
 
 .btn-submit:hover {
@@ -113,93 +86,47 @@ textarea {
 }
 
 .form-response {
-  margin-top: 20px;
-  font-size: 1.1rem;
-  font-weight: 600;
   text-align: center;
-  min-height: 26px;
+  margin-top: 20px;
+  font-weight: bold;
 }
 
-/* כפתורי צד צפים */
 .side-buttons {
   position: fixed;
   top: 40%;
-  right: 10px;
+  left: 20px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  z-index: 1000;
+  gap: 15px;
+  z-index: 999;
 }
 
 .side-btn {
+  width: 55px;
+  height: 55px;
   background-color: #0077cc;
   color: white;
-  width: 56px;
-  height: 56px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 26px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-  transition: transform 0.3s ease, background-color 0.3s ease;
   text-decoration: none;
-  user-select: none;
-  border: none;
-  outline: none;
+  font-size: 24px;
+  transition: transform 0.3s ease;
 }
 
 .side-btn:hover {
-  transform: scale(0.85);
-  text-decoration: none;
-  outline: none;
+  transform: scale(0.9);
 }
 
-/* צבעים מותאמים לכל כפתור */
-.side-btn.whatsapp {
-  background-color: #25d366;
+.whatsapp {
+  background-color: #25D366;
 }
 
-.side-btn.whatsapp:hover {
-  background-color: #1ebe57;
+.phone {
+  background-color: #0077cc;
 }
 
-.side-btn.phone {
-  background-color: #004d99;
-}
-
-.side-btn.phone:hover {
-  background-color: #003366;
-}
-
-.side-btn.mail {
-  background-color: #ea4335;
-}
-
-.side-btn.mail:hover {
-  background-color: #c2332a;
-}
-
-/* רספונסיב למובייל */
-@media (max-width: 480px) {
-  .container {
-    margin: 20px 15px 80px;
-    padding: 15px;
-  }
-
-  .page-title {
-    font-size: 2rem;
-  }
-
-  .side-buttons {
-    top: 50%;
-    right: 5px;
-    gap: 14px;
-  }
-
-  .side-btn {
-    width: 48px;
-    height: 48px;
-    font-size: 22px;
-  }
+.mail {
+  background-color: #D44638;
 }
