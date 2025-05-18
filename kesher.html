@@ -1,84 +1,76 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>צור קשר - יוז'וק מדיק</title>
-
-<!-- גופן Heebo -->
-<link href="https://fonts.googleapis.com/css2?family=Heebo&display=swap" rel="stylesheet" />
-
-<!-- FontAwesome לאייקונים -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-
-<!-- CSS -->
-<link rel="stylesheet" href="style2.css" />
-
-<!-- EmailJS -->
-<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>צור קשר - יוז'וק מדיק</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style2.css" />
+  <!-- FontAwesome לוואטסאפ, טלפון ומייל -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <!-- EmailJS SDK v4 -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
 
-<!-- באנר עליון -->
-<a href="tel:+972533562608" class="top-banner" aria-label="ליצירת קשר עם רפי">
-  ליצירת קשר: רפי 053-3562608
-</a>
+  <!-- באנר עליון עם טלפון -->
+  <a href="tel:+972533562608" class="top-banner">ליצירת קשר: רפי 053-3562608</a>
 
-<div class="container">
+  <div class="container">
 
-  <h1 class="page-title">צור קשר</h1>
+    <h1 class="page-title">צור קשר</h1>
 
-  <form id="contactForm" novalidate>
-    <div class="form-group">
-      <label for="name">שם מלא<span class="required">*</span></label>
-      <input type="text" id="name" name="name" required minlength="4" />
-      <span class="error-message"></span>
-    </div>
+    <form id="contactForm" novalidate>
+      <div class="form-group">
+        <label for="name">שם מלא<span class="required">*</span></label>
+        <input type="text" id="name" name="name" required minlength="4" />
+        <span class="error-message"></span>
+      </div>
 
-    <div class="form-group">
-      <label for="phone">טלפון<span class="required">*</span></label>
-      <input type="tel" id="phone" name="phone" required pattern="^05\d{8}$" />
-      <span class="error-message"></span>
-    </div>
+      <div class="form-group">
+        <label for="phone">טלפון<span class="required">*</span></label>
+        <input type="tel" id="phone" name="phone" required />
+        <span class="error-message"></span>
+      </div>
 
-    <div class="form-group">
-      <label for="email">אימייל<span class="required">*</span></label>
-      <input type="email" id="email" name="email" required />
-      <span class="error-message"></span>
-    </div>
+      <div class="form-group">
+        <label for="email">אימייל<span class="required">*</span></label>
+        <input type="email" id="email" name="email" required />
+        <span class="error-message"></span>
+      </div>
 
-    <div class="form-group">
-      <label for="area">איזור בארץ<span class="required">*</span></label>
-      <input type="text" id="area" name="area" required minlength="2" />
-      <span class="error-message"></span>
-    </div>
+      <div class="form-group">
+        <label for="area">איזור בארץ<span class="required">*</span></label>
+        <input type="text" id="area" name="area" required minlength="2" />
+        <span class="error-message"></span>
+      </div>
 
-    <div class="form-group">
-      <label for="message">הודעה<span class="required">*</span></label>
-      <textarea id="message" name="message" rows="5" required minlength="5"></textarea>
-      <span class="error-message"></span>
-    </div>
+      <div class="form-group">
+        <label for="message">הודעה<span class="required">*</span></label>
+        <textarea id="message" name="message" rows="5" required minlength="5"></textarea>
+        <span class="error-message"></span>
+      </div>
 
-    <button type="submit" id="sendBtn" class="btn-submit">שלח</button>
-  </form>
+      <button type="submit" id="sendBtn" class="btn-submit">שלח</button>
+    </form>
 
-  <div id="formResponse" class="form-response" role="alert" aria-live="polite"></div>
-</div>
+    <div id="formResponse" class="form-response"></div>
 
-<!-- כפתורי צד צפים -->
-<div class="side-buttons">
-  <a href="https://wa.me/972533562608" target="_blank" class="side-btn whatsapp" aria-label="וואטסאפ">
-    <i class="fab fa-whatsapp"></i>
-  </a>
-  <a href="tel:+972533562608" class="side-btn phone" aria-label="טלפון">
-    <i class="fas fa-phone"></i>
-  </a>
-  <a href="mailto:yuzukmedik@gmail.com" class="side-btn mail" aria-label="מייל">
-    <i class="fas fa-envelope"></i>
-  </a>
-</div>
+  </div>
 
-<!-- JS -->
-<script src="script.js"></script>
+  <!-- כפתורי צד צפים -->
+  <div class="side-buttons">
+    <a href="https://wa.me/972533562608" target="_blank" class="side-btn whatsapp" aria-label="וואטסאפ">
+      <i class="fab fa-whatsapp"></i>
+    </a>
+    <a href="tel:+972533562608" class="side-btn phone" aria-label="טלפון">
+      <i class="fas fa-phone"></i>
+    </a>
+    <a href="mailto:yuzukmedik@gmail.com" class="side-btn mail" aria-label="מייל">
+      <i class="fas fa-envelope"></i>
+    </a>
+  </div>
+
+  <script type="module" src="script.js"></script>
 </body>
 </html>
