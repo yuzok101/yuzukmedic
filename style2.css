@@ -1,66 +1,53 @@
-/* גופן Heebo */
-body, input, textarea, button {
+body {
   font-family: 'Heebo', sans-serif;
-  direction: rtl;
-  background: #f5f7fa;
-  color: #222;
+  background-color: #f9f9f9;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  direction: rtl;
+  color: #333;
 }
 
 .top-banner {
   display: block;
   background: #004d40;
-  color: #fff;
-  font-weight: 700;
-  padding: 15px;
+  color: white;
+  padding: 12px 20px;
   text-align: center;
   text-decoration: none;
-  font-size: 1.2rem;
-  letter-spacing: 0.05em;
-  transition: background 0.3s ease;
-  user-select: none;
-}
-
-.top-banner:hover {
-  background: #00332e;
-  cursor: pointer;
+  font-weight: 700;
+  font-size: 1.1rem;
 }
 
 .container {
   max-width: 480px;
+  margin: 30px auto 60px;
+  padding: 20px;
   background: white;
-  padding: 30px 40px 40px 40px;
-  margin: 30px auto 70px;
-  box-shadow: 0 4px 20px rgb(0 0 0 / 0.15);
-  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  border-radius: 8px;
 }
 
 .page-title {
   text-align: center;
   margin-bottom: 25px;
-  font-size: 2.4rem;
   font-weight: 700;
-  color: #004d40;
+  color: #00695c;
 }
 
 .form-group {
   margin-bottom: 18px;
-  position: relative;
 }
 
 label {
   display: block;
   font-weight: 600;
-  margin-bottom: 8px;
-  font-size: 1.1rem;
-  color: #00695c;
+  margin-bottom: 6px;
+  color: #004d40;
 }
 
 .required {
   color: #d32f2f;
-  margin-right: 3px;
+  margin-right: 4px;
 }
 
 input[type="text"],
@@ -68,56 +55,59 @@ input[type="tel"],
 input[type="email"],
 textarea {
   width: 100%;
-  padding: 12px 15px;
+  padding: 10px 12px;
   font-size: 1rem;
-  border: 2px solid #b2dfdb;
-  border-radius: 8px;
-  transition: border-color 0.3s ease;
+  border: 1.8px solid #bbb;
+  border-radius: 6px;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+  font-family: 'Heebo', sans-serif;
   resize: vertical;
-  outline-offset: 2px;
 }
 
 input[type="text"]:focus,
 input[type="tel"]:focus,
 input[type="email"]:focus,
 textarea:focus {
-  border-color: #004d40;
-  box-shadow: 0 0 6px #004d40aa;
+  outline: none;
+  border-color: #00796b;
 }
 
 .error-message {
   color: #d32f2f;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   margin-top: 4px;
   min-height: 18px;
-  display: block;
 }
 
 .btn-submit {
   background-color: #00796b;
   color: white;
-  font-weight: 700;
-  font-size: 1.3rem;
-  padding: 14px 0;
-  width: 100%;
   border: none;
-  border-radius: 12px;
+  padding: 14px;
+  width: 100%;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  user-select: none;
+  transition: background-color 0.3s;
+  font-family: 'Heebo', sans-serif;
 }
 
-.btn-submit:hover {
+.btn-submit:hover:enabled {
   background-color: #004d40;
 }
 
+.btn-submit:disabled {
+  background-color: #999;
+  cursor: default;
+}
+
 .form-response {
-  margin-top: 22px;
-  font-size: 1.15rem;
-  font-weight: 700;
+  margin-top: 20px;
+  font-weight: 600;
   text-align: center;
-  min-height: 36px;
-  user-select: none;
+  min-height: 24px;
 }
 
 .form-response.success {
@@ -128,54 +118,31 @@ textarea:focus {
   color: #d32f2f;
 }
 
-/* כפתורי צד צפים */
-
 .side-buttons {
   position: fixed;
   top: 40%;
-  right: 0;
+  right: 10px;
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  padding-right: 12px;
-  z-index: 1000;
+  gap: 15px;
+  z-index: 9999;
 }
 
 .side-btn {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
   background-color: #004d40;
   color: white;
-  font-size: 28px;
+  font-size: 24px;
+  padding: 12px;
+  border-radius: 50%;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  transition: background-color 0.3s;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   text-decoration: none;
-  box-shadow: 0 2px 8px rgb(0 0 0 / 0.25);
-  transition: transform 0.3s ease, background-color 0.3s ease;
-  user-select: none;
-  border: none;
 }
 
 .side-btn:hover {
-  transform: scale(0.85);
   background-color: #00796b;
-}
-
-/* הסרת קו תחתון מהאייקונים */
-.side-btn i {
-  pointer-events: none;
-}
-
-/* למובייל - הורדת קצת גודל */
-@media (max-width: 600px) {
-  .container {
-    margin: 15px 15px 70px 15px;
-    padding: 25px 20px 35px 20px;
-  }
-
-  .side-buttons {
-    top: 30%;
-  }
 }
