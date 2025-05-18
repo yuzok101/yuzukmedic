@@ -15,6 +15,9 @@ body {
   padding: 40px 20px;
   background: transparent;
   border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* מרכז את התוכן אופקית */
 }
 
 h1 {
@@ -23,25 +26,28 @@ h1 {
   margin-bottom: 40px;
   font-size: 2.5em;
   font-weight: 700;
+  width: 100%;
 }
 
-.courses-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px; /* רווח בין הכרטיסים */
-  justify-content: center;
+#courses {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 באנרים בכל שורה */
+  gap: 30px 30px; /* רווח אופקי ואנכי בין הבאנרים */
+  width: 100%;
+  max-width: 1200px;
+  justify-items: center; /* מרכז כל באנר בתא שלו */
 }
 
 .course {
   background: rgba(255, 255, 255, 0.9);
   border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  width: calc(50% - 15px); /* חצי רוחב מינוס חצי מה-gap */
-  height: 400px; /* גובה אחיד */
-  min-width: 500px; /* מונע שהכרטיס יהיה קטן מדי */
+  width: 100%; /* יתפוס את רוחב התא בגריד */
+  max-width: 560px; /* אפשר להגדיר רוחב מקסימלי לבאנר */
+  height: 400px;
 }
 
 .course img {
@@ -69,7 +75,6 @@ h1 {
 .course-content p {
   margin: 5px 0;
   line-height: 1.5em;
-  flex-grow: 1;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -92,10 +97,13 @@ h1 {
   background-color: #001f4d;
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 900px) {
+  #courses {
+    grid-template-columns: 1fr; /* באנר אחד בכל שורה במסכים קטנים */
+  }
+
   .course {
-    width: 100%;
-    min-width: unset;
+    max-width: 100%;
     height: auto;
   }
 
