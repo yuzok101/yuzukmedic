@@ -1,66 +1,66 @@
 /* גופן Heebo */
-@import url('https://fonts.googleapis.com/css2?family=Heebo&display=swap');
-
-body {
-  margin: 0;
+body, input, textarea, button {
   font-family: 'Heebo', sans-serif;
-  background: #f9fafb;
-  color: #222;
   direction: rtl;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background: #f5f7fa;
+  color: #222;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .top-banner {
   display: block;
-  background: #004aad;
-  color: white;
+  background: #004d40;
+  color: #fff;
   font-weight: 700;
-  font-size: 1.3rem;
+  padding: 15px;
   text-align: center;
-  padding: 15px 0;
   text-decoration: none;
-  transition: background-color 0.3s ease;
+  font-size: 1.2rem;
+  letter-spacing: 0.05em;
+  transition: background 0.3s ease;
+  user-select: none;
 }
 
-.top-banner:hover,
-.top-banner:focus {
-  background: #00357a;
-  outline: none;
+.top-banner:hover {
+  background: #00332e;
+  cursor: pointer;
 }
 
 .container {
-  max-width: 600px;
-  margin: 40px auto 80px;
+  max-width: 480px;
   background: white;
-  padding: 30px 40px;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  padding: 30px 40px 40px 40px;
+  margin: 30px auto 70px;
+  box-shadow: 0 4px 20px rgb(0 0 0 / 0.15);
+  border-radius: 15px;
 }
 
 .page-title {
-  margin-bottom: 30px;
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #004aad;
   text-align: center;
+  margin-bottom: 25px;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: #004d40;
 }
 
 .form-group {
-  margin-bottom: 25px;
+  margin-bottom: 18px;
   position: relative;
 }
 
 label {
   display: block;
   font-weight: 600;
-  margin-bottom: 6px;
-  color: #003366;
+  margin-bottom: 8px;
+  font-size: 1.1rem;
+  color: #00695c;
 }
 
 .required {
-  color: #d93025;
-  margin-left: 4px;
+  color: #d32f2f;
+  margin-right: 3px;
 }
 
 input[type="text"],
@@ -69,56 +69,63 @@ input[type="email"],
 textarea {
   width: 100%;
   padding: 12px 15px;
-  border: 2px solid #ccd6f6;
-  border-radius: 8px;
   font-size: 1rem;
-  font-family: 'Heebo', sans-serif;
+  border: 2px solid #b2dfdb;
+  border-radius: 8px;
   transition: border-color 0.3s ease;
   resize: vertical;
+  outline-offset: 2px;
 }
 
 input[type="text"]:focus,
 input[type="tel"]:focus,
 input[type="email"]:focus,
 textarea:focus {
-  border-color: #004aad;
-  outline: none;
-  box-shadow: 0 0 8px rgba(0, 74, 173, 0.4);
+  border-color: #004d40;
+  box-shadow: 0 0 6px #004d40aa;
 }
 
 .error-message {
-  color: #d93025;
+  color: #d32f2f;
   font-size: 0.9rem;
   margin-top: 4px;
   min-height: 18px;
+  display: block;
 }
 
 .btn-submit {
-  background-color: #004aad;
+  background-color: #00796b;
   color: white;
-  border: none;
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   padding: 14px 0;
   width: 100%;
-  border-radius: 10px;
+  border: none;
+  border-radius: 12px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  user-select: none;
 }
 
-.btn-submit:hover,
-.btn-submit:focus {
-  background-color: #002f70;
-  outline: none;
+.btn-submit:hover {
+  background-color: #004d40;
 }
 
-/* תגובת הפורם */
 .form-response {
-  margin-top: 25px;
-  font-weight: 600;
+  margin-top: 22px;
   font-size: 1.15rem;
+  font-weight: 700;
   text-align: center;
-  color: #004aad;
+  min-height: 36px;
+  user-select: none;
+}
+
+.form-response.success {
+  color: #2e7d32;
+}
+
+.form-response.error {
+  color: #d32f2f;
 }
 
 /* כפתורי צד צפים */
@@ -126,41 +133,49 @@ textarea:focus {
 .side-buttons {
   position: fixed;
   top: 40%;
-  right: 15px;
+  right: 0;
   display: flex;
   flex-direction: column;
   gap: 18px;
+  padding-right: 12px;
   z-index: 1000;
 }
 
 .side-btn {
-  background: #004aad;
-  color: white;
-  width: 56px;
-  height: 56px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
+  background-color: #004d40;
+  color: white;
+  font-size: 28px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 26px;
   text-decoration: none;
-  box-shadow: 0 6px 15px rgba(0, 74, 173, 0.4);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.25);
   transition: transform 0.3s ease, background-color 0.3s ease;
+  user-select: none;
+  border: none;
 }
 
-.side-btn:hover,
-.side-btn:focus {
-  transform: scale(0.88);
-  background-color: #00357a;
-  outline: none;
+.side-btn:hover {
+  transform: scale(0.85);
+  background-color: #00796b;
 }
 
-.side-btn:focus {
-  box-shadow: 0 0 0 3px #002e60;
+/* הסרת קו תחתון מהאייקונים */
+.side-btn i {
+  pointer-events: none;
 }
 
-/* הסרת קו תחתון מאובייקטים */
-.side-btn,
-.top-banner {
-  text-decoration: none !important;
+/* למובייל - הורדת קצת גודל */
+@media (max-width: 600px) {
+  .container {
+    margin: 15px 15px 70px 15px;
+    padding: 25px 20px 35px 20px;
+  }
+
+  .side-buttons {
+    top: 30%;
+  }
 }
