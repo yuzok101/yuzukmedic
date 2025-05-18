@@ -1,50 +1,50 @@
+/* עיצוב כללי */
 body {
   font-family: 'Heebo', sans-serif;
-  background: #f9f9f9;
+  background: #f7f9fc;
+  color: #333;
   margin: 0;
   padding: 0;
   direction: rtl;
-  color: #333;
+  text-align: right;
 }
 
 .top-banner {
   display: block;
-  background: #222;
+  background-color: #004a99;
   color: white;
   text-align: center;
-  padding: 10px;
+  padding: 10px 0;
   text-decoration: none;
-  font-weight: 700;
-  font-size: 1rem;
+  font-weight: bold;
 }
 
 .container {
-  max-width: 600px;
-  margin: 30px auto 60px;
+  max-width: 480px;
+  margin: 40px auto;
   background: white;
-  padding: 25px 30px 40px;
+  padding: 30px;
   border-radius: 8px;
-  box-shadow: 0 4px 15px rgb(0 0 0 / 0.1);
+  box-shadow: 0 0 15px rgb(0 0 0 / 0.1);
 }
 
 .page-title {
   margin-bottom: 25px;
-  text-align: center;
+  font-size: 28px;
+  color: #004a99;
   font-weight: 700;
-  font-size: 2rem;
-  color: #2a2a2a;
 }
 
 .form-group {
-  margin-bottom: 18px;
+  margin-bottom: 20px;
 }
 
 label {
   display: block;
-  margin-bottom: 6px;
   font-weight: 600;
-  font-size: 1rem;
-  color: #444;
+  margin-bottom: 8px;
+  font-size: 16px;
+  color: #222;
 }
 
 input[type="text"],
@@ -53,119 +53,97 @@ input[type="email"],
 textarea {
   width: 100%;
   padding: 10px 12px;
-  border: 1.8px solid #ccc;
+  border: 1.5px solid #ccc;
   border-radius: 6px;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
+  font-size: 15px;
+  font-family: inherit;
   box-sizing: border-box;
-  font-family: 'Heebo', sans-serif;
+  transition: border-color 0.3s;
 }
 
 input[type="text"]:focus,
 input[type="tel"]:focus,
 input[type="email"]:focus,
 textarea:focus {
+  border-color: #004a99;
   outline: none;
-  border-color: #0a84ff;
-  background-color: #f0f8ff;
-}
-
-textarea {
-  resize: vertical;
-  min-height: 90px;
 }
 
 .error-message {
   color: #d93025;
-  font-size: 0.9rem;
+  font-size: 13px;
   margin-top: 4px;
-  min-height: 18px;
-  display: block;
+  display: none;
 }
 
 .required {
   color: #d93025;
-  margin-left: 4px;
+  margin-left: 3px;
 }
 
 .btn-submit {
-  background-color: #0a84ff;
+  background-color: #004a99;
   color: white;
-  font-weight: 700;
-  font-size: 1.2rem;
-  padding: 12px 0;
   border: none;
-  border-radius: 8px;
-  width: 100%;
+  padding: 14px 25px;
+  font-size: 17px;
+  border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-weight: 600;
+  width: 100%;
+  transition: background-color 0.3s;
 }
 
 .btn-submit:hover:not(:disabled) {
-  background-color: #0669d6;
+  background-color: #003366;
 }
 
 .btn-submit:disabled {
-  background-color: #aac8ff;
+  opacity: 0.7;
   cursor: not-allowed;
 }
 
 .form-response {
-  margin-top: 18px;
+  margin-top: 20px;
   font-weight: 600;
-  font-size: 1.1rem;
-  min-height: 26px;
-  text-align: center;
+  font-size: 16px;
+  min-height: 24px;
 }
 
 .form-response.success {
-  color: #2a9d8f;
+  color: #1a7a1a;
 }
 
 .form-response.error {
   color: #d93025;
 }
 
+/* כפתורי צד צפים */
 .side-buttons {
   position: fixed;
-  top: 35%;
-  right: 10px;
+  top: 40%;
+  right: 0;
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  z-index: 9999;
+  gap: 15px;
+  z-index: 1000;
 }
 
 .side-btn {
+  background-color: #004a99;
+  color: white;
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 50px;
-  background-color: #0a84ff;
-  color: white;
-  border-radius: 50%;
+  border-radius: 30px 0 0 30px;
+  box-shadow: 0 0 5px rgb(0 0 0 / 0.2);
+  transition: background-color 0.3s;
   text-decoration: none;
-  font-size: 1.8rem;
-  box-shadow: 0 4px 8px rgb(10 132 255 / 0.4);
-  transition: background-color 0.3s ease;
-}
-
-.side-btn.whatsapp {
-  background-color: #25d366;
-  box-shadow: 0 4px 8px rgb(37 211 102 / 0.4);
-}
-
-.side-btn.phone {
-  background-color: #0a84ff;
-  box-shadow: 0 4px 8px rgb(10 132 255 / 0.4);
-}
-
-.side-btn.mail {
-  background-color: #ff5e57;
-  box-shadow: 0 4px 8px rgb(255 94 87 / 0.4);
+  font-size: 24px;
 }
 
 .side-btn:hover {
-  filter: brightness(85%);
+  background-color: #003366;
 }
