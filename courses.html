@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<link rel="stylesheet" href="yozok-style.css" />
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>הקורסים הקרובים</title>
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style1.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>הקורסים הקרובים - יוזוק מדיק</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="yozok-style.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <link rel="stylesheet" href="yozok-style.css" />
 </head>
 <body>
-  <div class="container">
+  <header class="fixed-header">
     <h1>הקורסים הקרובים</h1>
-    <div id="courses"></div>
-  </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <div id="courses"></div>
+    </div>
+  </main>
 
   <script>
     async function loadCourses() {
@@ -48,7 +51,7 @@
           courseDiv.className = 'course';
 
           courseDiv.innerHTML = `
-            <img src="${imagePath}" alt="${courseName}" onerror="this.src='images/default.jpg'"/>
+            <img src="${imagePath}" alt="${courseName}" onerror="this.src='images/default.jpg'" />
             <div class="course-content">
               <h2>${courseName}</h2>
               <p><strong>בין התאריכים:</strong> ${dates}</p>
@@ -65,7 +68,8 @@
           container.appendChild(courseDiv);
         });
       } catch (error) {
-        document.getElementById('courses').innerHTML = '<p style="color: red; text-align: center;">שגיאה בטעינת הקורסים</p>';
+        const container = document.getElementById('courses');
+        container.innerHTML = '<p style="color: red; text-align: center;">שגיאה בטעינת הקורסים</p>';
         console.error(error);
       }
     }
