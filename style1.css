@@ -1,52 +1,54 @@
 body {
-  font-family: 'Heebo', sans-serif;
   margin: 0;
+  font-family: 'Heebo', sans-serif;
   background: url('images/reka1.jpg') no-repeat center center fixed;
   background-size: cover;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 100px auto 40px;
-  padding: 20px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 16px;
+  direction: rtl;
 }
 
 h1 {
-  text-align: center;
-  color: #003366;
-  font-size: 2.5em;
-  margin-bottom: 40px;
   position: fixed;
   top: 0;
-  width: 100%;
-  background-color: #ffffffee;
-  padding: 20px 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.95);
+  text-align: center;
+  padding: 15px;
+  margin: 0;
+  font-size: 28px;
   z-index: 1000;
-  border-bottom: 2px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.container {
+  padding-top: 100px;
+  padding-bottom: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 #courses {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
   justify-content: center;
-  margin-top: 140px;
+  gap: 24px;
 }
 
 .course {
-  width: calc(50% - 20px);
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  background-color: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  width: 48%;
+  min-width: 280px;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s;
 }
 
 .course:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  transform: scale(1.02);
 }
 
 .course img {
@@ -61,39 +63,40 @@ h1 {
 
 .course-content h2 {
   margin-top: 0;
-  font-size: 1.4em;
-  color: #003366;
+  font-size: 20px;
 }
 
 .course-content p {
   margin: 5px 0;
-  font-size: 1em;
 }
 
 .register-button {
   display: inline-block;
   margin-top: 10px;
   padding: 10px 16px;
-  background-color: #003366;
+  background-color: #0088cc;
   color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
   text-decoration: none;
-  font-size: 0.95em;
+  border-radius: 8px;
+  transition: background-color 0.3s;
 }
 
+.register-button:hover {
+  background-color: #005f88;
+}
+
+/* התאמה למסכים קטנים */
 @media (max-width: 768px) {
   .course {
-    width: 100%;
+    width: 90%;
   }
 
   h1 {
-    font-size: 2em;
-    padding: 15px 0;
+    font-size: 24px;
+    padding: 10px;
   }
 
-  .course-content {
-    padding: 12px;
+  .course img {
+    height: 160px;
   }
 }
