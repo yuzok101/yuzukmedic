@@ -1,72 +1,59 @@
-/* גופן כללי */
+@import url('https://fonts.googleapis.com/css2?family=Heebo&display=swap');
+
 body {
   margin: 0;
   font-family: 'Heebo', sans-serif;
-  background-color: #fefefe;
+  background-color: #f9f9f9;
   color: #222;
   direction: rtl;
   line-height: 1.6;
 }
 
-/* באנר עליון */
 .top-banner {
   display: block;
-  background-color: #0077aa;
+  background-color: #004d99;
   color: white;
-  text-align: center;
-  padding: 15px 10px;
   font-weight: 700;
   font-size: 1.3rem;
+  padding: 15px 0;
+  text-align: center;
   text-decoration: none;
-  letter-spacing: 0.06em;
-  position: sticky;
-  top: 0;
-  z-index: 999;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  letter-spacing: 0.05em;
   transition: background-color 0.3s ease;
+  user-select: none;
 }
 
 .top-banner:hover {
-  background-color: #005f80;
+  background-color: #0066cc;
 }
 
-/* קונטיינר מרכזי */
 .container {
-  max-width: 700px;
-  margin: 40px auto 80px auto;
-  padding: 20px 25px;
-  background: #fff;
-  box-shadow: 0 0 25px rgba(0,0,0,0.1);
+  max-width: 600px;
+  margin: 40px auto 100px;
+  padding: 0 20px;
+  background: white;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
   border-radius: 12px;
 }
 
-/* כותרת הדף */
 .page-title {
-  font-size: 2.6rem;
-  text-align: center;
-  margin-bottom: 30px;
-  color: #004466;
+  font-size: 2.8rem;
   font-weight: 800;
-  letter-spacing: 0.05em;
+  margin-bottom: 30px;
+  text-align: center;
+  color: #004d99;
+  letter-spacing: 0.1em;
 }
 
-/* טפסים */
 .form-group {
-  margin-bottom: 20px;
-  position: relative;
+  margin-bottom: 22px;
 }
 
 label {
   display: block;
-  font-weight: 700;
+  font-weight: 600;
   margin-bottom: 8px;
-  font-size: 1.1rem;
-  color: #003355;
-}
-
-.required {
-  color: #d00;
-  margin-left: 4px;
+  color: #004d99;
 }
 
 input[type="text"],
@@ -75,74 +62,62 @@ input[type="email"],
 textarea {
   width: 100%;
   padding: 12px 15px;
-  font-size: 1rem;
-  border: 2px solid #ddd;
+  font-size: 1.1rem;
+  border: 2px solid #c0c0c0;
   border-radius: 8px;
   transition: border-color 0.3s ease;
   font-family: 'Heebo', sans-serif;
-  resize: vertical;
 }
 
 input[type="text"]:focus,
 input[type="tel"]:focus,
 input[type="email"]:focus,
 textarea:focus {
-  border-color: #0077aa;
+  border-color: #0077cc;
   outline: none;
-  box-shadow: 0 0 8px #0077aaaa;
 }
 
-/* הודעות שגיאה */
+textarea {
+  resize: vertical;
+}
+
+.required {
+  color: #cc0000;
+  margin-left: 5px;
+}
+
 .error-message {
-  color: #d00;
+  color: #cc0000;
   font-size: 0.9rem;
-  margin-top: 3px;
+  margin-top: 4px;
+  display: block;
   min-height: 18px;
 }
 
-/* כפתור שליחה */
 .btn-submit {
-  background-color: #0077aa;
+  background-color: #0077cc;
   color: white;
   border: none;
-  padding: 16px 40px;
-  font-size: 1.25rem;
+  padding: 14px 0;
+  font-size: 1.3rem;
   font-weight: 700;
-  border-radius: 30px;
+  width: 100%;
+  border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  display: block;
-  margin: 0 auto;
-  box-shadow: 0 4px 12px rgba(0,119,170,0.5);
+  user-select: none;
 }
 
-.btn-submit:hover:not(:disabled) {
-  background-color: #005f80;
-  box-shadow: 0 6px 18px rgba(0,95,128,0.7);
+.btn-submit:hover {
+  background-color: #005fa3;
 }
 
-.btn-submit:disabled {
-  background-color: #a0cde3;
-  cursor: default;
-  box-shadow: none;
-}
-
-/* הודעות הצלחה ושגיאה אחרי שליחה */
 .form-response {
-  margin-top: 25px;
+  margin-top: 20px;
   font-size: 1.1rem;
+  font-weight: 600;
   text-align: center;
-  font-weight: 700;
-  min-height: 24px;
-  transition: opacity 0.4s ease;
-}
-
-.form-response.error {
-  color: #d00;
-}
-
-.form-response.success {
-  color: #007700;
+  min-height: 26px;
 }
 
 /* כפתורי צד צפים */
@@ -153,81 +128,78 @@ textarea:focus {
   display: flex;
   flex-direction: column;
   gap: 18px;
-  z-index: 9999;
+  z-index: 1000;
 }
 
 .side-btn {
-  background-color: #0077aa;
+  background-color: #0077cc;
   color: white;
-  font-size: 1.8rem;
-  width: 58px;
-  height: 58px;
+  width: 56px;
+  height: 56px;
   border-radius: 50%;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease, background-color 0.3s ease;
   text-decoration: none;
-  box-shadow: 0 4px 10px rgba(0,119,170,0.5);
-  transition: all 0.3s ease;
-  border: none;
   user-select: none;
+  border: none;
 }
 
 .side-btn:hover {
   transform: scale(0.85);
-  box-shadow: 0 6px 14px rgba(0,95,128,0.8);
+  background-color: #005fa3;
+  text-decoration: none;
+  outline: none;
 }
 
+/* צבעים מותאמים לכל כפתור */
 .side-btn.whatsapp {
   background-color: #25d366;
-  box-shadow: 0 4px 10px #25d366aa;
 }
 
 .side-btn.whatsapp:hover {
-  box-shadow: 0 6px 14px #25d366cc;
+  background-color: #1ebe57;
 }
 
 .side-btn.phone {
-  background-color: #0077aa;
+  background-color: #004d99;
+}
+
+.side-btn.phone:hover {
+  background-color: #003366;
 }
 
 .side-btn.mail {
-  background-color: #d44638; /* צבע גימייל אדום */
-  box-shadow: 0 4px 10px #d44638aa;
+  background-color: #ea4335;
 }
 
 .side-btn.mail:hover {
-  box-shadow: 0 6px 14px #d44638cc;
+  background-color: #c2332a;
 }
 
-/* רספונסיב */
-@media (max-width: 600px) {
+/* רספונסיב למובייל */
+@media (max-width: 480px) {
   .container {
-    margin: 20px 15px 60px 15px;
-    padding: 15px 20px;
+    margin: 20px 15px 80px;
+    padding: 15px;
   }
 
   .page-title {
     font-size: 2rem;
   }
 
-  .btn-submit {
-    width: 100%;
-    padding: 14px 0;
-  }
-
   .side-buttons {
-    top: auto;
-    bottom: 20px;
-    right: 50%;
-    transform: translateX(50%);
-    flex-direction: row;
-    gap: 25px;
+    top: 50%;
+    right: 5px;
+    gap: 14px;
   }
 
   .side-btn {
-    width: 50px;
-    height: 50px;
-    font-size: 1.5rem;
+    width: 48px;
+    height: 48px;
+    font-size: 22px;
   }
 }
