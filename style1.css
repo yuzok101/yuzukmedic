@@ -1,115 +1,99 @@
 body {
   font-family: 'Heebo', sans-serif;
   margin: 0;
-  background-color: #f4f4f4;
-  background-image: url('images/reka1.jpg');
+  background: url('images/reka1.jpg') no-repeat center center fixed;
   background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  direction: rtl;
 }
 
 .container {
   max-width: 1200px;
-  margin: auto;
-  padding: 40px 20px;
-  background: transparent;
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin: 100px auto 40px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 16px;
 }
 
 h1 {
   text-align: center;
   color: #003366;
-  margin-bottom: 40px;
   font-size: 2.5em;
-  font-weight: 700;
+  margin-bottom: 40px;
+  position: fixed;
+  top: 0;
   width: 100%;
+  background-color: #ffffffee;
+  padding: 20px 0;
+  z-index: 1000;
+  border-bottom: 2px solid #ccc;
 }
 
 #courses {
   display: flex;
   flex-wrap: wrap;
+  gap: 20px;
   justify-content: center;
-  gap: 30px 20px; /* רווח אופקי 30px ואנכי 20px */
-  width: 100%;
-  max-width: 1200px;
+  margin-top: 140px;
 }
 
 .course {
-  background: rgba(255, 255, 255, 0.9);
+  width: calc(50% - 20px);
+  background: white;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  width: calc(50% - 20px); /* כל באנר תופס חצי רוחב מינוס רווח */
-  max-width: 560px;
-  height: 380px;
-  margin-bottom: 20px; /* רווח אנכי נוסף מתחת לבאנר */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.course:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .course img {
   width: 100%;
   height: 200px;
   object-fit: cover;
-  border-bottom: 1px solid #ddd;
 }
 
 .course-content {
-  padding: 20px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  font-size: 1.2em;
-  color: #003366;
+  padding: 15px;
 }
 
 .course-content h2 {
-  margin: 0 0 12px 0;
-  font-size: 1.6em;
+  margin-top: 0;
+  font-size: 1.4em;
+  color: #003366;
 }
 
 .course-content p {
   margin: 5px 0;
-  line-height: 1.5em;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 1em;
 }
 
 .register-button {
-  align-self: flex-start;
-  margin-top: 15px;
-  padding: 12px 24px;
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 16px;
   background-color: #003366;
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   text-decoration: none;
-  font-size: 1.1em;
-  transition: background-color 0.3s ease;
+  font-size: 0.95em;
 }
 
-.register-button:hover {
-  background-color: #001f4d;
-}
-
-@media (max-width: 900px) {
-  #courses {
-    justify-content: center;
-  }
-
+@media (max-width: 768px) {
   .course {
-    width: 90%; /* באנר אחד לכל שורה בנייד */
-    max-width: none;
-    height: auto;
+    width: 100%;
   }
 
-  .course img {
-    height: 180px;
+  h1 {
+    font-size: 2em;
+    padding: 15px 0;
+  }
+
+  .course-content {
+    padding: 12px;
   }
 }
