@@ -146,11 +146,11 @@ textarea {
   text-decoration: none;
   user-select: none;
   border: none;
+  outline: none;
 }
 
 .side-btn:hover {
   transform: scale(0.85);
-  background-color: #005fa3;
   text-decoration: none;
   outline: none;
 }
