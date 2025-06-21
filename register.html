@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8" />
+  <title>קורסים קרובים - הרשמה</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    html, body {
+      margin: 0; padding: 0; height: 100%;
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      background: url('images/default.jpg') no-repeat center center fixed;
+      background-size: cover;
+      color: #1c3b6b;
+    }
+    header, footer {
+      background-color: #1c3b6b;
+      color: white;
+      padding: 15px 10px;
+      text-align: center;
+      font-weight: bold;
+      position: fixed;
+      width: 100%;
+      z-index: 1000;
+    }
+    header { top: 0; font-size: 24px; }
+    footer { bottom: 0; font-size: 14px; }
+    main {
+      padding: 100px 30px 80px 30px;
+      max-width: 1400px;
+      margin: auto;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 30px;
+      justify-items: center;
+    }
+    .course {
+      background-color: rgba(255,255,255,0.75);
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      overflow: hidden;
+      max-width: 700px;
+      aspect-ratio: 1/1;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+    .course:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+    .course img {
+      width: 100%;
+      height: 50%;
+      object-fit: cover;
+    }
+    .course-content {
+      padding: 15px 20px;
+      flex: 1;
+      overflow: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .course-content h2 {
+      margin: 0 0 8px;
+      color: #1c3b6b;
+    }
+    .course-content p {
+      margin: 4px 0;
+      font-size: 15px;
+    }
+    .course-content p span {
+      font-weight: bold;
+      color: #1c3b6b;
+    }
+    .register-btn {
+      margin-top: 15px;
+      background-color: #1c3b6b;
+      color: white;
+      border: none;
+      padding: 12px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.25s ease;
+      width: 100%;
+    }
+    .register-btn:hover {
+      background-color: #004080;
+    }
+    /* טופס ההרשמה - מוסתר תחילה */
+    #registrationFormContainer {
+      display: none;
+      max-width: 600px;
+      margin: 30px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 14px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      direction: rtl;
+      color: #1c3b6b;
+    }
+    #registrationFormContainer.active {
+      display: block;
+    }
+    #registrationFormContainer h2 {
+      margin-top: 0;
+      text-align: center;
+    }
+    form label {
+      display: block;
+      margin-top: 18px;
+      font-weight: bold;
+    }
+    form input, form select, form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    form textarea {
+      resize: vertical;
+    }
+    form button {
+      margin-top: 25px;
+      width: 100%;
+      padding: 14px;
+      font-size: 18px;
+      background-color: #1c3b6b;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    form button:hover {
+      background-color: #004080;
+    }
+    .thankyou-message {
+      text-align: center;
+      color: green;
+      font-size: 20px;
+      margin-top: 20px;
+      display: none;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 700px) {
+      .container {
+        grid-template-columns: 1fr;
+        padding: 10px;
+      }
+      .course {
+        max-width: 100%;
+        aspect-ratio: auto;
+        height: auto;
+      }
+      .course img {
+        height: 35vh;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>קורסים קרובים - יוז׳וק מדיק</header>
+
+<main>
+  <div class="container" id="coursesContainer"></div>
+
+  <div id="registrationFormContainer">
+    <h2>טופס הרשמה</h2>
+    <form id="registrationForm">
+      <label for="name">שם מלא<span style="color:red;"> *</span></label>
+      <input type="text" id="name" name="name" required placeholder="הקלד את שמך המלא" />
+
+      <label for="phone">טלפון<span style="color:red;"> *</span></label>
+      <input type="tel" id="phone" name="phone" required placeholder="הקלד מספר טלפון" pattern="[0-9+\-\s]{7,15}" />
+
+      <label for="courseSelect" id="courseLabel">בחר קורס</label>
+      <select id="courseSelect" name="courseSelect" required>
+        <option value="" disabled selected>בחר קורס מהרשימה</option>
+      </select>
+
+      <label for="paymentMethod">אופן תשלום</label>
+      <select id="paymentMethod" name="paymentMethod" required>
+        <option value="" disabled selected>בחר אופן תשלום</option>
+        <option value="אשראי">אשראי</option>
+        <option value="מזומן">מזומן</option>
+        <option value="העברה בנקאית">העברה בנקאית</option>
+        <option value="ביט">ביט</option>
+      </select>
+
+      <label for="notes">הערות</label>
+      <textarea id="notes" name="notes" rows="4" placeholder="כתוב כאן הערות (אם יש)"></textarea>
+
+      <button type="submit">שלח הרשמה</button>
+    </form>
+
+    <div class="thankyou-message" id="thankyouMessage">
+      תודה על הפנייה! הצוות שלנו עובד על זה ונפנה אליך בהקדם.
+    </div>
+  </div>
+</main>
+
+<footer>© 2025 יוז׳וק מדיק – כל הזכויות שמורות</footer>
+
+<script>
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec';
+  const LIBRARY_URL = 'https://script.google.com/macros/library/d/16w_IbEhIOejX6hW6tR4_vbtq_FtlH-ij8fCvBmSghQ8UFiCwLiPQHLPL/1';
+
+  // טעינת הקורסים והצגת הבאנרים
+  async function loadCourses() {
+    const container = document.getElementById('coursesContainer');
+    container.innerHTML = '<p style="color:#fff; text-align:center;">טוען קורסים...</p>';
+    try {
+      const response = await fetch(SHEET_URL);
+      const courses = await response.json();
+
+      const now = new Date();
+
+      // סינון קורסים עתידיים בלבד
+      const upcomingCourses = courses.filter(course => {
+        const parts = course.startDate.split('.');
+        const d = new Date(parts[2], parts[1] -1, parts[0]);
+        return d >= now;
+      });
+
+      if(upcomingCourses.length === 0) {
+        container.innerHTML = '<p style="color:#fff; text-align:center;">אין כרגע קורסים זמינים.</p>';
+        return;
+      }
+
+      // טיעון תמונות רנדומליות בלי חזרות
+      let images = ["images/1.jpg","images/2.jpg","images/3.jpg","images/4.jpg","images/5.jpg","images/6.jpg","images/7.jpg","images/8.jpg","images/9.jpg","images/10.jpg"];
+      shuffleArray(images);
+
+      container.innerHTML = '';
+      upcomingCourses.forEach((course, idx) => {
+        const imgSrc = images[idx % images.length];
+        const courseDiv = document.createElement('div');
+        courseDiv.className = 'course';
+
+        courseDiv.innerHTML = `
+          <img src="${imgSrc}" alt="תמונה של קורס" />
+          <div class="course-content">
+            <h2>${course.type}</h2>
+            <p><span>תאריך התחלה:</span> ${course.startDate} &nbsp;&nbsp;&nbsp; <span>תאריך סיום:</span> ${course.endDate}</p>
+            <p><span>ימים:</span> ${course.days} &nbsp;&nbsp; <span>שעות:</span> ${course.hours}</p>
+            <p><span>מחיר:</span> ${course.price}</p>
+            <p><span>קהל יעד:</span> ${course.target}</p>
+            <p><span>מיקום:</span> ${course.location}</p>
+            <button class="register-btn" data-course='${JSON.stringify(course)}'>הרשמה</button>
+          </div>
+        `;
+
+        container.appendChild(courseDiv);
+      });
+
+      // מאזין לכפתורי הרשמה
+      document.querySelectorAll('.register-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+          const course = JSON.parse(e.target.getAttribute('data-course'));
+          openRegistrationForm(course);
+          window.scrollTo({top: 0, behavior: 'smooth'});
+        });
+      });
+
+    } catch (e) {
+      container.innerHTML = '<p style="color:#fff; text-align:center;">אירעה שגיאה בטעינת הקורסים.</p>';
+      console.error(e);
+    }
+  }
+
+  // פונקציה לערבוב מערך (למנוע חזרות בתמונות)
+  function shuffleArray(array) {
+    for(let i = array.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
+
+  // פתיחת טופס הרשמה עם מילוי פרטי הקורס
+  function openRegistrationForm(course) {
+    const formContainer = document.getElementById('registrationFormContainer');
+    formContainer.classList.add('active');
+
+    // מילוי שדות קורס בטופס
+    const select = document.getElementById('courseSelect');
+    select.innerHTML = ''; // ננקה ונוסיף אופציה בודדת
+    const option = document.createElement('option');
+    option.value = JSON.stringify({
+      type: course.type,
+      startDate: course.startDate,
+      endDate: course.endDate,
+      location: course.location
+    });
+    option.textContent = `${course.type} - ${course.startDate} עד ${course.endDate} - ${course.location}`;
+    option.selected = true;
+    select.appendChild(option);
+    select.disabled = true;
+
+    // אפס את שאר השדות
+    document.getElementById('name').value = '';
+    document.getElementById('phone').value = '';
+    document.getElementById('paymentMethod').value = '';
+    document.getElementById('notes').value = '';
+
+    document.getElementById('thankyouMessage').style.display = 'none';
+    document.getElementById('registrationForm').style.display = 'block';
+  }
+
+  // טעינת כל הקורסים לטופס כאשר נכנסים לטופס ישירות
+  async function fillCoursesSelect() {
+    try {
+      const response = await fetch(SHEET_URL);
+      const courses = await response.json();
+
+      // סינון קורסים עתידיים
+      const now = new Date();
+      const upcomingCourses = courses.filter(course => {
+        const parts = course.startDate.split('.');
+        const d = new Date(parts[2], parts[1] -1, parts[0]);
+        return d >= now;
+      });
+
+      const select = document.getElementById('courseSelect');
+      select.innerHTML = '<option value="" disabled selected>בחר קורס מהרשימה</option>';
+      upcomingCourses.forEach(course => {
+        const option = document.createElement('option');
+        option.value = JSON.stringify({
+          type: course.type,
+          startDate: course.startDate,
+          endDate: course.endDate,
+          location: course.location
+        });
+        option.textContent = `${course.type} - ${course.startDate} עד ${course.endDate} - ${course.location}`;
+        select.appendChild(option);
+      });
+
+      // אפשר לאפשר בחירה רק אם בחרו בטופס ולא הגיעו דרך כפתור הרשמה
+      select.disabled = false;
+
+    } catch(e) {
+      console.error('Error loading courses for select:', e);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    await loadCourses();
+    await fillCoursesSelect();
+  });
+
+  // שליחת הטופס
+  document.getElementById('registrationForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const paymentMethod = document.getElementById('paymentMethod').value;
+    const notes = document.getElementById('notes').value.trim();
+
+    let courseData = null;
+    const select = document.getElementById('courseSelect');
+    try {
+      courseData = JSON.parse(select.value);
+    } catch {
+      alert('אנא בחר קורס מהרשימה.');
+      return;
+    }
+
+    if (!name || !phone || !paymentMethod || !courseData) {
+      alert('אנא מלא את כל השדות המסומנים *');
+      return;
+    }
+
+    const formData = {
+      name,
+      phone,
+      paymentMethod,
+      notes,
+      course: courseData.type,
+      startDate: courseData.startDate,
+      endDate: courseData.endDate,
+      location: courseData.location
+    };
+
+    try {
+      const response = await fetch(SHEET_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        document.getElementById('registrationForm').style.display = 'none';
+        document.getElementById('thankyouMessage').style.display = 'block';
+      } else {
+        alert('אירעה שגיאה בשליחת הטופס, נסה שוב מאוחר יותר');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('אירעה שגיאה בשליחת הטופס, נסה שוב מאוחר יותר');
+    }
+  });
+</script>
+
+</body>
+</html>
