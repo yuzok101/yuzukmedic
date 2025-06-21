@@ -25,6 +25,7 @@
       align-items: center;
     }
     form {
+      position: relative;
       background: rgba(255 255 255 / 0.7);
       padding: 35px 30px;
       border-radius: 14px;
@@ -72,6 +73,8 @@
       resize: vertical;
     }
     button {
+      position: relative;
+      overflow: hidden;
       width: 100%;
       margin-top: 32px;
       padding: 16px;
@@ -85,6 +88,9 @@
       letter-spacing: 0.07em;
       transition: background-color 0.4s ease, box-shadow 0.3s ease;
       animation: fadeInUp 1.8s ease forwards;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     button:hover, button:focus {
       background-color: #004080;
@@ -97,7 +103,42 @@
       color: green;
       font-size: 1.4rem;
       font-weight: 700;
+      animation: fadeIn 1s ease forwards;
     }
+    /* מטוס שליחה */
+    .plane {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      width: 24px;
+      height: 24px;
+      transform: translateY(-50%);
+      fill: white;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .sending .plane {
+      opacity: 1;
+      animation: flyPlane 1s forwards;
+    }
+    @keyframes flyPlane {
+      0% {
+        right: 20px;
+        opacity: 1;
+        transform: translateY(-50%) rotate(0deg);
+      }
+      50% {
+        right: 60%;
+        opacity: 1;
+        transform: translateY(-60%) rotate(15deg);
+      }
+      100% {
+        right: 120%;
+        opacity: 0;
+        transform: translateY(-70%) rotate(15deg);
+      }
+    }
+    /* אנימציית fadeInUp */
     @keyframes fadeInUp {
       0% {opacity: 0; transform: translateY(30px);}
       100% {opacity: 1; transform: translateY(0);}
@@ -177,7 +218,12 @@
     <label for="notes">הערות</label>
     <textarea id="notes" name="notes" rows="4" placeholder="הקלד הערות אם יש..."></textarea>
 
-    <button type="submit">שלח הרשמה</button>
+    <button type="submit" id="submitBtn">
+      שלח הרשמה
+      <svg class="plane" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+      </svg>
+    </button>
     <div class="thankyou-message" id="thankyouMessage">
       תודה על הפנייה! הצוות שלנו עובד על זה ונחזור אליך בהקדם.
     </div>
@@ -187,7 +233,6 @@
 <script>
   emailjs.init("miOp6iToFLfbH1jk5");
 
-  // פונקציה לפענוח פרמטרים ב-URL
   function getQueryParams() {
     const params = {};
     const query = window.location.search.substring(1);
@@ -198,61 +243,57 @@
     return params;
   }
 
-  // טעינת הקורסים לרשימת הבחירה - אפשר להשאיר אם יש לך מקור אחר
-  async function loadCoursesToSelect() {
-    // כאן אפשר להוסיף קוד לטעינת קורסים אם צריך
-  }
-
-  // מילוי שדות בטופס
-  function fillForm(course) {
-    document.getElementById('courseName').value = course.type;
-    document.getElementById('startDate').value = course.startDate;
-    document.getElementById('endDate').value = course.endDate;
-    document.getElementById('location').value = course.location;
-  }
-
-  document.addEventListener('DOMContentLoaded', async () => {
+  document.addEventListener('DOMContentLoaded', () => {
     const params = getQueryParams();
 
     if (params.type && params.startDate && params.endDate && params.location) {
-      // מילוי אוטומטי מהקישורים עם פרמטרים
       document.getElementById('courseName').value = params.type;
       document.getElementById('startDate').value = params.startDate;
       document.getElementById('endDate').value = params.endDate;
       document.getElementById('location').value = params.location;
-
       document.getElementById('courseName').style.display = 'block';
       document.getElementById('courseSelect').style.display = 'none';
     } else {
       document.getElementById('courseName').style.display = 'none';
       document.getElementById('courseSelect').style.display = 'block';
-      // loadCoursesToSelect(); // במידה ותרצה לטעון קורסים דינמיים
+      // כאן אפשר להוסיף טעינת קורסים אם תרצה
     }
 
-    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+    const form = document.getElementById('registrationForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const thankyouMsg = document.getElementById('thankyouMessage');
+
+    form.addEventListener('submit', function(e) {
       e.preventDefault();
 
+      // הפעלת אנימציית שליחה
+      submitBtn.classList.add('sending');
+      submitBtn.disabled = true;
+
       const data = {
-        name: document.getElementById('name').value.trim(),
-        phone: document.getElementById('phone').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        course: document.getElementById('courseName').value || (() => {
+        name: form.name.value.trim(),
+        phone: form.phone.value.trim(),
+        email: form.email.value.trim(),
+        course: form.courseName.value || (() => {
           const sel = document.getElementById('courseSelect');
           return sel.options[sel.selectedIndex] ? JSON.parse(sel.value).type : '';
         })(),
-        startDate: document.getElementById('startDate').value,
-        endDate: document.getElementById('endDate').value,
-        location: document.getElementById('location').value,
-        paymentMethod: document.getElementById('paymentMethod').value,
-        notes: document.getElementById('notes').value.trim()
+        startDate: form.startDate.value,
+        endDate: form.endDate.value,
+        location: form.location.value,
+        paymentMethod: form.paymentMethod.value,
+        notes: form.notes.value.trim()
       };
 
       emailjs.send("service_45f1wyc", "template_18zogtj", data)
         .then(() => {
-          document.getElementById('registrationForm').style.display = 'none';
-          document.getElementById('thankyouMessage').style.display = 'block';
+          submitBtn.classList.remove('sending');
+          form.style.display = 'none';
+          thankyouMsg.style.display = 'block';
         })
         .catch((error) => {
+          submitBtn.classList.remove('sending');
+          submitBtn.disabled = false;
           console.error('שגיאה בשליחת המייל דרך EmailJS:', error);
           alert('אירעה שגיאה בשליחה. נסה שוב.');
         });
