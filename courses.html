@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="he">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>קורסים קרובים</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     html, body {
       margin: 0;
@@ -129,6 +129,7 @@
       color: #222;
     }
 
+    /* --- RESPONSIVE --- */
     @media (max-width: 1000px) {
       .container {
         grid-template-columns: 1fr;
@@ -137,6 +138,37 @@
 
       .course {
         max-width: 100%;
+        max-height: none;
+        aspect-ratio: auto;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header {
+        font-size: 24px;
+        padding: 15px 0;
+      }
+
+      footer {
+        font-size: 12px;
+        padding: 12px;
+      }
+
+      .course-content {
+        padding: 15px;
+      }
+
+      .course h2 {
+        font-size: 20px;
+      }
+
+      .course p {
+        font-size: 14px;
+      }
+
+      .register-btn {
+        font-size: 14px;
+        padding: 10px;
       }
     }
   </style>
