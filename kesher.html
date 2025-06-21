@@ -10,45 +10,48 @@
   <link rel="stylesheet" href="style2.css" />
 
   <style>
-    /* כפתור לוגו עם אנימציה מותאמת גם לניידים */
+    /* כפתור הלוגו הדביק */
     #logo-button {
       position: fixed;
-      top: 10px;
-      right: 10px;
+      top: 60px;
+      right: 20px;
       z-index: 1000;
-      animation: slideSide 3s infinite alternate ease-in-out;
+      animation: swingLogo 2s infinite ease-in-out;
+      transform-origin: top center;
     }
 
     #logo-button img {
-      height: 60px;
+      height: 90px;
       max-width: 100%;
       cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* צל */
+      border-radius: 12px; /* פינות מעוגלות */
+      background-color: white; /* רקע לבן */
+      padding: 4px;
     }
 
-    @keyframes slideSide {
-      from {
-        transform: translateX(0);
-      }
-      to {
-        transform: translateX(20px);
-      }
+    @keyframes swingLogo {
+      0%   { transform: rotate(0deg); }
+      25%  { transform: rotate(5deg); }
+      50%  { transform: rotate(0deg); }
+      75%  { transform: rotate(-5deg); }
+      100% { transform: rotate(0deg); }
     }
 
-    /* רספונסיביות לניידים */
     @media (max-width: 600px) {
       #logo-button {
-        top: 10px;
+        top: 50px;
         right: 10px;
       }
 
       #logo-button img {
-        height: 45px;
+        height: 70px;
       }
     }
   </style>
 </head>
 <body>
-  <!-- כפתור הלוגו שמחזיר ל-index.html -->
+  <!-- לוגו שדבוק תמיד בצד ימין למעלה -->
   <a href="index.html" id="logo-button">
     <img src="images/logo.png" alt="Logo" />
   </a>
