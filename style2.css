@@ -1,9 +1,7 @@
-/* עיצוב כללי */
+/* רקע כללי */
 body {
-  font-family: 'Heebo', 'Segoe UI', sans-serif;
-  background: 
-    linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)),
-    url('images/reka2.jpg') no-repeat center center fixed;
+  font-family: 'Heebo', sans-serif;
+  background: url("images/reka2.jpg") no-repeat center center fixed;
   background-size: cover;
   color: #333;
   margin: 0;
@@ -12,39 +10,34 @@ body {
   text-align: right;
 }
 
+/* שכבת רקע חצי שקופה מעל התמונה */
+.container {
+  max-width: 480px;
+  margin: 40px auto;
+  background: rgba(255, 255, 255, 0.93);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+  z-index: 1;
+}
+
 .top-banner {
   display: block;
-  background-color: #0057d8;
+  background-color: #004a99;
   color: white;
   text-align: center;
-  padding: 14px 0;
-  font-size: 18px;
-  font-weight: bold;
+  padding: 10px 0;
   text-decoration: none;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.container {
-  max-width: 500px;
-  margin: 50px auto;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(10px);
-  padding: 35px;
-  border-radius: 16px;
-  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.12);
-  transition: transform 0.3s ease;
-}
-
-.container:hover {
-  transform: translateY(-3px);
+  font-weight: bold;
+  font-size: 16px;
 }
 
 .page-title {
   margin-bottom: 25px;
   font-size: 30px;
-  color: #0057d8;
-  font-weight: 800;
-  text-align: center;
+  color: #004a99;
+  font-weight: 700;
 }
 
 .form-group {
@@ -64,9 +57,9 @@ input[type="tel"],
 input[type="email"],
 textarea {
   width: 100%;
-  padding: 12px 14px;
+  padding: 10px 12px;
   border: 1.5px solid #ccc;
-  border-radius: 10px;
+  border-radius: 8px;
   font-size: 15px;
   font-family: inherit;
   box-sizing: border-box;
@@ -75,9 +68,14 @@ textarea {
 
 input:focus,
 textarea:focus {
-  border-color: #0057d8;
-  box-shadow: 0 0 0 3px rgba(0, 87, 216, 0.15);
+  border-color: #004a99;
+  box-shadow: 0 0 5px rgba(0, 74, 153, 0.4);
   outline: none;
+}
+
+.required {
+  color: #d93025;
+  margin-left: 3px;
 }
 
 .error-message {
@@ -87,75 +85,39 @@ textarea:focus {
   display: none;
 }
 
-.required {
-  color: #d93025;
-  margin-left: 3px;
-}
-
-/* כפתור שליחה */
 .btn-submit {
-  background-color: #0057d8;
+  background-color: #004a99;
   color: white;
   border: none;
   padding: 14px 25px;
-  font-size: 18px;
-  border-radius: 12px;
+  font-size: 17px;
+  border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
   width: 100%;
   transition: background-color 0.3s, transform 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
 }
 
 .btn-submit i {
-  font-size: 18px;
-  vertical-align: middle;
+  margin-left: 8px;
 }
 
-.btn-submit.sending {
-  background-color: #999;
-  cursor: wait;
-}
-
-.btn-submit.sending i {
-  animation: spin 1s linear infinite;
-}
-
-.btn-submit.success {
-  background-color: #2ecc71 !important;
-}
-
-.btn-submit.error {
-  background-color: #e74c3c !important;
-}
-
-.btn-submit:hover:not(:disabled):not(.sending) {
-  background-color: #0044b5;
+.btn-submit:hover:not(:disabled) {
+  background-color: #003366;
   transform: scale(1.02);
 }
 
 .btn-submit:disabled {
-  opacity: 0.7;
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
-/* תוצאה מהשרת */
 .form-response {
   margin-top: 20px;
   font-weight: 600;
   font-size: 16px;
   min-height: 24px;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.4s ease;
-}
-
-.form-response.show {
-  opacity: 1;
-  transform: translateY(0);
+  transition: all 0.3s ease;
 }
 
 .form-response.success {
@@ -166,7 +128,7 @@ textarea:focus {
   color: #d93025;
 }
 
-/* כפתורי צד */
+/* כפתורים צפים */
 .side-buttons {
   position: fixed;
   top: 40%;
@@ -178,7 +140,7 @@ textarea:focus {
 }
 
 .side-btn {
-  background-color: #0057d8;
+  background-color: #004a99;
   color: white;
   width: 48px;
   height: 48px;
@@ -186,18 +148,13 @@ textarea:focus {
   align-items: center;
   justify-content: center;
   border-radius: 30px 0 0 30px;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
-  transition: background-color 0.3s;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s, transform 0.2s;
   text-decoration: none;
   font-size: 22px;
 }
 
 .side-btn:hover {
-  background-color: #0044b5;
-}
-
-/* אנימציה לאייקון מסתובב */
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  background-color: #003366;
+  transform: translateX(-3px);
 }
