@@ -10,58 +10,61 @@
   <link rel="stylesheet" href="style2.css" />
 
   <style>
-    /* כפתור הלוגו הדביק */
+    /* כפתור הלוגו בלבד - גדול, נמוך יותר, עם צל ונדנוד */
     #logo-button {
       position: fixed;
-      top: 60px;
+      top: 80px;     /* יותר למטה */
       right: 20px;
       z-index: 1000;
-      animation: swingLogo 2s infinite ease-in-out;
+      cursor: pointer;
+      animation: swingLogo 2.5s infinite ease-in-out;
       transform-origin: top center;
+      display: block;
     }
 
     #logo-button img {
-      height: 90px;
+      height: 120px;  /* יותר גדול */
       max-width: 100%;
-      cursor: pointer;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* צל */
-      border-radius: 12px; /* פינות מעוגלות */
-      background-color: white; /* רקע לבן */
-      padding: 4px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+      border-radius: 14px;
+      background-color: white;
+      padding: 5px;
+      display: block;
     }
 
     @keyframes swingLogo {
       0%   { transform: rotate(0deg); }
-      25%  { transform: rotate(5deg); }
+      25%  { transform: rotate(6deg); }
       50%  { transform: rotate(0deg); }
-      75%  { transform: rotate(-5deg); }
+      75%  { transform: rotate(-6deg); }
       100% { transform: rotate(0deg); }
     }
 
     @media (max-width: 600px) {
       #logo-button {
-        top: 50px;
-        right: 10px;
+        top: 70px;
+        right: 12px;
       }
 
       #logo-button img {
-        height: 70px;
+        height: 90px;
       }
     }
   </style>
 </head>
 <body>
-  <!-- לוגו שדבוק תמיד בצד ימין למעלה -->
-  <a href="index.html" id="logo-button">
-    <img src="images/logo.png" alt="Logo" />
+
+  <!-- רק התמונה של הלוגו, לחיצה מחזירה לדף הבית -->
+  <a href="index.html" id="logo-button" aria-label="דף הבית">
+    <img src="images/logo.png" alt="לוגו יוז'וק מדיק" />
   </a>
 
-  <a href="tel:+972533562608" class="top-banner">ליצירת קשר: רפי 053-3562608</a>
-
+  <!-- שאר התוכן שלך ממשיך כאן -->
   <div class="container">
     <h1 class="page-title">צור קשר</h1>
 
     <form id="contactForm" novalidate>
+      <!-- שדות הטופס כאן כמו שהיה -->
       <div class="form-group">
         <label for="name">שם מלא<span class="required">*</span></label>
         <input type="text" id="name" name="name" required minlength="4" />
