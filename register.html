@@ -167,18 +167,17 @@
     <label for="email">אימייל <span style="color:red">*</span></label>
     <input type="email" id="email" name="email" required placeholder="example@mail.com" autocomplete="email" />
 
-    <label for="courseSelect">שם הקורס</label>
-    <select id="courseSelect" name="courseSelect" style="display:none;"></select>
-    <input type="text" id="courseName" name="courseName" readonly />
+    <label for="courseName">שם הקורס</label>
+    <input type="text" id="courseName" name="courseName" />
 
     <label for="startDate">תאריך התחלה</label>
-    <input type="text" id="startDate" name="startDate" readonly />
+    <input type="text" id="startDate" name="startDate" />
 
     <label for="endDate">תאריך סיום</label>
-    <input type="text" id="endDate" name="endDate" readonly />
+    <input type="text" id="endDate" name="endDate" />
 
     <label for="location">מיקום</label>
-    <input type="text" id="location" name="location" readonly />
+    <input type="text" id="location" name="location" />
 
     <label for="paymentMethod">אופן תשלום</label>
     <select id="paymentMethod" name="paymentMethod" required>
@@ -199,111 +198,44 @@
   </form>
 </div>
 
+<!-- EmailJS SDK -->
+<script src="https://cdn.emailjs.com/sdk/3.2/email.min.js"></script>
 <script>
-  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec';
+  (function() {
+    emailjs.init('miOp6iToFLfbH1jk5');  // <-- החלף כאן למפתח הציבורי שלך מ-EmailJS
+  })();
 
-  // פונקציה לפענוח פרמטרים ב-URL
-  function getQueryParams() {
-    const params = {};
-    const query = window.location.search.substring(1);
-    query.split("&").forEach(pair => {
-      const [key, value] = pair.split("=");
-      if (key) params[decodeURIComponent(key)] = decodeURIComponent(value || "");
-    });
-    return params;
-  }
+  document.getElementById('registrationForm').addEventListener('submit', function(e) {
+    e.preventDefault();
 
-  // טעינת הקורסים לרשימת הבחירה
-  async function loadCoursesToSelect() {
-    try {
-      const res = await fetch(SHEET_URL);
-      const courses = await res.json();
-      const now = new Date();
-      const futureCourses = courses.filter(c => {
-        const [day, month, year] = c.startDate.split('.');
-        return new Date(`${year}-${month}-${day}`) >= now;
+    const form = e.target;
+
+    const templateParams = {
+      name: form.name.value.trim(),
+      phone: form.phone.value.trim(),
+      email: form.email.value.trim(),
+      courseName: form.courseName.value.trim(),
+      startDate: form.startDate.value.trim(),
+      endDate: form.endDate.value.trim(),
+      location: form.location.value.trim(),
+      paymentMethod: form.paymentMethod.value,
+      notes: form.notes.value.trim()
+    };
+
+    form.querySelector('button[type="submit"]').disabled = true;
+
+    emailjs.send('service_45f1wyc', 'template_wdtd8zn', templateParams)
+      .then(function(response) {
+         console.log('SUCCESS!', response.status, response.text);
+         form.style.display = 'none';
+         document.getElementById('thankyouMessage').style.display = 'block';
+      }, function(error) {
+         console.log('FAILED...', error);
+         alert('שגיאה בשליחה, נסה שוב מאוחר יותר.');
+      })
+      .finally(() => {
+         form.querySelector('button[type="submit"]').disabled = false;
       });
-      const select = document.getElementById('courseSelect');
-      futureCourses.forEach(c => {
-        const option = document.createElement('option');
-        option.value = JSON.stringify(c);
-        option.textContent = `${c.type} | ${c.startDate} - ${c.endDate} | ${c.location}`;
-        select.appendChild(option);
-      });
-      select.addEventListener('change', e => {
-        const course = JSON.parse(e.target.value);
-        fillForm(course);
-      });
-    } catch (err) {
-      alert('שגיאה בטעינת הקורסים');
-      console.error(err);
-    }
-  }
-
-  // מילוי שדות בטופס
-  function fillForm(course) {
-    document.getElementById('courseName').value = course.type;
-    document.getElementById('startDate').value = course.startDate;
-    document.getElementById('endDate').value = course.endDate;
-    document.getElementById('location').value = course.location;
-  }
-
-  document.addEventListener('DOMContentLoaded', async () => {
-    const params = getQueryParams();
-
-    if (params.type && params.startDate && params.endDate && params.location) {
-      // מילוי אוטומטי מהקישורים עם פרמטרים
-      document.getElementById('courseName').value = params.type;
-      document.getElementById('startDate').value = params.startDate;
-      document.getElementById('endDate').value = params.endDate;
-      document.getElementById('location').value = params.location;
-
-      document.getElementById('courseName').style.display = 'block';
-      document.getElementById('courseSelect').style.display = 'none';
-
-    } else {
-      // ללא פרמטרים - טוען רשימת קורסים לבחירה
-      document.getElementById('courseName').style.display = 'none';
-      document.getElementById('courseSelect').style.display = 'block';
-      await loadCoursesToSelect();
-    }
-
-    // טיפול בשליחת הטופס
-    document.getElementById('registrationForm').addEventListener('submit', async e => {
-      e.preventDefault();
-
-      const data = {
-        name: document.getElementById('name').value.trim(),
-        phone: document.getElementById('phone').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        course: document.getElementById('courseName').value || (() => {
-          const sel = document.getElementById('courseSelect');
-          return sel.options[sel.selectedIndex] ? JSON.parse(sel.value).type : '';
-        })(),
-        startDate: document.getElementById('startDate').value,
-        endDate: document.getElementById('endDate').value,
-        location: document.getElementById('location').value,
-        paymentMethod: document.getElementById('paymentMethod').value,
-        notes: document.getElementById('notes').value.trim()
-      };
-
-      try {
-        const res = await fetch(SHEET_URL, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(data)
-        });
-
-        if (res.ok) {
-          document.getElementById('registrationForm').style.display = 'none';
-          document.getElementById('thankyouMessage').style.display = 'block';
-        } else {
-          alert('שליחה נכשלה. נסה שוב מאוחר יותר.');
-        }
-      } catch (err) {
-        alert('אירעה שגיאה בשליחה.');
-      }
-    });
   });
 </script>
 
