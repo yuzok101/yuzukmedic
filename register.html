@@ -95,6 +95,8 @@
     letter-spacing: 0.07em;
     transition: background-color 0.4s ease, box-shadow 0.3s ease;
     animation: fadeInUp 1.8s ease forwards;
+    position: relative;
+    overflow: hidden;
   }
 
   button:hover, button:focus {
@@ -102,13 +104,46 @@
     box-shadow: 0 0 18px #004080;
   }
 
+  /* המטוס בתוך הכפתור */
+  .plane-icon {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    width: 20px;
+    height: 20px;
+    fill: white;
+    transform: translateY(-50%);
+    transition: transform 0.6s ease, opacity 0.6s ease;
+  }
+
+  /* אנימציית המראה */
+  .sending .plane-icon {
+    animation: flyPlane 1.5s forwards;
+  }
+
+  @keyframes flyPlane {
+    0% {
+      transform: translateY(-50%) translateX(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-150%) translateX(200%);
+      opacity: 0;
+    }
+  }
+
   .thankyou-message {
     display: none;
     text-align: center;
     margin-top: 30px;
-    color: green;
     font-size: 1.4rem;
     font-weight: 700;
+  }
+  .thankyou-message.success {
+    color: green;
+  }
+  .thankyou-message.error {
+    color: red;
   }
 
   /* Animations */
@@ -148,6 +183,11 @@
     button {
       font-size: 1.15rem;
       padding: 14px;
+    }
+    .plane-icon {
+      width: 16px;
+      height: 16px;
+      right: 12px;
     }
   }
 </style>
@@ -191,10 +231,14 @@
     <label for="notes">הערות</label>
     <textarea id="notes" name="notes" rows="4" placeholder="הקלד הערות אם יש..."></textarea>
 
-    <button type="submit">שלח הרשמה</button>
-    <div class="thankyou-message" id="thankyouMessage">
-      תודה על הפנייה! הצוות שלנו עובד על זה ונחזור אליך בהקדם.
-    </div>
+    <button type="submit">
+      שלח הרשמה
+      <svg class="plane-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" >
+        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+      </svg>
+    </button>
+
+    <div class="thankyou-message" id="thankyouMessage"></div>
   </form>
 </div>
 
@@ -202,13 +246,15 @@
 <script src="https://cdn.emailjs.com/sdk/3.2/email.min.js"></script>
 <script>
   (function() {
-    emailjs.init('miOp6iToFLfbH1jk5');  // <-- החלף כאן למפתח הציבורי שלך מ-EmailJS
+    emailjs.init('miOp6iToFLfbH1jk5');  // המפתח הציבורי שלך
   })();
 
   document.getElementById('registrationForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
     const form = e.target;
+    const btn = form.querySelector('button[type="submit"]');
+    const thankyouMessage = document.getElementById('thankyouMessage');
 
     const templateParams = {
       name: form.name.value.trim(),
@@ -222,19 +268,21 @@
       notes: form.notes.value.trim()
     };
 
-    form.querySelector('button[type="submit"]').disabled = true;
+    btn.classList.add('sending');
+    btn.disabled = true;
+    thankyouMessage.textContent = '';
+    thankyouMessage.className = 'thankyou-message';
 
     emailjs.send('service_45f1wyc', 'template_wdtd8zn', templateParams)
       .then(function(response) {
-         console.log('SUCCESS!', response.status, response.text);
          form.style.display = 'none';
-         document.getElementById('thankyouMessage').style.display = 'block';
+         thankyouMessage.textContent = 'תודה על הפנייה! הצוות שלנו עובד על זה ונחזור אליך בהקדם.';
+         thankyouMessage.classList.add('success');
       }, function(error) {
-         console.log('FAILED...', error);
-         alert('שגיאה בשליחה, נסה שוב מאוחר יותר.');
-      })
-      .finally(() => {
-         form.querySelector('button[type="submit"]').disabled = false;
+         thankyouMessage.textContent = 'שגיאה בשליחה, נסה שוב מאוחר יותר. פרטי השגיאה: ' + error.text;
+         thankyouMessage.classList.add('error');
+         btn.classList.remove('sending');
+         btn.disabled = false;
       });
   });
 </script>
