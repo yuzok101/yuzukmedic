@@ -5,15 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>צור קשר - יוז'וק מדיק</title>
 
-  <!-- גופן Heebo -->
   <link href="https://fonts.googleapis.com/css2?family=Heebo&display=swap" rel="stylesheet" />
-
-  <!-- CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="style2.css" />
 </head>
 <body>
-
-  <!-- באנר עליון -->
   <a href="tel:+972533562608" class="top-banner">ליצירת קשר: רפי 053-3562608</a>
 
   <div class="container">
@@ -51,6 +47,7 @@
       </div>
 
       <button type="submit" id="sendBtn" class="btn-submit">
+        <span class="btn-icon"><i class="fas fa-paper-plane"></i></span>
         <span id="btnText">שלח</span>
         <span id="spinner" class="spinner hidden"></span>
       </button>
@@ -59,7 +56,6 @@
     <div id="formResponse" class="form-response"></div>
   </div>
 
-  <!-- כפתורי צד צפים -->
   <div class="side-buttons">
     <a href="https://wa.me/972533562608" target="_blank" class="side-btn" aria-label="WhatsApp">
       <img src="images/wa.png" alt="WhatsApp" />
@@ -72,7 +68,6 @@
     </a>
   </div>
 
-  <!-- EmailJS + Script -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script>
     emailjs.init("miOp6iToFLfbH1jk5");
@@ -90,6 +85,7 @@
         return;
       }
 
+      sendBtn.classList.add("loading");
       spinner.classList.remove("hidden");
       btnText.textContent = "שולח...";
       sendBtn.disabled = true;
@@ -113,12 +109,12 @@
           responseBox.className = "form-response error";
         })
         .finally(() => {
+          sendBtn.classList.remove("loading");
           spinner.classList.add("hidden");
           btnText.textContent = "שלח";
           sendBtn.disabled = false;
         });
     });
   </script>
-
 </body>
 </html>
