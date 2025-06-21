@@ -1,74 +1,187 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="he">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>הקורסים הקרובים</title>
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style1.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-</head>
-<body>
-  <div class="container">
-    <h1>הקורסים הקרובים</h1>
-    <div id="courses"></div>
-  </div>
-
-  <script>
-    async function loadCourses() {
-      try {
-        const response = await fetch('data/courses.xlsx');
-        if (!response.ok) throw new Error('שגיאה בטעינת הקובץ');
-
-        const arrayBuffer = await response.arrayBuffer();
-        const workbook = XLSX.read(arrayBuffer, { type: 'array' });
-        const sheet = workbook.Sheets[workbook.SheetNames[0]];
-        const data = XLSX.utils.sheet_to_json(sheet);
-
-        const container = document.getElementById('courses');
-        container.innerHTML = '';
-
-        data.forEach((course, index) => {
-          const courseName = course['שם הקורס'] || '';
-          const dates = course['בין התאריכים'] || '';
-          const meetingDays = course['ימי מפגשים'] || '';
-          const hours = course['שעות'] || '';
-          const price = course['מחיר'] || '';
-          const notes = course['הערות'] || '';
-          const training = course['הכשרה'] || '';
-          const audience = course['קהל יעד'] || '';
-
-          if (!courseName) return;
-
-          const imagePath = `images/${index + 1}.jpg`;
-
-          const courseDiv = document.createElement('div');
-          courseDiv.className = 'course';
-
-          courseDiv.innerHTML = `
-            <img src="${imagePath}" alt="${courseName}" onerror="this.src='images/default.jpg'"/>
-            <div class="course-content">
-              <h2>${courseName}</h2>
-              <p><strong>בין התאריכים:</strong> ${dates}</p>
-              <p><strong>ימי מפגשים:</strong> ${meetingDays}</p>
-              <p><strong>שעות:</strong> ${hours}</p>
-              <p><strong>מחיר:</strong> ${price}</p>
-              <p><strong>קהל יעד:</strong> ${audience}</p>
-              <p><strong>הערות:</strong> ${notes}</p>
-              <p><strong>הכשרה:</strong> ${training}</p>
-              <a href="#contact" class="register-button">להרשמה</a>
-            </div>
-          `;
-
-          container.appendChild(courseDiv);
-        });
-      } catch (error) {
-        document.getElementById('courses').innerHTML = '<p style="color: red; text-align: center;">שגיאה בטעינת הקורסים</p>';
-        console.error(error);
-      }
+  <meta charset="UTF-8">
+  <title>קורסים קרובים</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", "Open Sans", Arial, sans-serif;
+      background-color: #f0f8ff;
+      direction: rtl;
+      color: #1c3b6b;
+      overflow-x: hidden;
     }
 
-    loadCourses();
+    header {
+      background-color: #1c3b6b;
+      color: white;
+      padding: 20px 0;
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      animation: fadeInDown 1s ease;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+      padding: 40px 20px;
+      max-width: 1200px;
+      margin: auto;
+      animation: fadeInUp 1.5s ease;
+    }
+
+    .course {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      overflow: hidden;
+      transition: transform 0.4s ease, box-shadow 0.3s ease;
+      animation: fadeIn 1s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .course:hover {
+      transform: scale(1.03) rotate(-0.5deg);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .course img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .course-content {
+      padding: 20px;
+      flex-grow: 1;
+    }
+
+    .course h2 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      color: #1c3b6b;
+    }
+
+    .course p {
+      margin: 6px 0;
+      font-size: 15px;
+      color: #333;
+    }
+
+    .course p span {
+      font-weight: bold;
+      color: #1c3b6b;
+    }
+
+    .register-btn {
+      margin-top: 15px;
+      background-color: #1c3b6b;
+      color: white;
+      padding: 10px 18px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .register-btn:hover {
+      background-color: #0055aa;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #777;
+      font-size: 14px;
+      animation: fadeIn 2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-50px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <header>הקורסים הקרובים שלנו</header>
+
+  <div class="container" id="coursesContainer"></div>
+
+  <footer>&copy; 2025 יוז׳וק מדיק</footer>
+
+  <script>
+    const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec';
+
+    function parseDate(str) {
+      const parts = str.split('.');
+      return new Date(parts[2], parts[1] - 1, parts[0]);
+    }
+
+    function getRandomImage() {
+      const index = Math.floor(Math.random() * 10) + 1; // 1–10
+      return `images/${index}.jpg`;
+    }
+
+    fetch(SHEET_URL)
+      .then(response => response.json())
+      .then(courses => {
+        const container = document.getElementById('coursesContainer');
+        container.innerHTML = '';
+
+        const now = new Date();
+
+        courses.forEach(course => {
+          const startDate = parseDate(course.startDate);
+          if (startDate < now) return; // אל תציג קורסים שכבר התחילו
+
+          const imagePath = getRandomImage();
+
+          const div = document.createElement('div');
+          div.className = 'course';
+          div.innerHTML = `
+            <img src="${imagePath}" alt="תמונה">
+            <div class="course-content">
+              <h2>${course.type || 'קורס'}</h2>
+              <p><span>תאריכים:</span> ${course.startDate} - ${course.endDate}</p>
+              <p><span>ימים:</span> ${course.days}</p>
+              <p><span>שעות:</span> ${course.hours}</p>
+              <p><span>מחיר:</span> ${course.price}</p>
+              <p><span>קהל יעד:</span> ${course.target}</p>
+              <p><span>מיקום:</span> ${course.location}</p>
+              <p><span>הערות:</span> ${course.notes}</p>
+              <button class="register-btn">להרשמה</button>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+
+        if (container.innerHTML.trim() === '') {
+          container.innerHTML = '<p style="text-align:center;font-size:18px;">אין כרגע קורסים זמינים.</p>';
+        }
+      })
+      .catch(error => {
+        console.error('שגיאה בטעינת הקורסים:', error);
+        document.getElementById('coursesContainer').innerHTML =
+          '<p style="text-align:center;color:red;">אירעה שגיאה בטעינת הקורסים.</p>';
+      });
   </script>
 </body>
 </html>
