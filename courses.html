@@ -131,6 +131,35 @@
       color: #222;
     }
 
+    /* לוגו שמאל למעלה */
+    #logo-button {
+      position: fixed;
+      top: 80px;
+      left: 20px;
+      z-index: 2000;
+      animation: swingLogo 2.5s infinite ease-in-out;
+      transform-origin: top center;
+    }
+
+    #logo-button img {
+      height: 120px;
+      max-width: 100%;
+      cursor: pointer;
+      background: transparent;
+      padding: 0;
+      border: none;
+      box-shadow: none;
+      border-radius: 0;
+    }
+
+    @keyframes swingLogo {
+      0%   { transform: rotate(0deg); }
+      25%  { transform: rotate(6deg); }
+      50%  { transform: rotate(0deg); }
+      75%  { transform: rotate(-6deg); }
+      100% { transform: rotate(0deg); }
+    }
+
     @media (max-width: 700px) {
       .container {
         grid-template-columns: 1fr;
@@ -161,10 +190,25 @@
         flex-direction: column;
         justify-content: space-between;
       }
+
+      #logo-button {
+        top: 70px;
+        left: 12px;
+      }
+
+      #logo-button img {
+        height: 90px;
+      }
     }
   </style>
 </head>
 <body>
+
+  <!-- לוגו שקוף בצד שמאל -->
+  <a href="index.html" id="logo-button">
+    <img src="images/logo.png" alt="לוגו יוז'וק מדיק" />
+  </a>
+
   <header>הקורסים הקרובים שלנו</header>
 
   <main>
