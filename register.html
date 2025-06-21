@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>טופס הרשמה</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Assistant&display=swap">
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Assistant&display=swap');
     html, body {
       margin: 0; padding: 0; height: 100%;
       font-family: 'Assistant', Arial, sans-serif;
@@ -15,41 +15,40 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
-
     .overlay {
       background: rgba(255, 255, 255, 0.6);
       min-height: 100vh;
       padding: 40px 15px;
+      box-sizing: border-box;
       display: flex;
       justify-content: center;
       align-items: center;
     }
-
     form {
-      background: rgba(255,255,255,0.7);
+      background: rgba(255 255 255 / 0.7);
       padding: 35px 30px;
       border-radius: 14px;
       max-width: 600px;
       width: 100%;
       box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+      animation: fadeInUp 1s ease forwards;
     }
-
     h2 {
       text-align: center;
       margin-bottom: 28px;
       color: #1c3b6b;
       font-weight: 700;
       font-size: 2.2rem;
+      animation: fadeIn 1.3s ease forwards;
     }
-
     label {
       display: block;
       margin-top: 18px;
       font-weight: 700;
       color: #1c3b6b;
       font-size: 1.15rem;
+      animation: fadeInLeft 1.5s ease forwards;
     }
-
     input, select, textarea {
       width: 100%;
       margin-top: 8px;
@@ -57,13 +56,21 @@
       font-size: 1.05rem;
       border-radius: 8px;
       border: 2px solid #1c3b6b;
+      transition: border-color 0.3s ease;
+      animation: fadeInRight 1.6s ease forwards;
       background: rgba(255,255,255,0.95);
       color: #1c3b6b;
       box-sizing: border-box;
     }
-
-    textarea { resize: vertical; }
-
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #004080;
+      box-shadow: 0 0 10px #004080;
+      background: #fff;
+    }
+    textarea {
+      resize: vertical;
+    }
     button {
       width: 100%;
       margin-top: 32px;
@@ -75,130 +82,200 @@
       border-radius: 10px;
       cursor: pointer;
       font-weight: 800;
-      position: relative;
-      overflow: hidden;
+      letter-spacing: 0.07em;
+      transition: background-color 0.4s ease, box-shadow 0.3s ease;
+      animation: fadeInUp 1.8s ease forwards;
     }
-
-    .plane-icon {
-      position: absolute;
-      right: 16px;
-      top: 50%;
-      width: 20px;
-      height: 20px;
-      fill: white;
-      transform: translateY(-50%);
-      transition: transform 0.6s ease, opacity 0.6s ease;
+    button:hover, button:focus {
+      background-color: #004080;
+      box-shadow: 0 0 18px #004080;
     }
-
-    .sending .plane-icon {
-      animation: flyPlane 1.5s forwards;
-    }
-
-    @keyframes flyPlane {
-      0% { transform: translateY(-50%) translateX(0); opacity: 1; }
-      100% { transform: translateY(-150%) translateX(200%); opacity: 0; }
-    }
-
     .thankyou-message {
       display: none;
       text-align: center;
       margin-top: 30px;
+      color: green;
       font-size: 1.4rem;
       font-weight: 700;
-      color: green;
     }
-
-    .thankyou-message.error { color: red; }
+    @keyframes fadeInUp {
+      0% {opacity: 0; transform: translateY(30px);}
+      100% {opacity: 1; transform: translateY(0);}
+    }
+    @keyframes fadeInLeft {
+      0% {opacity: 0; transform: translateX(20px);}
+      100% {opacity: 1; transform: translateX(0);}
+    }
+    @keyframes fadeInRight {
+      0% {opacity: 0; transform: translateX(-20px);}
+      100% {opacity: 1; transform: translateX(0);}
+    }
+    @keyframes fadeIn {
+      0% {opacity: 0;}
+      100% {opacity: 1;}
+    }
+    @media (max-width: 480px) {
+      form {
+        padding: 25px 20px;
+        border-radius: 12px;
+      }
+      h2 {
+        font-size: 1.7rem;
+      }
+      label {
+        font-size: 1rem;
+      }
+      input, select, textarea {
+        font-size: 1rem;
+        padding: 10px 14px;
+      }
+      button {
+        font-size: 1.15rem;
+        padding: 14px;
+      }
+    }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 </head>
 <body>
+
 <div class="overlay">
-  <form id="registrationForm">
+  <form id="registrationForm" autocomplete="off" spellcheck="false" novalidate>
     <h2>טופס הרשמה לקורס</h2>
-
-    <label for="name">שם מלא *</label>
-    <input type="text" id="name" name="name" required />
-
-    <label for="phone">טלפון *</label>
-    <input type="tel" id="phone" name="phone" required />
-
-    <label for="email">אימייל *</label>
-    <input type="email" id="email" name="email" required />
-
-    <label for="courseName">שם הקורס</label>
+    <label for="name">שם מלא <span style="color:red">*</span></label>
+    <input type="text" id="name" name="name" required autocomplete="name" />
+    <label for="phone">טלפון <span style="color:red">*</span></label>
+    <input type="tel" id="phone" name="phone" required pattern="[0-9+\-\s]{7,15}" placeholder="050-1234567" autocomplete="tel" />
+    <label for="email">אימייל <span style="color:red">*</span></label>
+    <input type="email" id="email" name="email" required placeholder="example@mail.com" autocomplete="email" />
+    <label for="courseSelect">שם הקורס</label>
+    <select id="courseSelect" name="courseSelect" style="display:none;"></select>
     <input type="text" id="courseName" name="courseName" readonly />
-
     <label for="startDate">תאריך התחלה</label>
     <input type="text" id="startDate" name="startDate" readonly />
-
     <label for="endDate">תאריך סיום</label>
     <input type="text" id="endDate" name="endDate" readonly />
-
     <label for="location">מיקום</label>
     <input type="text" id="location" name="location" readonly />
-
     <label for="paymentMethod">אופן תשלום</label>
     <select id="paymentMethod" name="paymentMethod" required>
-      <option value="" disabled selected>בחר</option>
+      <option value="" disabled selected>בחר אופן תשלום</option>
       <option value="אשראי">אשראי</option>
       <option value="מזומן">מזומן</option>
       <option value="העברה בנקאית">העברה בנקאית</option>
       <option value="ביט">ביט</option>
     </select>
-
     <label for="notes">הערות</label>
-    <textarea id="notes" name="notes"></textarea>
-
-    <button type="submit">
-      שלח הרשמה
-      <svg class="plane-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-      </svg>
-    </button>
-    <div class="thankyou-message" id="thankyouMessage"></div>
+    <textarea id="notes" name="notes" rows="4" placeholder="הקלד הערות אם יש..."></textarea>
+    <button type="submit">שלח הרשמה</button>
+    <div class="thankyou-message" id="thankyouMessage">
+      תודה על הפנייה! הצוות שלנו עובד על זה ונחזור אליך בהקדם.
+    </div>
   </form>
 </div>
 
-<script src="https://cdn.emailjs.com/sdk/3.2/email.min.js"></script>
 <script>
-  emailjs.init('miOp6iToFLfbH1jk5');
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec';
 
-  const form = document.getElementById('registrationForm');
-  const thankyou = document.getElementById('thankyouMessage');
-  const btn = form.querySelector('button');
+  function getQueryParams() {
+    const params = {};
+    const query = window.location.search.substring(1);
+    query.split("&").forEach(pair => {
+      const [key, value] = pair.split("=");
+      if (key) params[decodeURIComponent(key)] = decodeURIComponent(value || "");
+    });
+    return params;
+  }
 
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    btn.classList.add('sending');
-
-    const data = {
-      name: form.name.value,
-      phone: form.phone.value,
-      email: form.email.value,
-      course: form.courseName.value,
-      start: form.startDate.value,
-      end: form.endDate.value,
-      location: form.location.value,
-      payment: form.paymentMethod.value,
-      notes: form.notes.value
-    };
-
-    emailjs.send('service_45f1wyc', 'template_wdtd8zn', data)
-      .then(() => {
-        thankyou.textContent = 'הטופס נשלח בהצלחה!';
-        thankyou.classList.remove('error');
-        thankyou.style.display = 'block';
-        form.reset();
-      })
-      .catch(() => {
-        thankyou.textContent = 'שליחה נכשלה. נסה שוב.';
-        thankyou.classList.add('error');
-        thankyou.style.display = 'block';
-      })
-      .finally(() => {
-        btn.classList.remove('sending');
+  async function loadCoursesToSelect() {
+    try {
+      const res = await fetch(SHEET_URL);
+      const courses = await res.json();
+      const now = new Date();
+      const futureCourses = courses.filter(c => {
+        const [day, month, year] = c.startDate.split('.');
+        return new Date(`${year}-${month}-${day}`) >= now;
       });
+      const select = document.getElementById('courseSelect');
+      futureCourses.forEach(c => {
+        const option = document.createElement('option');
+        option.value = JSON.stringify(c);
+        option.textContent = `${c.type} | ${c.startDate} - ${c.endDate} | ${c.location}`;
+        select.appendChild(option);
+      });
+      select.addEventListener('change', e => {
+        const course = JSON.parse(e.target.value);
+        fillForm(course);
+      });
+    } catch (err) {
+      alert('שגיאה בטעינת הקורסים');
+      console.error(err);
+    }
+  }
+
+  function fillForm(course) {
+    document.getElementById('courseName').value = course.type;
+    document.getElementById('startDate').value = course.startDate;
+    document.getElementById('endDate').value = course.endDate;
+    document.getElementById('location').value = course.location;
+  }
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    emailjs.init("miOp6iToFLfbH1jk5");
+
+    const params = getQueryParams();
+    if (params.type && params.startDate && params.endDate && params.location) {
+      document.getElementById('courseName').value = params.type;
+      document.getElementById('startDate').value = params.startDate;
+      document.getElementById('endDate').value = params.endDate;
+      document.getElementById('location').value = params.location;
+      document.getElementById('courseName').style.display = 'block';
+      document.getElementById('courseSelect').style.display = 'none';
+    } else {
+      document.getElementById('courseName').style.display = 'none';
+      document.getElementById('courseSelect').style.display = 'block';
+      await loadCoursesToSelect();
+    }
+
+    document.getElementById('registrationForm').addEventListener('submit', async e => {
+      e.preventDefault();
+
+      const data = {
+        name: document.getElementById('name').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        course: document.getElementById('courseName').value || (() => {
+          const sel = document.getElementById('courseSelect');
+          return sel.options[sel.selectedIndex] ? JSON.parse(sel.value).type : '';
+        })(),
+        startDate: document.getElementById('startDate').value,
+        endDate: document.getElementById('endDate').value,
+        location: document.getElementById('location').value,
+        paymentMethod: document.getElementById('paymentMethod').value,
+        notes: document.getElementById('notes').value.trim()
+      };
+
+      try {
+        const res = await fetch(SHEET_URL, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
+          await emailjs.send("service_45f1wyc", "template_wdtd8zn", data);
+          document.getElementById('registrationForm').style.display = 'none';
+          document.getElementById('thankyouMessage').style.display = 'block';
+        } else {
+          alert('שליחה נכשלה. נסה שוב מאוחר יותר.');
+        }
+      } catch (err) {
+        alert('אירעה שגיאה בשליחה.');
+        console.error(err);
+      }
+    });
   });
 </script>
+
 </body>
 </html>
