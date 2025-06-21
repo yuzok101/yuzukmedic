@@ -8,8 +8,51 @@
   <link href="https://fonts.googleapis.com/css2?family=Heebo&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <link rel="stylesheet" href="style2.css" />
+
+  <style>
+    /* כפתור לוגו עם אנימציה מותאמת גם לניידים */
+    #logo-button {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 1000;
+      animation: slideSide 3s infinite alternate ease-in-out;
+    }
+
+    #logo-button img {
+      height: 60px;
+      max-width: 100%;
+      cursor: pointer;
+    }
+
+    @keyframes slideSide {
+      from {
+        transform: translateX(0);
+      }
+      to {
+        transform: translateX(20px);
+      }
+    }
+
+    /* רספונסיביות לניידים */
+    @media (max-width: 600px) {
+      #logo-button {
+        top: 10px;
+        right: 10px;
+      }
+
+      #logo-button img {
+        height: 45px;
+      }
+    }
+  </style>
 </head>
 <body>
+  <!-- כפתור הלוגו שמחזיר ל-index.html -->
+  <a href="index.html" id="logo-button">
+    <img src="images/logo.png" alt="Logo" />
+  </a>
+
   <a href="tel:+972533562608" class="top-banner">ליצירת קשר: רפי 053-3562608</a>
 
   <div class="container">
