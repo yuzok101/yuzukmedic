@@ -1,4 +1,4 @@
-/* עיצוב כללי (כפי שהוסבר בהרחבה קודם) — נוספו אנימציות בסוף */
+/* עיצוב כללי */
 body {
   font-family: 'Heebo', 'Segoe UI', sans-serif;
   background: 
@@ -198,10 +198,6 @@ textarea:focus {
 
 /* אנימציה לאייקון מסתובב */
 @keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
