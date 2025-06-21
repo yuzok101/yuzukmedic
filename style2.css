@@ -97,26 +97,28 @@ textarea:focus {
   gap: 10px;
 }
 
+/* אייקון מטוס בכפתור */
 .btn-submit .btn-icon {
   display: inline-block;
+  font-size: 20px;
   transition: transform 0.3s;
-  font-size: 18px;
+  color: white;
 }
 
+/* אנימציית טיסה עדינה */
 .btn-submit.loading .btn-icon {
-  animation: fly 1s linear infinite;
+  animation: fly 1.2s ease-in-out infinite;
 }
 
-/* אנימציית מטוס */
 @keyframes fly {
   0% {
-    transform: translateX(0) rotate(0);
+    transform: translateX(0) rotate(0deg);
   }
   50% {
-    transform: translateX(5px) rotate(10deg);
+    transform: translateX(6px) rotate(12deg);
   }
   100% {
-    transform: translateX(0) rotate(0);
+    transform: translateX(0) rotate(0deg);
   }
 }
 
@@ -175,6 +177,12 @@ textarea:focus {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
+/* להגדיל רק את הסמל של המייל */
+.side-btn.mail img {
+  width: 44px;
+  height: 44px;
+}
+
 /* רספונסיביות */
 @media (max-width: 600px) {
   .container {
@@ -193,5 +201,10 @@ textarea:focus {
   .side-btn img {
     width: 32px;
     height: 32px;
+  }
+
+  .side-btn.mail img {
+    width: 38px;
+    height: 38px;
   }
 }
