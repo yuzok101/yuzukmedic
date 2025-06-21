@@ -10,6 +10,9 @@
 
   <!-- FontAwesome לאייקונים -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style2.css?v=1.0" />
 </head>
 <body>
 
@@ -82,7 +85,6 @@
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      // איפוס הודעות
       response.className = "form-response";
       response.textContent = "";
       btn.disabled = true;
@@ -90,10 +92,8 @@
       btn.innerHTML = '<i class="fas fa-spinner"></i> שולח...';
 
       try {
-        // סימולציה של איחור לשליחה (2 שניות)
         await new Promise(r => setTimeout(r, 2000));
 
-        // הצלחה
         btn.classList.remove("sending");
         btn.classList.add("success");
         btn.innerHTML = '<i class="fas fa-check-circle"></i> נשלח בהצלחה';
@@ -103,7 +103,6 @@
 
         form.reset();
       } catch (error) {
-        // שגיאה
         btn.classList.remove("sending");
         btn.classList.add("error");
         btn.innerHTML = '<i class="fas fa-times-circle"></i> שגיאה בשליחה';
