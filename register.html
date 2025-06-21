@@ -124,11 +124,11 @@
     }
     .thankyou-message {
       display: none;
-      text-align: center;
-      margin-top: 30px;
+      margin-top: 15px;
       color: green;
       font-size: 1.4rem;
       font-weight: 700;
+      text-align: center;
       animation: fadeIn 1s ease forwards;
     }
     .error-message {
@@ -301,8 +301,10 @@
         .then(() => {
           submitBtn.disabled = false;
           planeIcon.style.display = 'none';
+          btnText.textContent = "שלח הרשמה";
           thankyouMsg.style.display = 'block';
-          form.style.display = 'none';
+          errorMsg.style.display = 'none';
+          // שומר על הטופס פתוח לשינויים או רישומים נוספים
         })
         .catch((error) => {
           submitBtn.disabled = false;
@@ -310,6 +312,7 @@
           btnText.textContent = "שלח הרשמה";
           errorMsg.textContent = "אירעה שגיאה בשליחה. נסה שוב.";
           errorMsg.style.display = 'block';
+          thankyouMsg.style.display = 'none';
           console.error('שגיאה בשליחת המייל דרך EmailJS:', error);
         });
     });
