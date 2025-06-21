@@ -202,6 +202,7 @@
 <script>
   const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec';
 
+  // פונקציה לפענוח פרמטרים ב-URL
   function getQueryParams() {
     const params = {};
     const query = window.location.search.substring(1);
@@ -212,6 +213,7 @@
     return params;
   }
 
+  // טעינת הקורסים לרשימת הבחירה
   async function loadCoursesToSelect() {
     try {
       const res = await fetch(SHEET_URL);
@@ -238,9 +240,72 @@
     }
   }
 
+  // מילוי שדות בטופס
   function fillForm(course) {
     document.getElementById('courseName').value = course.type;
     document.getElementById('startDate').value = course.startDate;
     document.getElementById('endDate').value = course.endDate;
     document.getElementById('location').value = course.location;
- 
+  }
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    const params = getQueryParams();
+
+    if (params.type && params.startDate && params.endDate && params.location) {
+      // מילוי אוטומטי מהקישורים עם פרמטרים
+      document.getElementById('courseName').value = params.type;
+      document.getElementById('startDate').value = params.startDate;
+      document.getElementById('endDate').value = params.endDate;
+      document.getElementById('location').value = params.location;
+
+      document.getElementById('courseName').style.display = 'block';
+      document.getElementById('courseSelect').style.display = 'none';
+
+    } else {
+      // ללא פרמטרים - טוען רשימת קורסים לבחירה
+      document.getElementById('courseName').style.display = 'none';
+      document.getElementById('courseSelect').style.display = 'block';
+      await loadCoursesToSelect();
+    }
+
+    // טיפול בשליחת הטופס
+    document.getElementById('registrationForm').addEventListener('submit', async e => {
+      e.preventDefault();
+
+      const data = {
+        name: document.getElementById('name').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        course: document.getElementById('courseName').value || (() => {
+          const sel = document.getElementById('courseSelect');
+          return sel.options[sel.selectedIndex] ? JSON.parse(sel.value).type : '';
+        })(),
+        startDate: document.getElementById('startDate').value,
+        endDate: document.getElementById('endDate').value,
+        location: document.getElementById('location').value,
+        paymentMethod: document.getElementById('paymentMethod').value,
+        notes: document.getElementById('notes').value.trim()
+      };
+
+      try {
+        const res = await fetch(SHEET_URL, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(data)
+        });
+
+        if (res.ok) {
+          document.getElementById('registrationForm').style.display = 'none';
+          document.getElementById('thankyouMessage').style.display = 'block';
+        } else {
+          alert('שליחה נכשלה. נסה שוב מאוחר יותר.');
+        }
+      } catch (err) {
+        alert('אירעה שגיאה בשליחה.');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
