@@ -14,18 +14,20 @@
       background-size: cover;
       direction: rtl;
       color: #1c3b6b;
-      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
     }
 
     header {
-      background-color: rgba(28, 59, 107, 0.85);
+      background-color: #1c3b6b; /* אטום לחלוטין */
       color: white;
       padding: 20px 0;
       text-align: center;
       font-size: 28px;
       font-weight: bold;
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-      animation: fadeInDown 1s ease;
+      z-index: 10;
     }
 
     .container {
@@ -35,7 +37,8 @@
       padding: 40px;
       max-width: 1200px;
       margin: auto;
-      animation: fadeInUp 1.5s ease;
+      width: 100%;
+      flex: 1;
     }
 
     .course {
@@ -44,7 +47,6 @@
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
       overflow: hidden;
       transition: transform 0.4s ease, box-shadow 0.3s ease;
-      animation: fadeIn 1s ease;
       display: flex;
       flex-direction: column;
     }
@@ -58,8 +60,6 @@
       width: 100%;
       height: 200px;
       object-fit: cover;
-      border-top-right-radius: 16px;
-      border-top-left-radius: 16px;
     }
 
     .course-content {
@@ -103,25 +103,10 @@
     footer {
       text-align: center;
       padding: 20px;
-      color: #eee;
+      color: white;
       font-size: 14px;
-      background-color: rgba(28, 59, 107, 0.6);
-      animation: fadeIn 2s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(50px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes fadeInDown {
-      from { opacity: 0; transform: translateY(-50px); }
-      to { opacity: 1; transform: translateY(0); }
+      background-color: #1c3b6b; /* אטום ולא שקוף */
+      margin-top: auto;
     }
 
     @media (max-width: 600px) {
@@ -137,7 +122,7 @@
 
   <div class="container" id="coursesContainer"></div>
 
-  <footer>&copy; 2025 יוז׳וק מדיק</footer>
+  <footer>&copy; 2025 יוז׳וק מדיק – כל הזכויות שמורות</footer>
 
   <script>
     const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec';
@@ -148,7 +133,7 @@
     }
 
     function getRandomImage() {
-      const index = Math.floor(Math.random() * 10) + 1; // 1–10
+      const index = Math.floor(Math.random() * 10) + 1;
       return `images/${index}.jpg`;
     }
 
@@ -186,7 +171,7 @@
         });
 
         if (container.innerHTML.trim() === '') {
-          container.innerHTML = '<p style="text-align:center;font-size:18px;">אין כרגע קורסים זמינים.</p>';
+          container.innerHTML = '<p style="text-align:center;font-size:18px;color:#fff;">אין כרגע קורסים זמינים.</p>';
         }
       })
       .catch(error => {
