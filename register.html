@@ -92,9 +92,35 @@
       justify-content: center;
       align-items: center;
     }
-    button:hover, button:focus {
+    button:hover:not(:disabled), button:focus:not(:disabled) {
       background-color: #004080;
       box-shadow: 0 0 18px #004080;
+    }
+    button:disabled {
+      cursor: default;
+      opacity: 0.7;
+    }
+    /* אנימציית מטוס */
+    .plane-icon {
+      width: 24px;
+      height: 24px;
+      margin-left: 12px;
+      fill: white;
+      animation: flyPlane 1.2s linear forwards;
+    }
+    @keyframes flyPlane {
+      0% {
+        transform: translateX(0) translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      50% {
+        transform: translateX(20px) translateY(-10px) rotate(15deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(60px) translateY(-20px) rotate(15deg);
+        opacity: 0;
+      }
     }
     .thankyou-message {
       display: none;
@@ -105,40 +131,14 @@
       font-weight: 700;
       animation: fadeIn 1s ease forwards;
     }
-    /* מטוס שליחה */
-    .plane {
-      position: absolute;
-      right: 20px;
-      top: 50%;
-      width: 24px;
-      height: 24px;
-      transform: translateY(-50%);
-      fill: white;
-      opacity: 0;
-      pointer-events: none;
+    .error-message {
+      display: none;
+      margin-top: 15px;
+      color: red;
+      font-weight: 700;
+      text-align: center;
+      animation: fadeIn 1s ease forwards;
     }
-    .sending .plane {
-      opacity: 1;
-      animation: flyPlane 1s forwards;
-    }
-    @keyframes flyPlane {
-      0% {
-        right: 20px;
-        opacity: 1;
-        transform: translateY(-50%) rotate(0deg);
-      }
-      50% {
-        right: 60%;
-        opacity: 1;
-        transform: translateY(-60%) rotate(15deg);
-      }
-      100% {
-        right: 120%;
-        opacity: 0;
-        transform: translateY(-70%) rotate(15deg);
-      }
-    }
-    /* אנימציית fadeInUp */
     @keyframes fadeInUp {
       0% {opacity: 0; transform: translateY(30px);}
       100% {opacity: 1; transform: translateY(0);}
@@ -219,13 +219,16 @@
     <textarea id="notes" name="notes" rows="4" placeholder="הקלד הערות אם יש..."></textarea>
 
     <button type="submit" id="submitBtn">
-      שלח הרשמה
-      <svg class="plane" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <span class="btn-text">שלח הרשמה</span>
+      <svg class="plane-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:none;">
         <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
       </svg>
     </button>
     <div class="thankyou-message" id="thankyouMessage">
-      תודה על הפנייה! הצוות שלנו עובד על זה ונחזור אליך בהקדם.
+      השליחה הצליחה, ניצור איתך קשר בהקדם.
+    </div>
+    <div class="error-message" id="errorMessage">
+      <!-- הודעת שגיאה תופיע כאן -->
     </div>
   </form>
 </div>
@@ -262,13 +265,22 @@
     const form = document.getElementById('registrationForm');
     const submitBtn = document.getElementById('submitBtn');
     const thankyouMsg = document.getElementById('thankyouMessage');
+    const errorMsg = document.getElementById('errorMessage');
+    const btnText = submitBtn.querySelector('.btn-text');
+    const planeIcon = submitBtn.querySelector('.plane-icon');
 
     form.addEventListener('submit', function(e) {
       e.preventDefault();
+      errorMsg.style.display = 'none';
+      thankyouMsg.style.display = 'none';
 
-      // הפעלת אנימציית שליחה
-      submitBtn.classList.add('sending');
       submitBtn.disabled = true;
+      btnText.textContent = "משתף...";
+      planeIcon.style.display = 'inline-block';
+      planeIcon.style.animation = 'none';
+      // פעולה לאתחול האנימציה מחדש
+      planeIcon.offsetHeight; 
+      planeIcon.style.animation = null;
 
       const data = {
         name: form.name.value.trim(),
@@ -287,15 +299,18 @@
 
       emailjs.send("service_45f1wyc", "template_18zogtj", data)
         .then(() => {
-          submitBtn.classList.remove('sending');
-          form.style.display = 'none';
+          submitBtn.disabled = false;
+          planeIcon.style.display = 'none';
           thankyouMsg.style.display = 'block';
+          form.style.display = 'none';
         })
         .catch((error) => {
-          submitBtn.classList.remove('sending');
           submitBtn.disabled = false;
+          planeIcon.style.display = 'none';
+          btnText.textContent = "שלח הרשמה";
+          errorMsg.textContent = "אירעה שגיאה בשליחה. נסה שוב.";
+          errorMsg.style.display = 'block';
           console.error('שגיאה בשליחת המייל דרך EmailJS:', error);
-          alert('אירעה שגיאה בשליחה. נסה שוב.');
         });
     });
   });
