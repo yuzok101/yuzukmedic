@@ -158,8 +158,8 @@
       return new Date(parts[2], parts[1] - 1, parts[0]);
     }
 
-    function formatHebrewDate(date) {
-      return new Intl.DateTimeFormat('he-u-ca-hebrew', {
+    function formatHebrewDateInWords(date) {
+      return new Intl.DateTimeFormat('he-u-ca-hebrew-nu-hebr', {
         year: 'numeric',
         month: 'long',
         day: 'numeric'
@@ -201,8 +201,8 @@
           if (startDate < now) return;
 
           const endDate = parseDate(course.endDate);
-          const hebrewStart = formatHebrewDate(startDate);
-          const hebrewEnd = formatHebrewDate(endDate);
+          const hebrewStart = formatHebrewDateInWords(startDate);
+          const hebrewEnd = formatHebrewDateInWords(endDate);
           const imagePath = imagePool[imageIndex] || "images/default.jpg";
           imageIndex++;
 
