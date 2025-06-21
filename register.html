@@ -1,28 +1,29 @@
 <!DOCTYPE html>
 <html lang="he">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>טופס הרשמה</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
       font-family: Arial, sans-serif;
       direction: rtl;
-      padding: 20px;
+      padding: 30px 20px;
       max-width: 600px;
       margin: auto;
-      background: #f0f4ff;
+      background-color: #f4f9ff;
       color: #1c3b6b;
     }
     h2 {
       text-align: center;
+      margin-bottom: 30px;
     }
     label {
       display: block;
-      margin-top: 15px;
+      margin-top: 18px;
       font-weight: bold;
     }
-    input, select, textarea, button {
+    input, select, textarea {
       width: 100%;
       padding: 10px;
       margin-top: 5px;
@@ -32,10 +33,14 @@
       box-sizing: border-box;
     }
     button {
+      width: 100%;
+      padding: 14px;
       margin-top: 25px;
+      font-size: 18px;
       background-color: #1c3b6b;
       color: white;
       border: none;
+      border-radius: 8px;
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
@@ -45,8 +50,8 @@
     .thankyou-message {
       display: none;
       text-align: center;
+      margin-top: 30px;
       color: green;
-      margin-top: 20px;
       font-size: 18px;
     }
   </style>
@@ -56,23 +61,23 @@
 <h2>טופס הרשמה לקורס</h2>
 
 <form id="registrationForm">
-  <label for="name">שם מלא<span style="color:red;"> *</span></label>
-  <input type="text" id="name" name="name" required placeholder="הקלד את שמך המלא" />
+  <label for="name">שם מלא <span style="color:red">*</span></label>
+  <input type="text" id="name" name="name" required>
 
-  <label for="phone">טלפון<span style="color:red;"> *</span></label>
-  <input type="tel" id="phone" name="phone" required placeholder="הקלד מספר טלפון" pattern="[0-9+\-\s]{7,15}" />
+  <label for="phone">טלפון <span style="color:red">*</span></label>
+  <input type="tel" id="phone" name="phone" required pattern="[0-9+\-\s]{7,15}" placeholder="050-1234567">
 
   <label for="courseName">שם הקורס</label>
-  <input type="text" id="courseName" name="courseName" readonly />
+  <input type="text" id="courseName" name="courseName" readonly>
 
   <label for="startDate">תאריך התחלה</label>
-  <input type="text" id="startDate" name="startDate" readonly />
+  <input type="text" id="startDate" name="startDate" readonly>
 
   <label for="endDate">תאריך סיום</label>
-  <input type="text" id="endDate" name="endDate" readonly />
+  <input type="text" id="endDate" name="endDate" readonly>
 
   <label for="location">מיקום</label>
-  <input type="text" id="location" name="location" readonly />
+  <input type="text" id="location" name="location" readonly>
 
   <label for="paymentMethod">אופן תשלום</label>
   <select id="paymentMethod" name="paymentMethod" required>
@@ -84,73 +89,69 @@
   </select>
 
   <label for="notes">הערות</label>
-  <textarea id="notes" name="notes" rows="4" placeholder="כתוב כאן הערות (אם יש)"></textarea>
+  <textarea id="notes" name="notes" rows="4" placeholder="הקלד הערות אם יש..."></textarea>
 
   <button type="submit">שלח הרשמה</button>
 </form>
 
 <div class="thankyou-message" id="thankyouMessage">
-  תודה על הפנייה! הצוות שלנו עובד על זה ונפנה אליך בהקדם.
+  תודה על הפנייה! הצוות שלנו עובד על זה ונחזור אליך בהקדם.
 </div>
 
 <script>
   const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec';
 
-  // פונקציה לקרוא פרמטרים מכתובת ה-URL
+  // חילוץ פרמטרים מה-URL
   function getQueryParams() {
     const params = {};
-    const queryString = window.location.search.substring(1);
-    const pairs = queryString.split('&');
-    for (const pair of pairs) {
-      const [key, value] = pair.split('=');
-      if (key) params[decodeURIComponent(key)] = decodeURIComponent(value || '');
-    }
+    const query = window.location.search.substring(1);
+    query.split("&").forEach(pair => {
+      const [key, value] = pair.split("=");
+      if (key) params[decodeURIComponent(key)] = decodeURIComponent(value || "");
+    });
     return params;
   }
 
   document.addEventListener('DOMContentLoaded', () => {
     const params = getQueryParams();
 
-    // אם יש פרמטרים - מלא אותם בשדות המתאימים
-    if(params.course) document.getElementById('courseName').value = params.course;
-    if(params.startDate) document.getElementById('startDate').value = params.startDate;
-    if(params.endDate) document.getElementById('endDate').value = params.endDate;
-    if(params.location) document.getElementById('location').value = params.location;
+    if (params.course)      document.getElementById('courseName').value = params.course;
+    if (params.startDate)   document.getElementById('startDate').value = params.startDate;
+    if (params.endDate)     document.getElementById('endDate').value = params.endDate;
+    if (params.location)    document.getElementById('location').value = params.location;
 
     const form = document.getElementById('registrationForm');
-    form.addEventListener('submit', async e => {
+    const thankyou = document.getElementById('thankyouMessage');
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
       const data = {
         name: document.getElementById('name').value.trim(),
         phone: document.getElementById('phone').value.trim(),
-        paymentMethod: document.getElementById('paymentMethod').value,
-        notes: document.getElementById('notes').value.trim(),
         course: document.getElementById('courseName').value,
         startDate: document.getElementById('startDate').value,
         endDate: document.getElementById('endDate').value,
-        location: document.getElementById('location').value
+        location: document.getElementById('location').value,
+        paymentMethod: document.getElementById('paymentMethod').value,
+        notes: document.getElementById('notes').value.trim()
       };
 
-      if(!data.name || !data.phone || !data.paymentMethod) {
-        alert('אנא מלא את כל השדות המסומנים *');
-        return;
-      }
-
       try {
-        const response = await fetch(SHEET_URL, {
+        const res = await fetch(SHEET_URL, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify(data)
         });
-        if(response.ok) {
+
+        if (res.ok) {
           form.style.display = 'none';
-          document.getElementById('thankyouMessage').style.display = 'block';
+          thankyou.style.display = 'block';
         } else {
-          alert('אירעה שגיאה בשליחת הטופס, נסה שוב מאוחר יותר');
+          alert('שליחה נכשלה. נסה שוב מאוחר יותר.');
         }
-      } catch(err) {
-        alert('אירעה שגיאה בשליחת הטופס, נסה שוב מאוחר יותר');
+      } catch (err) {
+        alert('אירעה שגיאה בשליחה.');
       }
     });
   });
