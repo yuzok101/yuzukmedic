@@ -14,9 +14,6 @@
       background-size: cover;
       direction: rtl;
       color: #1c3b6b;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
     }
 
     header {
@@ -27,7 +24,27 @@
       font-size: 28px;
       font-weight: bold;
       box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-      z-index: 10;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    footer {
+      background-color: #1c3b6b;
+      color: white;
+      text-align: center;
+      padding: 16px;
+      font-size: 14px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    main {
+      padding-top: 100px;
+      padding-bottom: 80px;
     }
 
     .container {
@@ -35,10 +52,8 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 30px;
       padding: 40px;
-      max-width: 1100px;
+      max-width: 1200px;
       margin: auto;
-      width: 100%;
-      flex: 1;
     }
 
     .course {
@@ -50,8 +65,9 @@
       display: flex;
       flex-direction: column;
       width: 100%;
-      aspect-ratio: 1 / 1; /* ריבוע מוחלט */
-      max-height: 550px;
+      aspect-ratio: 1 / 1;
+      max-width: 600px;
+      max-height: 600px;
     }
 
     .course:hover {
@@ -67,11 +83,11 @@
 
     .course-content {
       padding: 20px;
-      overflow-y: auto;
       flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      overflow: auto;
     }
 
     .course h2 {
@@ -107,19 +123,14 @@
       background-color: #0055aa;
     }
 
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: white;
-      font-size: 14px;
-      background-color: #1c3b6b;
-      margin-top: auto;
-    }
-
     @media (max-width: 800px) {
       .container {
         grid-template-columns: 1fr;
         padding: 20px;
+      }
+
+      .course {
+        max-width: 100%;
       }
     }
   </style>
@@ -127,7 +138,9 @@
 <body>
   <header>הקורסים הקרובים שלנו</header>
 
-  <div class="container" id="coursesContainer"></div>
+  <main>
+    <div class="container" id="coursesContainer"></div>
+  </main>
 
   <footer>&copy; 2025 יוז׳וק מדיק – כל הזכויות שמורות</footer>
 
