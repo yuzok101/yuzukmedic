@@ -23,7 +23,6 @@
       text-align: center;
       font-size: 28px;
       font-weight: bold;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
       position: fixed;
       top: 0;
       width: 100%;
@@ -123,6 +122,13 @@
       background-color: #0055aa;
     }
 
+    .hebrew-date {
+      direction: rtl;
+      text-align: right;
+      font-size: 14px;
+      color: #222;
+    }
+
     @media (max-width: 800px) {
       .container {
         grid-template-columns: 1fr;
@@ -150,6 +156,14 @@
     function parseDate(str) {
       const parts = str.split('.');
       return new Date(parts[2], parts[1] - 1, parts[0]);
+    }
+
+    function formatHebrewDate(date) {
+      return new Intl.DateTimeFormat('he-u-ca-hebrew', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      }).format(date);
     }
 
     function shuffleArray(array) {
@@ -186,6 +200,9 @@
           const startDate = parseDate(course.startDate);
           if (startDate < now) return;
 
+          const endDate = parseDate(course.endDate);
+          const hebrewStart = formatHebrewDate(startDate);
+          const hebrewEnd = formatHebrewDate(endDate);
           const imagePath = imagePool[imageIndex] || "images/default.jpg";
           imageIndex++;
 
@@ -196,7 +213,11 @@
             <div class="course-content">
               <div>
                 <h2>${course.type || 'קורס'}</h2>
-                <p><span>תאריכים:</span> ${course.startDate} - ${course.endDate}</p>
+                <p>
+                  <span>תאריך התחלה:</span> ${course.startDate} |
+                  <span>תאריך סיום:</span> ${course.endDate}
+                </p>
+                <p class="hebrew-date">${hebrewStart} – ${hebrewEnd}</p>
                 <p><span>ימים:</span> ${course.days}</p>
                 <p><span>שעות:</span> ${course.hours}</p>
                 <p><span>מחיר:</span> ${course.price}</p>
