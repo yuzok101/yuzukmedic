@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
   <!-- CSS -->
-  <link rel="stylesheet" href="style2.css?v=1.0" />
+  <link rel="stylesheet" href="style2.css?v=2" />
 </head>
 <body>
 
@@ -32,7 +32,7 @@
 
       <div class="form-group">
         <label for="phone">טלפון<span class="required">*</span></label>
-        <input type="tel" id="phone" name="phone" required pattern="^05\d{8}$" />
+        <input type="tel" id="phone" name="phone" required pattern="^05\\d{8}$" />
         <span class="error-message"></span>
       </div>
 
@@ -55,13 +55,11 @@
       </div>
 
       <button type="submit" id="sendBtn" class="btn-submit">
-        <i class="fas fa-paper-plane"></i>
-        שלח
+        <i class="fas fa-paper-plane"></i> שלח
       </button>
     </form>
 
     <div id="formResponse" class="form-response"></div>
-
   </div>
 
   <!-- כפתורי צד צפים -->
@@ -77,41 +75,48 @@
     </a>
   </div>
 
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+  <!-- קוד שליחה -->
   <script>
+    emailjs.init("miOp6iToFLfbH1jk5"); // Public Key שלך
+
     const form = document.getElementById("contactForm");
     const btn = document.getElementById("sendBtn");
     const response = document.getElementById("formResponse");
 
-    form.addEventListener("submit", async (e) => {
+    form.addEventListener("submit", function (e) {
       e.preventDefault();
 
-      response.className = "form-response";
-      response.textContent = "";
       btn.disabled = true;
-      btn.classList.add("sending");
-      btn.innerHTML = '<i class="fas fa-spinner"></i> שולח...';
+      btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> שולח...';
+      response.textContent = "";
+      response.className = "form-response";
 
-      try {
-        await new Promise(r => setTimeout(r, 2000));
+      const formData = {
+        name: document.getElementById("name").value,
+        phone: document.getElementById("phone").value,
+        email: document.getElementById("email").value,
+        area: document.getElementById("area").value,
+        message: document.getElementById("message").value,
+      };
 
-        btn.classList.remove("sending");
-        btn.classList.add("success");
-        btn.innerHTML = '<i class="fas fa-check-circle"></i> נשלח בהצלחה';
-
-        response.textContent = "הטופס נשלח בהצלחה!";
-        response.classList.add("show", "success");
-
-        form.reset();
-      } catch (error) {
-        btn.classList.remove("sending");
-        btn.classList.add("error");
-        btn.innerHTML = '<i class="fas fa-times-circle"></i> שגיאה בשליחה';
-
-        response.textContent = "אירעה שגיאה בשליחה. נסה שוב.";
-        response.classList.add("show", "error");
-      } finally {
-        btn.disabled = false;
-      }
+      emailjs.send("service_45f1wyc", "template_xxxxx", formData) // ← החלף ל-Template ID שלך
+        .then(function () {
+          btn.innerHTML = '<i class="fas fa-check-circle"></i> נשלח בהצלחה';
+          response.textContent = "ההודעה נשלחה בהצלחה!";
+          response.classList.add("success");
+          form.reset();
+        }, function (error) {
+          btn.innerHTML = '<i class="fas fa-times-circle"></i> שגיאה';
+          response.textContent = "אירעה שגיאה בשליחה. נסה שוב.";
+          response.classList.add("error");
+          console.error("EmailJS Error:", error);
+        })
+        .finally(() => {
+          btn.disabled = false;
+        });
     });
   </script>
 
