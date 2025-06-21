@@ -10,39 +10,34 @@
   <link rel="stylesheet" href="style2.css" />
 
   <style>
-    /* לוגו שקוף - עכשיו בצד שמאל */
+    /* לוגו בצד שמאל למעלה עם נדנוד */
     #logo-button {
       position: fixed;
       top: 80px;
-      left: 20px; /* הועבר מצד ימין לשמאל */
-      z-index: 1000;
+      left: 20px;
+      z-index: 2000;
       animation: swingLogo 2.5s infinite ease-in-out;
       transform-origin: top center;
     }
 
     #logo-button img {
       height: 120px;
-      max-width: 100%;
-      cursor: pointer;
       background: transparent;
-      padding: 0;
-      border: none;
-      box-shadow: none;
-      border-radius: 0;
+      cursor: pointer;
     }
 
     @keyframes swingLogo {
-      0%   { transform: rotate(0deg); }
-      25%  { transform: rotate(6deg); }
-      50%  { transform: rotate(0deg); }
-      75%  { transform: rotate(-6deg); }
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(6deg); }
+      50% { transform: rotate(0deg); }
+      75% { transform: rotate(-6deg); }
       100% { transform: rotate(0deg); }
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 700px) {
       #logo-button {
-        top: 70px;
-        left: 12px;
+        top: 60px;
+        left: 10px;
       }
 
       #logo-button img {
@@ -53,10 +48,12 @@
 </head>
 <body>
 
-  <!-- הלוגו בצד שמאל למעלה -->
+  <!-- לוגו מעוצב -->
   <a href="index.html" id="logo-button">
     <img src="images/logo.png" alt="לוגו יוז'וק מדיק" />
   </a>
+
+  <a href="tel:+972533562608" class="top-banner">ליצירת קשר: רפי 053-3562608</a>
 
   <div class="container">
     <h1 class="page-title">צור קשר</h1>
