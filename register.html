@@ -249,41 +249,73 @@
     emailjs.init('miOp6iToFLfbH1jk5');  // המפתח הציבורי שלך
   })();
 
-  document.getElementById('registrationForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+  // פונקציה לקריאת פרמטרים מ-URL
+  function getQueryParams() {
+    const params = {};
+    const queryString = window.location.search.substring(1);
+    queryString.split("&").forEach(part => {
+      const [key, value] = part.split("=");
+      if(key && value) {
+        params[decodeURIComponent(key)] = decodeURIComponent(value.replace(/\+/g, ' '));
+      }
+    });
+    return params;
+  }
 
-    const form = e.target;
-    const btn = form.querySelector('button[type="submit"]');
-    const thankyouMessage = document.getElementById('thankyouMessage');
+  document.addEventListener('DOMContentLoaded', () => {
+    const params = getQueryParams();
 
-    const templateParams = {
-      name: form.name.value.trim(),
-      phone: form.phone.value.trim(),
-      email: form.email.value.trim(),
-      courseName: form.courseName.value.trim(),
-      startDate: form.startDate.value.trim(),
-      endDate: form.endDate.value.trim(),
-      location: form.location.value.trim(),
-      paymentMethod: form.paymentMethod.value,
-      notes: form.notes.value.trim()
-    };
+    // ממלאים את שדות הקורס אם קיימים בפרמטרים
+    if (params.courseName) {
+      document.getElementById('courseName').value = params.courseName;
+    }
+    if (params.startDate) {
+      document.getElementById('startDate').value = params.startDate;
+    }
+    if (params.endDate) {
+      document.getElementById('endDate').value = params.endDate;
+    }
+    if (params.location) {
+      document.getElementById('location').value = params.location;
+    }
 
-    btn.classList.add('sending');
-    btn.disabled = true;
-    thankyouMessage.textContent = '';
-    thankyouMessage.className = 'thankyou-message';
+    // מאזין לשליחת הטופס
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+      e.preventDefault();
 
-    emailjs.send('service_45f1wyc', 'template_wdtd8zn', templateParams)
-      .then(function(response) {
-         form.style.display = 'none';
-         thankyouMessage.textContent = 'תודה על הפנייה! הצוות שלנו עובד על זה ונחזור אליך בהקדם.';
-         thankyouMessage.classList.add('success');
-      }, function(error) {
-         thankyouMessage.textContent = 'שגיאה בשליחה, נסה שוב מאוחר יותר. פרטי השגיאה: ' + error.text;
-         thankyouMessage.classList.add('error');
-         btn.classList.remove('sending');
-         btn.disabled = false;
-      });
+      const form = e.target;
+      const btn = form.querySelector('button[type="submit"]');
+      const thankyouMessage = document.getElementById('thankyouMessage');
+
+      const templateParams = {
+        name: form.name.value.trim(),
+        phone: form.phone.value.trim(),
+        email: form.email.value.trim(),
+        courseName: form.courseName.value.trim(),
+        startDate: form.startDate.value.trim(),
+        endDate: form.endDate.value.trim(),
+        location: form.location.value.trim(),
+        paymentMethod: form.paymentMethod.value,
+        notes: form.notes.value.trim()
+      };
+
+      btn.classList.add('sending');
+      btn.disabled = true;
+      thankyouMessage.textContent = '';
+      thankyouMessage.className = 'thankyou-message';
+
+      emailjs.send('service_45f1wyc', 'template_wdtd8zn', templateParams)
+        .then(function(response) {
+           form.style.display = 'none';
+           thankyouMessage.textContent = 'תודה על הפנייה! הצוות שלנו עובד על זה ונחזור אליך בהקדם.';
+           thankyouMessage.classList.add('success');
+        }, function(error) {
+           thankyouMessage.textContent = 'שגיאה בשליחה, נסה שוב מאוחר יותר. פרטי השגיאה: ' + error.text;
+           thankyouMessage.classList.add('error');
+           btn.classList.remove('sending');
+           btn.disabled = false;
+        });
+    });
   });
 </script>
 
