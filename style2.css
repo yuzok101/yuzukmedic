@@ -1,8 +1,8 @@
 /* עיצוב כללי */
 body {
-  font-family: 'Heebo', sans-serif;
+  font-family: 'Heebo', 'Segoe UI', sans-serif;
   background: 
-    linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), 
+    linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.7)), 
     url('reka2.jpg') no-repeat center center fixed;
   background-size: cover;
   color: #333;
@@ -12,32 +12,44 @@ body {
   text-align: right;
 }
 
+/* באנר עליון */
 .top-banner {
   display: block;
-  background-color: #004a99;
+  background-color: #0057d8;
   color: white;
   text-align: center;
-  padding: 10px 0;
+  padding: 14px 0;
+  font-size: 18px;
   text-decoration: none;
   font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* מיכל מרכזי */
 .container {
-  max-width: 480px;
-  margin: 40px auto;
-  background: white;
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 0 15px rgb(0 0 0 / 0.1);
+  max-width: 500px;
+  margin: 50px auto;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 35px;
+  border-radius: 16px;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.12);
+  transition: transform 0.3s ease;
+}
+
+.container:hover {
+  transform: translateY(-3px);
 }
 
 .page-title {
   margin-bottom: 25px;
-  font-size: 28px;
-  color: #004a99;
-  font-weight: 700;
+  font-size: 30px;
+  color: #0057d8;
+  font-weight: 800;
+  text-align: center;
 }
 
+/* קבוצות שדה */
 .form-group {
   margin-bottom: 20px;
 }
@@ -55,23 +67,23 @@ input[type="tel"],
 input[type="email"],
 textarea {
   width: 100%;
-  padding: 10px 12px;
+  padding: 12px 14px;
   border: 1.5px solid #ccc;
-  border-radius: 6px;
+  border-radius: 10px;
   font-size: 15px;
   font-family: inherit;
   box-sizing: border-box;
-  transition: border-color 0.3s;
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
-input[type="text"]:focus,
-input[type="tel"]:focus,
-input[type="email"]:focus,
+input:focus,
 textarea:focus {
-  border-color: #004a99;
+  border-color: #0057d8;
+  box-shadow: 0 0 0 3px rgba(0, 87, 216, 0.15);
   outline: none;
 }
 
+/* הודעות שגיאה */
 .error-message {
   color: #d93025;
   font-size: 13px;
@@ -84,21 +96,23 @@ textarea:focus {
   margin-left: 3px;
 }
 
+/* כפתור שליחה */
 .btn-submit {
-  background-color: #004a99;
+  background-color: #0057d8;
   color: white;
   border: none;
   padding: 14px 25px;
-  font-size: 17px;
-  border-radius: 6px;
+  font-size: 18px;
+  border-radius: 12px;
   cursor: pointer;
   font-weight: 600;
   width: 100%;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 .btn-submit:hover:not(:disabled) {
-  background-color: #003366;
+  background-color: #0044b5;
+  transform: scale(1.02);
 }
 
 .btn-submit:disabled {
@@ -106,6 +120,7 @@ textarea:focus {
   cursor: not-allowed;
 }
 
+/* תגובה לטופס */
 .form-response {
   margin-top: 20px;
   font-weight: 600;
@@ -133,7 +148,7 @@ textarea:focus {
 }
 
 .side-btn {
-  background-color: #004a99;
+  background-color: #0057d8;
   color: white;
   width: 48px;
   height: 48px;
@@ -141,12 +156,12 @@ textarea:focus {
   align-items: center;
   justify-content: center;
   border-radius: 30px 0 0 30px;
-  box-shadow: 0 0 5px rgb(0 0 0 / 0.2);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
   transition: background-color 0.3s;
   text-decoration: none;
-  font-size: 24px;
+  font-size: 22px;
 }
 
 .side-btn:hover {
-  background-color: #003366;
+  background-color: #0044b5;
 }
