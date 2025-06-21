@@ -142,21 +142,29 @@
 <div class="overlay">
   <form id="registrationForm" autocomplete="off" spellcheck="false" novalidate>
     <h2>טופס הרשמה לקורס</h2>
+
     <label for="name">שם מלא <span style="color:red">*</span></label>
-    <input type="text" id="name" name="name" required />
+    <input type="text" id="name" name="name" required autocomplete="name" />
+
     <label for="phone">טלפון <span style="color:red">*</span></label>
-    <input type="tel" id="phone" name="phone" required pattern="[0-9+\-\s]{7,15}" placeholder="050-1234567" />
+    <input type="tel" id="phone" name="phone" required pattern="[0-9+\-\s]{7,15}" placeholder="050-1234567" autocomplete="tel" />
+
     <label for="email">אימייל <span style="color:red">*</span></label>
-    <input type="email" id="email" name="email" required placeholder="example@mail.com" />
+    <input type="email" id="email" name="email" required placeholder="example@mail.com" autocomplete="email" />
+
     <label for="courseSelect">שם הקורס</label>
     <select id="courseSelect" name="courseSelect" style="display:none;"></select>
     <input type="text" id="courseName" name="courseName" readonly />
+
     <label for="startDate">תאריך התחלה</label>
     <input type="text" id="startDate" name="startDate" readonly />
+
     <label for="endDate">תאריך סיום</label>
     <input type="text" id="endDate" name="endDate" readonly />
+
     <label for="location">מיקום</label>
     <input type="text" id="location" name="location" readonly />
+
     <label for="paymentMethod">אופן תשלום</label>
     <select id="paymentMethod" name="paymentMethod" required>
       <option value="" disabled selected>בחר אופן תשלום</option>
@@ -165,16 +173,21 @@
       <option value="העברה בנקאית">העברה בנקאית</option>
       <option value="ביט">ביט</option>
     </select>
+
     <label for="notes">הערות</label>
     <textarea id="notes" name="notes" rows="4" placeholder="הקלד הערות אם יש..."></textarea>
+
     <button type="submit">שלח הרשמה</button>
-    <div class="thankyou-message" id="thankyouMessage">תודה על הפנייה! נחזור אליך בהקדם.</div>
+    <div class="thankyou-message" id="thankyouMessage">
+      תודה על הפנייה! הצוות שלנו עובד על זה ונחזור אליך בהקדם.
+    </div>
   </form>
 </div>
 
 <script>
-  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec';
+  emailjs.init("miOp6iToFLfbH1jk5");
 
+  // פונקציה לפענוח פרמטרים ב-URL
   function getQueryParams() {
     const params = {};
     const query = window.location.search.substring(1);
@@ -185,32 +198,12 @@
     return params;
   }
 
+  // טעינת הקורסים לרשימת הבחירה - אפשר להשאיר אם יש לך מקור אחר
   async function loadCoursesToSelect() {
-    try {
-      const res = await fetch(SHEET_URL);
-      const courses = await res.json();
-      const now = new Date();
-      const futureCourses = courses.filter(c => {
-        const [day, month, year] = c.startDate.split('.');
-        return new Date(`${year}-${month}-${day}`) >= now;
-      });
-      const select = document.getElementById('courseSelect');
-      futureCourses.forEach(c => {
-        const option = document.createElement('option');
-        option.value = JSON.stringify(c);
-        option.textContent = `${c.type} | ${c.startDate} - ${c.endDate} | ${c.location}`;
-        select.appendChild(option);
-      });
-      select.addEventListener('change', e => {
-        const course = JSON.parse(e.target.value);
-        fillForm(course);
-      });
-    } catch (err) {
-      alert('שגיאה בטעינת הקורסים');
-      console.error(err);
-    }
+    // כאן אפשר להוסיף קוד לטעינת קורסים אם צריך
   }
 
+  // מילוי שדות בטופס
   function fillForm(course) {
     document.getElementById('courseName').value = course.type;
     document.getElementById('startDate').value = course.startDate;
@@ -219,23 +212,24 @@
   }
 
   document.addEventListener('DOMContentLoaded', async () => {
-    emailjs.init("miOp6iToFLfbH1jk5");
-
     const params = getQueryParams();
+
     if (params.type && params.startDate && params.endDate && params.location) {
+      // מילוי אוטומטי מהקישורים עם פרמטרים
       document.getElementById('courseName').value = params.type;
       document.getElementById('startDate').value = params.startDate;
       document.getElementById('endDate').value = params.endDate;
       document.getElementById('location').value = params.location;
+
       document.getElementById('courseName').style.display = 'block';
       document.getElementById('courseSelect').style.display = 'none';
     } else {
       document.getElementById('courseName').style.display = 'none';
       document.getElementById('courseSelect').style.display = 'block';
-      await loadCoursesToSelect();
+      // loadCoursesToSelect(); // במידה ותרצה לטעון קורסים דינמיים
     }
 
-    document.getElementById('registrationForm').addEventListener('submit', async e => {
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
       e.preventDefault();
 
       const data = {
@@ -253,29 +247,15 @@
         notes: document.getElementById('notes').value.trim()
       };
 
-      try {
-        const res = await fetch(SHEET_URL, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(data)
-        });
-
-        if (res.ok) {
-          try {
-            await emailjs.send("service_45f1wyc", "template_wdtd8zn", data);
-          } catch (emailError) {
-            console.error('שגיאה בשליחת המייל דרך EmailJS:', emailError);
-          }
-
+      emailjs.send("service_45f1wyc", "template_18zogtj", data)
+        .then(() => {
           document.getElementById('registrationForm').style.display = 'none';
           document.getElementById('thankyouMessage').style.display = 'block';
-        } else {
-          alert('שליחה נכשלה. נסה שוב מאוחר יותר.');
-        }
-      } catch (err) {
-        alert('אירעה שגיאה בשליחה.');
-        console.error('שגיאה כללית:', err);
-      }
+        })
+        .catch((error) => {
+          console.error('שגיאה בשליחת המייל דרך EmailJS:', error);
+          alert('אירעה שגיאה בשליחה. נסה שוב.');
+        });
     });
   });
 </script>
