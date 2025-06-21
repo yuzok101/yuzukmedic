@@ -1,25 +1,26 @@
 /* עיצוב כללי */
 body {
   font-family: 'Heebo', sans-serif;
-  background: #f7f9fc;
-  color: #333;
   margin: 0;
   padding: 0;
   direction: rtl;
   text-align: right;
+  background: url("images/reka2.jpg") no-repeat center center / cover fixed;
   position: relative;
   min-height: 100vh;
+  color: #333;
 }
 
-/* רקע עם שקיפות */
+/* שכבת שקיפות על הרקע */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   background: url("images/reka2.jpg") no-repeat center center / cover;
-  opacity: 0.1;
+  opacity: 0.08;
   z-index: -1;
   pointer-events: none;
+  filter: brightness(0.9);
 }
 
 /* באנר עליון */
@@ -28,40 +29,53 @@ body::before {
   background-color: #004a99;
   color: white;
   text-align: center;
-  padding: 10px 0;
+  padding: 12px 0;
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: 0.05em;
+  user-select: none;
   text-decoration: none;
-  font-weight: bold;
-  font-size: 1.1rem;
+  box-shadow: 0 2px 5px rgb(0 0 0 / 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 /* מיכל הטופס */
 .container {
   max-width: 480px;
-  margin: 40px auto 80px;
+  margin: 50px auto 120px;
   background: rgba(255 255 255 / 0.95);
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgb(0 0 0 / 0.15);
+  padding: 35px 40px;
+  border-radius: 15px;
+  box-shadow: 0 0 25px rgb(0 0 0 / 0.15);
+  transition: box-shadow 0.3s ease;
 }
 
-/* כותרת הדף */
+.container:hover {
+  box-shadow: 0 0 35px rgb(0 0 0 / 0.25);
+}
+
+/* כותרת */
 .page-title {
-  margin-bottom: 25px;
-  font-size: 28px;
+  font-size: 2.2rem;
   color: #004a99;
-  font-weight: 700;
+  font-weight: 900;
+  margin-bottom: 35px;
+  text-align: center;
+  letter-spacing: 0.06em;
 }
 
-/* שדות הטופס */
+/* שדות טופס */
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 label {
   display: block;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 8px;
-  font-size: 16px;
+  font-size: 1.1rem;
   color: #222;
 }
 
@@ -70,13 +84,14 @@ input[type="tel"],
 input[type="email"],
 textarea {
   width: 100%;
-  padding: 10px 15px;
-  border: 1.8px solid #ccc;
-  border-radius: 8px;
-  font-size: 15px;
+  padding: 14px 18px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
   font-family: inherit;
   box-sizing: border-box;
-  transition: border-color 0.3s, box-shadow 0.3s;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  resize: vertical;
 }
 
 input[type="text"]:focus,
@@ -84,20 +99,142 @@ input[type="tel"]:focus,
 input[type="email"]:focus,
 textarea:focus {
   border-color: #004a99;
-  outline: none;
   box-shadow: 0 0 8px #004a99aa;
+  outline: none;
 }
 
 .error-message {
   color: #d93025;
   font-size: 13px;
-  margin-top: 4px;
+  margin-top: 5px;
   display: none;
 }
 
 .required {
   color: #d93025;
-  margin-left: 3px;
+  margin-left: 4px;
 }
 
-/
+/* כפתור שליחה */
+.btn-submit {
+  background-color: #004a99;
+  color: white;
+  border: none;
+  padding: 16px 0;
+  font-size: 1.2rem;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 800;
+  width: 100%;
+  letter-spacing: 0.06em;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 8px rgb(0 74 153 / 0.4);
+}
+
+.btn-submit:hover:not(:disabled) {
+  background-color: #003366;
+}
+
+.btn-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* תגובות של הטופס */
+.form-response {
+  margin-top: 22px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  min-height: 28px;
+  text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.form-response.success {
+  color: #1a7a1a;
+}
+
+.form-response.error {
+  color: #d93025;
+}
+
+/* כפתורי יצירת קשר בצד ימין, ורטיקלית */
+.contact-footer {
+  position: fixed;
+  top: 40%;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  background: rgba(255 255 255 / 0.9);
+  padding: 10px 6px;
+  border-radius: 30px 0 0 30px;
+  box-shadow: 0 0 15px rgb(0 0 0 / 0.1);
+  z-index: 1000;
+}
+
+/* עיצוב כפתורי יצירת קשר - גודל נורמלי */
+.contact-btn {
+  width: 44px;
+  height: 44px;
+  background-color: #004a99;
+  color: white;
+  border-radius: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  font-size: 22px;
+  box-shadow: 0 2px 6px rgb(0 74 153 / 0.4);
+  transition: background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* אייקון SVG בגודל מותאם */
+.contact-btn svg {
+  width: 22px;
+  height: 22px;
+  fill: currentColor;
+  pointer-events: none;
+  transition: fill 0.25s ease;
+}
+
+.contact-btn:hover {
+  background-color: #003366;
+  box-shadow: 0 4px 12px rgb(0 51 102 / 0.7);
+}
+
+/* רספונסיביות */
+@media (max-width: 480px) {
+  .container {
+    margin: 40px 16px 110px;
+    padding: 25px 20px;
+  }
+
+  .page-title {
+    font-size: 1.8rem;
+    margin-bottom: 28px;
+  }
+
+  .btn-submit {
+    font-size: 1rem;
+    padding: 14px 0;
+  }
+
+  .contact-footer {
+    top: 35%;
+    padding: 8px 4px;
+    gap: 12px;
+  }
+
+  .contact-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+  }
+
+  .contact-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+}
