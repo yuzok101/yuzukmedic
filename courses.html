@@ -20,7 +20,7 @@
     }
 
     header {
-      background-color: #1c3b6b; /* אטום לחלוטין */
+      background-color: #1c3b6b;
       color: white;
       padding: 20px 0;
       text-align: center;
@@ -32,7 +32,7 @@
 
     .container {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 24px;
       padding: 40px;
       max-width: 1200px;
@@ -42,13 +42,14 @@
     }
 
     .course {
-      background-color: rgba(255, 255, 255, 0.75); /* חצי שקוף */
+      background-color: rgba(255, 255, 255, 0.75);
       border-radius: 16px;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
       overflow: hidden;
       transition: transform 0.4s ease, box-shadow 0.3s ease;
       display: flex;
       flex-direction: column;
+      aspect-ratio: 1 / 1; /* ריבוע מוחלט */
     }
 
     .course:hover {
@@ -58,24 +59,28 @@
 
     .course img {
       width: 100%;
-      height: 200px;
+      height: 50%;
       object-fit: cover;
     }
 
     .course-content {
-      padding: 20px;
-      flex-grow: 1;
+      padding: 16px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     .course h2 {
       margin: 0 0 10px;
-      font-size: 22px;
+      font-size: 20px;
       color: #1c3b6b;
     }
 
     .course p {
-      margin: 6px 0;
-      font-size: 15px;
+      margin: 4px 0;
+      font-size: 14px;
       color: #333;
     }
 
@@ -85,13 +90,13 @@
     }
 
     .register-btn {
-      margin-top: 15px;
+      margin-top: 10px;
       background-color: #1c3b6b;
       color: white;
-      padding: 10px 18px;
+      padding: 8px;
       border: none;
       border-radius: 6px;
-      font-size: 16px;
+      font-size: 14px;
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
@@ -105,7 +110,7 @@
       padding: 20px;
       color: white;
       font-size: 14px;
-      background-color: #1c3b6b; /* אטום ולא שקוף */
+      background-color: #1c3b6b;
       margin-top: auto;
     }
 
@@ -132,10 +137,26 @@
       return new Date(parts[2], parts[1] - 1, parts[0]);
     }
 
-    function getRandomImage() {
-      const index = Math.floor(Math.random() * 10) + 1;
-      return `images/${index}.jpg`;
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
     }
+
+    const imagePool = shuffleArray([
+      "images/1.jpg",
+      "images/2.jpg",
+      "images/3.jpg",
+      "images/4.jpg",
+      "images/5.jpg",
+      "images/6.jpg",
+      "images/7.jpg",
+      "images/8.jpg",
+      "images/9.jpg",
+      "images/10.jpg"
+    ]);
 
     fetch(SHEET_URL)
       .then(response => response.json())
@@ -144,26 +165,29 @@
         container.innerHTML = '';
 
         const now = new Date();
+        let imageIndex = 0;
 
         courses.forEach(course => {
           const startDate = parseDate(course.startDate);
           if (startDate < now) return;
 
-          const imagePath = getRandomImage();
+          const imagePath = imagePool[imageIndex] || "images/default.jpg";
+          imageIndex++;
 
           const div = document.createElement('div');
           div.className = 'course';
           div.innerHTML = `
             <img src="${imagePath}" alt="תמונה">
             <div class="course-content">
-              <h2>${course.type || 'קורס'}</h2>
-              <p><span>תאריכים:</span> ${course.startDate} - ${course.endDate}</p>
-              <p><span>ימים:</span> ${course.days}</p>
-              <p><span>שעות:</span> ${course.hours}</p>
-              <p><span>מחיר:</span> ${course.price}</p>
-              <p><span>קהל יעד:</span> ${course.target}</p>
-              <p><span>מיקום:</span> ${course.location}</p>
-              <p><span>הערות:</span> ${course.notes}</p>
+              <div>
+                <h2>${course.type || 'קורס'}</h2>
+                <p><span>תאריכים:</span> ${course.startDate} - ${course.endDate}</p>
+                <p><span>ימים:</span> ${course.days}</p>
+                <p><span>שעות:</span> ${course.hours}</p>
+                <p><span>מחיר:</span> ${course.price}</p>
+                <p><span>קהל יעד:</span> ${course.target}</p>
+                <p><span>מיקום:</span> ${course.location}</p>
+              </div>
               <button class="register-btn">להרשמה</button>
             </div>
           `;
