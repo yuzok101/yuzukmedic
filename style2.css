@@ -1,3 +1,4 @@
+/* כללי */
 body {
   font-family: 'Heebo', sans-serif;
   background: url('images/reka2.jpg') no-repeat center center fixed;
@@ -9,6 +10,7 @@ body {
   text-align: right;
 }
 
+/* באנר עליון */
 .top-banner {
   display: block;
   background-color: #004a99;
@@ -19,6 +21,7 @@ body {
   text-decoration: none;
 }
 
+/* קונטיינר */
 .container {
   max-width: 480px;
   margin: 40px auto;
@@ -76,6 +79,7 @@ textarea:focus {
   margin-left: 3px;
 }
 
+/* כפתור שליחה */
 .btn-submit {
   background-color: #004a99;
   color: white;
@@ -93,11 +97,30 @@ textarea:focus {
   gap: 10px;
 }
 
-.btn-submit:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+.btn-submit .btn-icon {
+  display: inline-block;
+  transition: transform 0.3s;
+  font-size: 18px;
 }
 
+.btn-submit.loading .btn-icon {
+  animation: fly 1s linear infinite;
+}
+
+/* אנימציית מטוס */
+@keyframes fly {
+  0% {
+    transform: translateX(0) rotate(0);
+  }
+  50% {
+    transform: translateX(5px) rotate(10deg);
+  }
+  100% {
+    transform: translateX(0) rotate(0);
+  }
+}
+
+/* ספינר טעינה */
 .spinner {
   width: 18px;
   height: 18px;
@@ -133,6 +156,7 @@ textarea:focus {
   color: #d93025;
 }
 
+/* כפתורי צד */
 .side-buttons {
   position: fixed;
   top: 40%;
@@ -151,6 +175,7 @@ textarea:focus {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
+/* רספונסיביות */
 @media (max-width: 600px) {
   .container {
     margin: 20px;
