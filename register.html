@@ -143,11 +143,11 @@
   <form id="registrationForm" autocomplete="off" spellcheck="false" novalidate>
     <h2>טופס הרשמה לקורס</h2>
     <label for="name">שם מלא <span style="color:red">*</span></label>
-    <input type="text" id="name" name="name" required autocomplete="name" />
+    <input type="text" id="name" name="name" required />
     <label for="phone">טלפון <span style="color:red">*</span></label>
-    <input type="tel" id="phone" name="phone" required pattern="[0-9+\-\s]{7,15}" placeholder="050-1234567" autocomplete="tel" />
+    <input type="tel" id="phone" name="phone" required pattern="[0-9+\-\s]{7,15}" placeholder="050-1234567" />
     <label for="email">אימייל <span style="color:red">*</span></label>
-    <input type="email" id="email" name="email" required placeholder="example@mail.com" autocomplete="email" />
+    <input type="email" id="email" name="email" required placeholder="example@mail.com" />
     <label for="courseSelect">שם הקורס</label>
     <select id="courseSelect" name="courseSelect" style="display:none;"></select>
     <input type="text" id="courseName" name="courseName" readonly />
@@ -168,9 +168,7 @@
     <label for="notes">הערות</label>
     <textarea id="notes" name="notes" rows="4" placeholder="הקלד הערות אם יש..."></textarea>
     <button type="submit">שלח הרשמה</button>
-    <div class="thankyou-message" id="thankyouMessage">
-      תודה על הפנייה! הצוות שלנו עובד על זה ונחזור אליך בהקדם.
-    </div>
+    <div class="thankyou-message" id="thankyouMessage">תודה על הפנייה! נחזור אליך בהקדם.</div>
   </form>
 </div>
 
@@ -263,7 +261,12 @@
         });
 
         if (res.ok) {
-          await emailjs.send("service_45f1wyc", "template_wdtd8zn", data);
+          try {
+            await emailjs.send("service_45f1wyc", "template_wdtd8zn", data);
+          } catch (emailError) {
+            console.error('שגיאה בשליחת המייל דרך EmailJS:', emailError);
+          }
+
           document.getElementById('registrationForm').style.display = 'none';
           document.getElementById('thankyouMessage').style.display = 'block';
         } else {
@@ -271,7 +274,7 @@
         }
       } catch (err) {
         alert('אירעה שגיאה בשליחה.');
-        console.error(err);
+        console.error('שגיאה כללית:', err);
       }
     });
   });
