@@ -1,7 +1,10 @@
 /* עיצוב כללי */
 body {
   font-family: 'Heebo', sans-serif;
-  background: #f7f9fc;
+  background: 
+    linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)), 
+    url('reka2.jpg') no-repeat center center fixed;
+  background-size: cover;
   color: #333;
   margin: 0;
   padding: 0;
