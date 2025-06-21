@@ -19,7 +19,7 @@
     header {
       background-color: #1c3b6b;
       color: white;
-      padding: 20px 0;
+      padding: 20px 10px;
       text-align: center;
       font-size: 28px;
       font-weight: bold;
@@ -33,7 +33,7 @@
       background-color: #1c3b6b;
       color: white;
       text-align: center;
-      padding: 16px;
+      padding: 16px 10px;
       font-size: 14px;
       position: fixed;
       bottom: 0;
@@ -139,36 +139,46 @@
       .course {
         max-width: 100%;
         max-height: none;
-        aspect-ratio: auto;
+        aspect-ratio: 1 / 1;
       }
     }
 
     @media (max-width: 480px) {
       header {
-        font-size: 24px;
-        padding: 15px 0;
+        font-size: 22px;
+        padding: 15px 10px;
       }
 
       footer {
         font-size: 12px;
-        padding: 12px;
+        padding: 12px 10px;
+      }
+
+      .container {
+        padding: 10px;
       }
 
       .course-content {
-        padding: 15px;
+        padding: 12px 10px;
       }
 
       .course h2 {
-        font-size: 20px;
+        font-size: 18px;
       }
 
       .course p {
-        font-size: 14px;
+        font-size: 13px;
+        margin: 2px 0;
       }
 
       .register-btn {
-        font-size: 14px;
-        padding: 10px;
+        font-size: 16px;
+        padding: 14px;
+        border-radius: 8px;
+      }
+
+      .course img {
+        height: 55%;
       }
     }
   </style>
