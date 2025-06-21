@@ -158,12 +158,11 @@
       return new Date(parts[2], parts[1] - 1, parts[0]);
     }
 
-    function formatHebrewDateInWords(date) {
-      return new Intl.DateTimeFormat('he-u-ca-hebrew-nu-hebr', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-      }).format(date);
+    async function getHebrewDateStr(date) {
+      const url = `https://www.hebcal.com/converter?cfg=json&gy=${date.getFullYear()}&gm=${date.getMonth() + 1}&gd=${date.getDate()}&g2h=1`;
+      const res = await fetch(url);
+      const json = await res.json();
+      return json.hebrew;
     }
 
     function shuffleArray(array) {
@@ -187,58 +186,53 @@
       "images/10.jpg"
     ]);
 
-    fetch(SHEET_URL)
-      .then(response => response.json())
-      .then(courses => {
-        const container = document.getElementById('coursesContainer');
-        container.innerHTML = '';
+    (async () => {
+      const response = await fetch(SHEET_URL);
+      const courses = await response.json();
+      const container = document.getElementById('coursesContainer');
+      container.innerHTML = '';
 
-        const now = new Date();
-        let imageIndex = 0;
+      const now = new Date();
+      let imageIndex = 0;
 
-        courses.forEach(course => {
-          const startDate = parseDate(course.startDate);
-          if (startDate < now) return;
+      for (const course of courses) {
+        const startDate = parseDate(course.startDate);
+        if (startDate < now) continue;
 
-          const endDate = parseDate(course.endDate);
-          const hebrewStart = formatHebrewDateInWords(startDate);
-          const hebrewEnd = formatHebrewDateInWords(endDate);
-          const imagePath = imagePool[imageIndex] || "images/default.jpg";
-          imageIndex++;
+        const endDate = parseDate(course.endDate);
+        const hebrewStart = await getHebrewDateStr(startDate);
+        const hebrewEnd = await getHebrewDateStr(endDate);
+        const imagePath = imagePool[imageIndex] || "images/default.jpg";
+        imageIndex++;
 
-          const div = document.createElement('div');
-          div.className = 'course';
-          div.innerHTML = `
-            <img src="${imagePath}" alt="תמונה">
-            <div class="course-content">
-              <div>
-                <h2>${course.type || 'קורס'}</h2>
-                <p>
-                  <span>תאריך התחלה:</span> ${course.startDate} |
-                  <span>תאריך סיום:</span> ${course.endDate}
-                </p>
-                <p class="hebrew-date">${hebrewStart} – ${hebrewEnd}</p>
-                <p><span>ימים:</span> ${course.days}</p>
-                <p><span>שעות:</span> ${course.hours}</p>
-                <p><span>מחיר:</span> ${course.price}</p>
-                <p><span>קהל יעד:</span> ${course.target}</p>
-                <p><span>מיקום:</span> ${course.location}</p>
-              </div>
-              <button class="register-btn">להרשמה</button>
+        const div = document.createElement('div');
+        div.className = 'course';
+        div.innerHTML = `
+          <img src="${imagePath}" alt="תמונה">
+          <div class="course-content">
+            <div>
+              <h2>${course.type || 'קורס'}</h2>
+              <p>
+                <span>תאריך התחלה:</span> ${course.startDate} |
+                <span>תאריך סיום:</span> ${course.endDate}
+              </p>
+              <p class="hebrew-date">${hebrewStart} – ${hebrewEnd}</p>
+              <p><span>ימים:</span> ${course.days}</p>
+              <p><span>שעות:</span> ${course.hours}</p>
+              <p><span>מחיר:</span> ${course.price}</p>
+              <p><span>קהל יעד:</span> ${course.target}</p>
+              <p><span>מיקום:</span> ${course.location}</p>
             </div>
-          `;
-          container.appendChild(div);
-        });
+            <button class="register-btn">להרשמה</button>
+          </div>
+        `;
+        container.appendChild(div);
+      }
 
-        if (container.innerHTML.trim() === '') {
-          container.innerHTML = '<p style="text-align:center;font-size:18px;color:#fff;">אין כרגע קורסים זמינים.</p>';
-        }
-      })
-      .catch(error => {
-        console.error('שגיאה בטעינת הקורסים:', error);
-        document.getElementById('coursesContainer').innerHTML =
-          '<p style="text-align:center;color:red;">אירעה שגיאה בטעינת הקורסים.</p>';
-      });
+      if (container.innerHTML.trim() === '') {
+        container.innerHTML = '<p style="text-align:center;font-size:18px;color:#fff;">אין כרגע קורסים זמינים.</p>';
+      }
+    })();
   </script>
 </body>
 </html>
