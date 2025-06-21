@@ -12,7 +12,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
   <!-- CSS -->
-  <link rel="stylesheet" href="style2.css?v=2" />
+  <link rel="stylesheet" href="style2.css?v=3" />
 </head>
 <body>
 
@@ -102,7 +102,7 @@
         message: document.getElementById("message").value,
       };
 
-      emailjs.send("service_45f1wyc", "template_e02sg8p", formData) // ← החלף ל-Template ID שלך
+      emailjs.send("service_45f1wyc", "template_e02sg8p", formData)
         .then(function () {
           btn.innerHTML = '<i class="fas fa-check-circle"></i> נשלח בהצלחה';
           response.textContent = "ההודעה נשלחה בהצלחה!";
@@ -110,7 +110,7 @@
           form.reset();
         }, function (error) {
           btn.innerHTML = '<i class="fas fa-times-circle"></i> שגיאה';
-          response.textContent = "אירעה שגיאה בשליחה. נסה שוב.";
+          response.textContent = "אירעה שגיאה בשליחה: " + (error?.text || error?.message || "שגיאה לא ידועה");
           response.classList.add("error");
           console.error("EmailJS Error:", error);
         })
