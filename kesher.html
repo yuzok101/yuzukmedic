@@ -10,26 +10,25 @@
   <link rel="stylesheet" href="style2.css" />
 
   <style>
-    /* כפתור הלוגו בלבד - גדול, נמוך יותר, עם צל ונדנוד */
+    /* לוגו שקוף בלבד - בלי רקע, בלי מסגרת */
     #logo-button {
       position: fixed;
-      top: 80px;     /* יותר למטה */
+      top: 80px;
       right: 20px;
       z-index: 1000;
-      cursor: pointer;
       animation: swingLogo 2.5s infinite ease-in-out;
       transform-origin: top center;
-      display: block;
     }
 
     #logo-button img {
-      height: 120px;  /* יותר גדול */
+      height: 120px;
       max-width: 100%;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
-      border-radius: 14px;
-      background-color: white;
-      padding: 5px;
-      display: block;
+      cursor: pointer;
+      background: transparent;
+      padding: 0;
+      border: none;
+      box-shadow: none;
+      border-radius: 0;
     }
 
     @keyframes swingLogo {
@@ -54,17 +53,15 @@
 </head>
 <body>
 
-  <!-- רק התמונה של הלוגו, לחיצה מחזירה לדף הבית -->
-  <a href="index.html" id="logo-button" aria-label="דף הבית">
+  <!-- לוגו שקוף בלבד, ללא רקע -->
+  <a href="index.html" id="logo-button">
     <img src="images/logo.png" alt="לוגו יוז'וק מדיק" />
   </a>
 
-  <!-- שאר התוכן שלך ממשיך כאן -->
   <div class="container">
     <h1 class="page-title">צור קשר</h1>
 
     <form id="contactForm" novalidate>
-      <!-- שדות הטופס כאן כמו שהיה -->
       <div class="form-group">
         <label for="name">שם מלא<span class="required">*</span></label>
         <input type="text" id="name" name="name" required minlength="4" />
