@@ -67,7 +67,7 @@
       aspect-ratio: 1 / 1;
       max-width: 700px;
       max-height: 700px;
-      cursor: pointer; /* מראה שזה קליקבילי */
+      cursor: pointer;
     }
 
     .course:hover {
@@ -117,7 +117,7 @@
       font-size: 16px;
       cursor: pointer;
       transition: background-color 0.3s ease;
-      align-self: flex-start; /* שומר על הכפתור בצד */
+      align-self: flex-start;
     }
 
     .register-btn:hover {
@@ -131,7 +131,6 @@
       color: #222;
     }
 
-    /* --- RESPONSIVE --- */
     @media (max-width: 700px) {
       .container {
         grid-template-columns: 1fr;
@@ -236,7 +235,6 @@
         const div = document.createElement('div');
         div.className = 'course';
 
-        // הפיכת האובייקט לפרמטרים ב-url
         const queryParams = toQueryString({
           type: course.type || '',
           startDate: course.startDate || '',
@@ -264,15 +262,11 @@
           </div>
         `;
 
-        // לחיצה על כל הבאנר שולחת להרשמה עם הפרטים
         div.addEventListener('click', (e) => {
-          // אם לחצו על הכפתור בלבד לא מפעילים את הלחיצה על הדיב
           if(e.target.classList.contains('register-btn')){
-            // כפתור הרישום נלחץ - עובר לדף ההרשמה עם פרמטרים
             window.location.href = `register.html?${queryParams}`;
             e.stopPropagation();
           } else {
-            // כל מקום אחר בדיב - גם שולח לדף ההרשמה עם אותם פרטים
             window.location.href = `register.html?${queryParams}`;
           }
         });
