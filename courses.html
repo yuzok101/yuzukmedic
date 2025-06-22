@@ -417,7 +417,8 @@
             <img src="${imagePath}" alt="תמונה">
             <div class="course-content">
               <div>
-                <h2>${course.type || 'קורס'}</h2>
+                <h2>${course.type} - ${course.target} - ${course.location || 'קורס'}</h2>
+                <p><span>הכשרה:</span> ${course.type}</p>
                 <p><span>תאריך התחלה:</span> ${course.startDate} | <span>תאריך סיום:</span> ${course.endDate}</p>
                 <p class="hebrew-date">${hebrewStart} – ${hebrewEnd}</p>
                 <p><span>ימים:</span> ${course.days}</p>
