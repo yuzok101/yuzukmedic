@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>טופס הרשמה</title>
+  <title>טופס הרשמה לקורס</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Assistant&display=swap');
     html, body {
@@ -100,7 +100,6 @@
       cursor: default;
       opacity: 0.7;
     }
-    /* אנימציית מטוס */
     .plane-icon {
       width: 24px;
       height: 24px;
@@ -176,7 +175,6 @@
       }
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -193,9 +191,10 @@
     <label for="email">אימייל <span style="color:red">*</span></label>
     <input type="email" id="email" name="email" required placeholder="example@mail.com" autocomplete="email" />
 
-    <label for="courseSelect">שם הקורס</label>
-    <select id="courseSelect" name="courseSelect" style="display:none;"></select>
-    <input type="text" id="courseName" name="courseName" readonly style="display:none;" />
+    <label for="courseSelect">שם הקורס <span style="color:red">*</span></label>
+    <select id="courseSelect" name="courseSelect" required>
+      <option value="" disabled selected>בחר קורס מהרשימה</option>
+    </select>
 
     <label for="startDate">תאריך התחלה</label>
     <input type="text" id="startDate" name="startDate" readonly />
@@ -206,7 +205,7 @@
     <label for="location">מיקום</label>
     <input type="text" id="location" name="location" readonly />
 
-    <label for="paymentMethod">אופן תשלום</label>
+    <label for="paymentMethod">אופן תשלום <span style="color:red">*</span></label>
     <select id="paymentMethod" name="paymentMethod" required>
       <option value="" disabled selected>בחר אופן תשלום</option>
       <option value="אשראי">אשראי</option>
@@ -227,192 +226,138 @@
     <div class="thankyou-message" id="thankyouMessage">
       השליחה הצליחה, ניצור איתך קשר בהקדם.
     </div>
-    <div class="error-message" id="errorMessage">
-      <!-- הודעת שגיאה תופיע כאן -->
-    </div>
+    <div class="error-message" id="errorMessage"></div>
   </form>
 </div>
 
 <script>
-  emailjs.init("miOp6iToFLfbH1jk5");
+  // כתובת ה-URL של ה-WebApp שלך בגוגל Apps Script - תחליף פה את ה-URL המלא שלך
+  const GOOGLE_WEBAPP_URL = "https://script.google.com/macros/s/YOUR_WEBAPP_ID/exec";
 
-  const GOOGLE_SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR5abc12345EXAMPLEURL/pub?output=csv'; // <-- החלף כאן לכתובת שלך
+  const form = document.getElementById('registrationForm');
+  const courseSelect = document.getElementById('courseSelect');
+  const startDate = document.getElementById('startDate');
+  const endDate = document.getElementById('endDate');
+  const locationInput = document.getElementById('location');
+  const thankyouMsg = document.getElementById('thankyouMessage');
+  const errorMsg = document.getElementById('errorMessage');
+  const submitBtn = document.getElementById('submitBtn');
+  const btnText = submitBtn.querySelector('.btn-text');
+  const planeIcon = submitBtn.querySelector('.plane-icon');
 
-  function getQueryParams() {
-    const params = {};
-    const query = window.location.search.substring(1);
-    query.split("&").forEach(pair => {
-      const [key, value] = pair.split("=");
-      if (key) params[decodeURIComponent(key)] = decodeURIComponent(value || "");
-    });
-    return params;
-  }
+  let courses = [];
 
-  // פונקציה לפענוח CSV פשוטה
-  function parseCSV(text) {
-    const lines = text.trim().split('\n');
-    const headers = lines[0].split(',');
-    const rows = lines.slice(1).map(line => {
-      const values = line.split(',');
-      const obj = {};
-      headers.forEach((h, i) => {
-        obj[h.trim()] = values[i] ? values[i].trim() : '';
+  async function loadCourses() {
+    try {
+      const res = await fetch(GOOGLE_WEBAPP_URL);
+      if (!res.ok) throw new Error("שגיאה בטעינת הקורסים");
+      courses = await res.json();
+
+      // ננקה את התפריט ונוסיף אופציות חדשות
+      courseSelect.innerHTML = '<option value="" disabled selected>בחר קורס מהרשימה</option>';
+      courses.forEach((course, index) => {
+        const option = document.createElement('option');
+        option.value = index; // נשמור אינדקס למימוש מהיר
+        option.textContent = course.type || 'קורס לא ידוע';
+        courseSelect.appendChild(option);
       });
-      return obj;
-    });
-    return rows;
+    } catch (err) {
+      console.error(err);
+      alert("אירעה שגיאה בטעינת הקורסים, אנא רענן את הדף ונסה שוב.");
+    }
   }
 
-  document.addEventListener('DOMContentLoaded', async () => {
-    const params = getQueryParams();
+  function fillCourseFields(index) {
+    if (index === "" || index === null) {
+      startDate.value = "";
+      endDate.value = "";
+      locationInput.value = "";
+      return;
+    }
+    const course = courses[index];
+    startDate.value = course.startDate || "";
+    endDate.value = course.endDate || "";
+    locationInput.value = course.location || "";
+  }
 
-    const courseSelect = document.getElementById('courseSelect');
-    const courseName = document.getElementById('courseName');
-    const startDate = document.getElementById('startDate');
-    const endDate = document.getElementById('endDate');
-    const location = document.getElementById('location');
+  courseSelect.addEventListener('change', (e) => {
+    fillCourseFields(e.target.value);
+  });
 
-    if (params.type && params.startDate && params.endDate && params.location) {
-      // אם יש פרמטרים בקישור, תמלא את השדות ותסתיר את רשימת הקורסים
-      courseName.value = params.type;
-      startDate.value = params.startDate;
-      endDate.value = params.endDate;
-      location.value = params.location;
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorMsg.style.display = "none";
+    thankyouMsg.style.display = "none";
 
-      courseName.style.display = 'block';
-      courseSelect.style.display = 'none';
-
-    } else {
-      // נטען את רשימת הקורסים מגוגל שיט ונציג בבחירה
-      courseName.style.display = 'none';
-      courseSelect.style.display = 'block';
-
-      try {
-        const res = await fetch(GOOGLE_SHEET_CSV_URL);
-        if (!res.ok) throw new Error("שגיאה בטעינת הקורסים");
-
-        const csvText = await res.text();
-        const courses = parseCSV(csvText);
-
-        // ננקה ונוסיף אופציות ל-select
-        courseSelect.innerHTML = '<option value="" disabled selected>בחר קורס מהרשימה</option>';
-
-        courses.forEach(course => {
-          // נניח ששמות העמודות הם: type,startDate,endDate,location (שנה לפי הצורך)
-          const optionValue = JSON.stringify({
-            type: course.type || '',
-            startDate: course.startDate || '',
-            endDate: course.endDate || '',
-            location: course.location || ''
-          });
-          const optionText = course.type || 'קורס לא ידוע';
-          const option = document.createElement('option');
-          option.value = optionValue;
-          option.textContent = optionText;
-          courseSelect.appendChild(option);
-        });
-
-        // פונקציה למילוי השדות לפי בחירת קורס
-        function fillCourseFields(value) {
-          if (!value) {
-            courseName.value = '';
-            startDate.value = '';
-            endDate.value = '';
-            location.value = '';
-            return;
-          }
-          const selected = JSON.parse(value);
-          courseName.value = selected.type;
-          startDate.value = selected.startDate;
-          endDate.value = selected.endDate;
-          location.value = selected.location;
-        }
-
-        // בחר את הקורס הראשון (האופציה הראשונה אחרי "בחר קורס מהרשימה")
-        if (courseSelect.options.length > 1) {
-          courseSelect.selectedIndex = 1;
-          fillCourseFields(courseSelect.value);
-        }
-
-        // מאזין לשינוי בחירת הקורס
-        courseSelect.addEventListener('change', () => {
-          fillCourseFields(courseSelect.value);
-        });
-
-      } catch(err) {
-        console.error(err);
-        alert('אירעה שגיאה בטעינת רשימת הקורסים, אנא רענן את הדף ונסה שוב.');
-      }
+    // בדיקת שדות חובה
+    if (!form.name.value.trim() ||
+        !form.phone.value.trim() ||
+        !form.email.value.trim() ||
+        !form.paymentMethod.value ||
+        courseSelect.value === "") {
+      errorMsg.textContent = "אנא מלא את כל השדות המסומנים בכוכבית";
+      errorMsg.style.display = "block";
+      return;
     }
 
-    // --- טיפול בשליחה ---
-    const form = document.getElementById('registrationForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const thankyouMsg = document.getElementById('thankyouMessage');
-    const errorMsg = document.getElementById('errorMessage');
-    const btnText = submitBtn.querySelector('.btn-text');
-    const planeIcon = submitBtn.querySelector('.plane-icon');
+    // השבתת הכפתור בזמן שליחה
+    submitBtn.disabled = true;
+    btnText.textContent = "שולח את הטופס שלך...";
+    planeIcon.style.display = "inline-block";
+    planeIcon.style.animation = "none";
+    planeIcon.offsetHeight; // ריסט לאנימציה
+    planeIcon.style.animation = null;
 
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      errorMsg.style.display = 'none';
-      thankyouMsg.style.display = 'none';
+    const selectedCourse = courses[courseSelect.value];
 
-      // בדיקת תקינות שדות חובה:
-      if (!form.name.value.trim() || !form.phone.value.trim() || !form.email.value.trim() || !form.paymentMethod.value) {
-        errorMsg.textContent = 'אנא מלא את כל השדות המסומנים בכוכבית';
-        errorMsg.style.display = 'block';
-        return;
+    const data = {
+      name: form.name.value.trim(),
+      phone: form.phone.value.trim(),
+      email: form.email.value.trim(),
+      course: selectedCourse.type || '',
+      startDate: selectedCourse.startDate || '',
+      endDate: selectedCourse.endDate || '',
+      location: selectedCourse.location || '',
+      paymentMethod: form.paymentMethod.value,
+      notes: form.notes.value.trim()
+    };
+
+    try {
+      const res = await fetch(GOOGLE_WEBAPP_URL, {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      const result = await res.json();
+      if (result.status === "success") {
+        thankyouMsg.style.display = "block";
+        errorMsg.style.display = "none";
+        form.reset();
+        // איפוס שדות הקורס
+        startDate.value = "";
+        endDate.value = "";
+        locationInput.value = "";
+        courseSelect.selectedIndex = 0;
+      } else {
+        throw new Error(result.message || "אירעה שגיאה בשליחה");
       }
-
-      submitBtn.disabled = true;
-      btnText.textContent = "שולח את הטופס שלך...";
-      planeIcon.style.display = 'inline-block';
-      planeIcon.style.animation = 'none';
-      planeIcon.offsetHeight; 
-      planeIcon.style.animation = null;
-
-      const data = {
-        name: form.name.value.trim(),
-        phone: form.phone.value.trim(),
-        email: form.email.value.trim(),
-        course: courseName.value,
-        startDate: startDate.value,
-        endDate: endDate.value,
-        location: location.value,
-        paymentMethod: form.paymentMethod.value,
-        notes: form.notes.value.trim()
-      };
-
-      emailjs.send("service_45f1wyc", "template_18zogtj", data)
-        .then(() => {
-          submitBtn.disabled = false;
-          planeIcon.style.display = 'none';
-          btnText.textContent = "שלח הרשמה";
-          thankyouMsg.style.display = 'block';
-          errorMsg.style.display = 'none';
-        })
-        .catch((error) => {
-          submitBtn.disabled = false;
-          planeIcon.style.display = 'none';
-          btnText.textContent = "שלח הרשמה";
-          errorMsg.textContent = "אירעה שגיאה בשליחה. נסה שוב.";
-          errorMsg.style.display = 'block';
-          thankyouMsg.style.display = 'none';
-          console.error('שגיאה בשליחת המייל דרך EmailJS:', error);
-        });
-    });
+    } catch (err) {
+      errorMsg.textContent = err.message || "אירעה שגיאה בשליחה, אנא נסה שוב.";
+      errorMsg.style.display = "block";
+      thankyouMsg.style.display = "none";
+      console.error("שגיאה בשליחת הטופס:", err);
+    } finally {
+      submitBtn.disabled = false;
+      btnText.textContent = "שלח טופס הרשמה";
+      planeIcon.style.display = "none";
+    }
   });
-</script>
 
-<script>
-nl_pos = "bl";
-nl_color = "gray";
-nl_compact = "1";
-nl_accordion = "1";
-nl_contact = "n:יוזוק מדיק|p:0533562608";
+  // טעינת הקורסים בעת טעינת הדף
+  window.addEventListener('DOMContentLoaded', loadCourses);
 </script>
-<script src="https://yuzok101.github.io/yuzukmedic/data/nagishli.js" charset="utf-8" defer></script>
 
 </body>
 </html>
