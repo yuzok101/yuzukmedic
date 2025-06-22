@@ -19,7 +19,7 @@
     background-image: url('images/hero-bg.jpg');
     background-size: cover;
     background-position: center;
-    height: 100vh;
+    height: 80vh; /* הקטנה מ-100vh */
     position: relative;
     color: white;
 
@@ -27,6 +27,7 @@
     justify-content: center;
     align-items: center;
     text-align: center;
+    padding: 0 15px;
   }
 
   .hero-overlay {
@@ -40,23 +41,29 @@
     max-width: 600px;
     padding: 0 15px;
     z-index: 1;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* מרכז אנכי */
+    align-items: center;
+    height: 100%;
   }
 
   .hero-content h1 {
-    font-size: 5rem; /* הגדלנו */
-    margin-bottom: 25px;
+    font-size: 4rem; /* הקטנה */
+    margin-bottom: 20px;
   }
 
   .hero-content p {
-    font-size: 1.8rem; /* הגדלנו */
-    margin-bottom: 35px;
+    font-size: 1.5rem; /* הקטנה */
+    margin-bottom: 25px;
   }
 
   .btn {
     background-color: #ffc107;
     color: #000;
-    padding: 16px 32px; /* הגדלנו */
-    font-size: 1.4rem; /* הגדלנו */
+    padding: 16px 32px; /* שמור */
+    font-size: 1.4rem; /* שמור */
     border: none;
     border-radius: 5px;
     text-decoration: none;
@@ -111,7 +118,7 @@
   .main-nav {
     background-color: #003366;
     text-align: center;
-    margin-top: 20px;
+    margin-top: 0; /* הורדנו את הרווח הלבן */
     padding: 15px 0; /* גובה מוגדל */
   }
 
@@ -172,27 +179,27 @@
     background: linear-gradient(to right, #004466, #0077aa);
     color: white;
     text-align: center;
-    padding: 60px 20px;
+    padding: 40px 20px; /* הקטנה */
     border-radius: 0;
-    margin-top: 60px;
+    margin-top: 40px; /* הקטנה */
   }
 
   .cta-banner h2 {
-    font-size: 2em;
+    font-size: 1.8em; /* הקטנה */
     margin-bottom: 10px;
   }
 
   .cta-banner p {
-    font-size: 1.2em;
-    margin-bottom: 20px;
+    font-size: 1em; /* הקטנה */
+    margin-bottom: 15px;
   }
 
   .cta-button {
     background-color: #ffffff;
     color: #002244;
     text-decoration: none;
-    padding: 14px 28px;
-    font-size: 1.1em;
+    padding: 12px 24px; /* הקטנה */
+    font-size: 1em; /* הקטנה */
     font-weight: bold;
     border-radius: 30px;
     transition: background-color 0.3s ease, color 0.3s ease;
