@@ -155,47 +155,30 @@
       0% {opacity: 0;}
       100% {opacity: 1;}
     }
-
-    /* לוגו בצד שמאל למעלה עם נדנוד */
-    #logo-button {
-      position: fixed;
-      top: 80px;
-      left: 20px;
-      z-index: 2000;
-      animation: swingLogo 2.5s infinite ease-in-out;
-      transform-origin: top center;
-    }
-    #logo-button img {
-      height: 120px;
-      background: transparent;
-      cursor: pointer;
-      opacity: 0.9;
-    }
-    @keyframes swingLogo {
-      0% { transform: rotate(0deg); }
-      25% { transform: rotate(6deg); }
-      50% { transform: rotate(0deg); }
-      75% { transform: rotate(-6deg); }
-      100% { transform: rotate(0deg); }
-    }
-    @media (max-width: 700px) {
-      #logo-button {
-        top: 60px;
-        left: 10px;
+    @media (max-width: 480px) {
+      form {
+        padding: 25px 20px;
+        border-radius: 12px;
       }
-      #logo-button img {
-        height: 90px;
+      h2 {
+        font-size: 1.7rem;
+      }
+      label {
+        font-size: 1rem;
+      }
+      input, select, textarea {
+        font-size: 1rem;
+        padding: 10px 14px;
+      }
+      button {
+        font-size: 1.15rem;
+        padding: 14px;
       }
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 </head>
 <body>
-
-  <!-- לוגו בצד שמאל למעלה -->
-  <a href="index.html" id="logo-button" aria-label="לוגו יוזוק מדיק - חזרה לעמוד הבית">
-    <img src="images/logo.png" alt="לוגו יוז'וק מדיק" />
-  </a>
 
 <div class="overlay">
   <form id="registrationForm" autocomplete="off" spellcheck="false" novalidate>
@@ -289,4 +272,129 @@
       fillCourseFields({
         type: params.type,
         startDate: params.startDate,
-       
+        endDate: params.endDate,
+        location: params.location
+      });
+      courseNameInput.style.display = 'block';
+      courseSelect.style.display = 'none';
+    } else {
+      // אין פרמטרים, נטען רשימת קורסים מה-API ונציג את התפריט
+      courseNameInput.style.display = 'none';
+      courseSelect.style.display = 'block';
+
+      fetch('https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec')
+        .then(response => {
+          if (!response.ok) throw new Error('Network response was not ok');
+          return response.json();
+        })
+        .then(data => {
+          if (!Array.isArray(data) || data.length === 0) {
+            courseSelect.innerHTML = '<option value="">לא נמצאו קורסים זמינים</option>';
+            return;
+          }
+          courseSelect.innerHTML = '<option value="">-- בחר קורס מהרשימה --</option>';
+          data.forEach(course => {
+            const val = JSON.stringify(course);
+            const text = `${course.type} | ${course.startDate} - ${course.endDate} | ${course.location}`;
+            const option = document.createElement('option');
+            option.value = val;
+            option.textContent = text;
+            courseSelect.appendChild(option);
+          });
+
+          // כדי שהקורס הראשון בברירת מחדל יטען אוטומטית, בוחרים אותו
+          // אבל לא חובה לבחור תמיד - אפשר גם להשאיר ריק. כאן בוחר אוטומטית את הראשון אם רוצים:
+          /*
+          if(data.length > 0) {
+            courseSelect.selectedIndex = 1; // בוחר את האופציה הראשונה אחרי הכותרת
+            const selectedCourse = JSON.parse(courseSelect.value);
+            fillCourseFields(selectedCourse);
+          }
+          */
+        })
+        .catch(error => {
+          console.error('שגיאה בטעינת הקורסים:', error);
+          courseSelect.innerHTML = '<option value="">שגיאה בטעינת הקורסים</option>';
+        });
+
+      courseSelect.addEventListener('change', () => {
+        if (!courseSelect.value) {
+          clearCourseFields();
+          return;
+        }
+        try {
+          const selectedCourse = JSON.parse(courseSelect.value);
+          fillCourseFields(selectedCourse);
+        } catch (e) {
+          clearCourseFields();
+          console.error('שגיאה בפרשנות הקורס שנבחר:', e);
+        }
+      });
+    }
+
+    const form = document.getElementById('registrationForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const thankyouMsg = document.getElementById('thankyouMessage');
+    const errorMsg = document.getElementById('errorMessage');
+    const btnText = submitBtn.querySelector('.btn-text');
+    const planeIcon = submitBtn.querySelector('.plane-icon');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      errorMsg.style.display = 'none';
+      thankyouMsg.style.display = 'none';
+
+      submitBtn.disabled = true;
+      btnText.textContent = "שולח את הטופס שלך...";
+      planeIcon.style.display = 'inline-block';
+      planeIcon.style.animation = 'none';
+      planeIcon.offsetHeight; 
+      planeIcon.style.animation = null;
+
+      const data = {
+        name: form.name.value.trim(),
+        phone: form.phone.value.trim(),
+        email: form.email.value.trim(),
+        course: form.courseName.value || (() => {
+          const sel = document.getElementById('courseSelect');
+          return sel.options[sel.selectedIndex] ? JSON.parse(sel.value).type : '';
+        })(),
+        startDate: form.startDate.value,
+        endDate: form.endDate.value,
+        location: form.location.value,
+        paymentMethod: form.paymentMethod.value,
+        notes: form.notes.value.trim()
+      };
+
+      emailjs.send("service_45f1wyc", "template_18zogtj", data)
+        .then(() => {
+          submitBtn.disabled = false;
+          planeIcon.style.display = 'none';
+          btnText.textContent = "שלח הרשמה";
+          thankyouMsg.style.display = 'block';
+          errorMsg.style.display = 'none';
+        })
+        .catch((error) => {
+          submitBtn.disabled = false;
+          planeIcon.style.display = 'none';
+          btnText.textContent = "שלח הרשמה";
+          errorMsg.textContent = "אירעה שגיאה בשליחה. נסה שוב.";
+          errorMsg.style.display = 'block';
+          thankyouMsg.style.display = 'none';
+          console.error('שגיאה בשליחת המייל דרך EmailJS:', error);
+        });
+    });
+  });
+</script>
+
+<script>
+nl_pos = "bl";
+nl_color = "gray";
+nl_compact = "1";
+nl_accordion = "1";
+nl_contact = "n:יוזוק מדיק|p:0533562608";
+</script>
+<script src="https://yuzok101.github.io/yuzukmedic/data/nagishli.js" charset="utf-8" defer></script>
+
+</body>
+</html>
