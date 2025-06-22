@@ -193,9 +193,11 @@
     <label for="email">אימייל <span style="color:red">*</span></label>
     <input type="email" id="email" name="email" required placeholder="example@mail.com" autocomplete="email" />
 
-    <label for="courseSelect">שם הקורס</label>
-    <select id="courseSelect" name="courseSelect" style="display:none;"></select>
-    <input type="text" id="courseName" name="courseName" readonly />
+    <label for="courseSelect">בחר קורס</label>
+    <select id="courseSelect" name="courseSelect" style="display:none;">
+      <option value="">-- בחר קורס מהרשימה --</option>
+    </select>
+    <input type="text" id="courseName" name="courseName" readonly style="display:none;" />
 
     <label for="startDate">תאריך התחלה</label>
     <input type="text" id="startDate" name="startDate" readonly />
@@ -246,20 +248,88 @@
     return params;
   }
 
+  function clearCourseFields() {
+    document.getElementById('courseName').value = '';
+    document.getElementById('startDate').value = '';
+    document.getElementById('endDate').value = '';
+    document.getElementById('location').value = '';
+  }
+
+  function fillCourseFields(courseObj) {
+    document.getElementById('courseName').value = courseObj.type || '';
+    document.getElementById('startDate').value = courseObj.startDate || '';
+    document.getElementById('endDate').value = courseObj.endDate || '';
+    document.getElementById('location').value = courseObj.location || '';
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     const params = getQueryParams();
+    const courseSelect = document.getElementById('courseSelect');
+    const courseNameInput = document.getElementById('courseName');
 
+    // אם יש פרמטרים מלאים בקישור, מגדירים ומסתירים תפריט בחירה
     if (params.type && params.startDate && params.endDate && params.location) {
-      document.getElementById('courseName').value = params.type;
-      document.getElementById('startDate').value = params.startDate;
-      document.getElementById('endDate').value = params.endDate;
-      document.getElementById('location').value = params.location;
-      document.getElementById('courseName').style.display = 'block';
-      document.getElementById('courseSelect').style.display = 'none';
+      fillCourseFields({
+        type: params.type,
+        startDate: params.startDate,
+        endDate: params.endDate,
+        location: params.location
+      });
+      courseNameInput.style.display = 'block';
+      courseSelect.style.display = 'none';
     } else {
-      document.getElementById('courseName').style.display = 'none';
-      document.getElementById('courseSelect').style.display = 'block';
-      // כאן אפשר להוסיף טעינת קורסים אם תרצה
+      // אין פרמטרים, נטען רשימת קורסים מה-API ונציג את התפריט
+      courseNameInput.style.display = 'none';
+      courseSelect.style.display = 'block';
+
+      fetch('https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec')
+        .then(response => {
+          if (!response.ok) throw new Error('Network response was not ok');
+          return response.json();
+        })
+        .then(data => {
+          if (!Array.isArray(data) || data.length === 0) {
+            courseSelect.innerHTML = '<option value="">לא נמצאו קורסים זמינים</option>';
+            return;
+          }
+          courseSelect.innerHTML = '<option value="">-- בחר קורס מהרשימה --</option>';
+          data.forEach(course => {
+            const val = JSON.stringify(course);
+            const text = `${course.type} | ${course.startDate} - ${course.endDate} | ${course.location}`;
+            const option = document.createElement('option');
+            option.value = val;
+            option.textContent = text;
+            courseSelect.appendChild(option);
+          });
+
+          // כדי שהקורס הראשון בברירת מחדל יטען אוטומטית, בוחרים אותו
+          // אבל לא חובה לבחור תמיד - אפשר גם להשאיר ריק. כאן בוחר אוטומטית את הראשון אם רוצים:
+          /*
+          if(data.length > 0) {
+            courseSelect.selectedIndex = 1; // בוחר את האופציה הראשונה אחרי הכותרת
+            const selectedCourse = JSON.parse(courseSelect.value);
+            fillCourseFields(selectedCourse);
+          }
+          */
+        })
+        .catch(error => {
+          console.error('שגיאה בטעינת הקורסים:', error);
+          courseSelect.innerHTML = '<option value="">שגיאה בטעינת הקורסים</option>';
+        });
+
+      courseSelect.addEventListener('change', () => {
+        if (!courseSelect.value) {
+          clearCourseFields();
+          return;
+        }
+        try {
+          const selectedCourse = JSON.parse(courseSelect.value);
+          fillCourseFields(selectedCourse);
+        } catch (e) {
+          clearCourseFields();
+          console.error('שגיאה בפרשנות הקורס שנבחר:', e);
+        }
+      });
     }
 
     const form = document.getElementById('registrationForm');
@@ -278,7 +348,6 @@
       btnText.textContent = "שולח את הטופס שלך...";
       planeIcon.style.display = 'inline-block';
       planeIcon.style.animation = 'none';
-      // פעולה לאתחול האנימציה מחדש
       planeIcon.offsetHeight; 
       planeIcon.style.animation = null;
 
@@ -304,7 +373,6 @@
           btnText.textContent = "שלח הרשמה";
           thankyouMsg.style.display = 'block';
           errorMsg.style.display = 'none';
-          // שומר על הטופס פתוח לשינויים או רישומים נוספים
         })
         .catch((error) => {
           submitBtn.disabled = false;
@@ -319,8 +387,7 @@
   });
 </script>
 
-
-  <script>
+<script>
 nl_pos = "bl";
 nl_color = "gray";
 nl_compact = "1";
@@ -329,6 +396,5 @@ nl_contact = "n:יוזוק מדיק|p:0533562608";
 </script>
 <script src="https://yuzok101.github.io/yuzukmedic/data/nagishli.js" charset="utf-8" defer></script>
 
-  
 </body>
 </html>
