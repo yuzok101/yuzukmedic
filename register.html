@@ -14,6 +14,24 @@
       background-size: cover;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
+      scroll-behavior: smooth;
+    }
+    /* לוגו קבוע */
+    .fixed-logo {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 9999;
+      transition: transform 0.3s ease;
+    }
+    .fixed-logo img {
+      height: 60px;
+      width: auto;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .fixed-logo:hover {
+      transform: scale(1.05);
     }
     .overlay {
       background: rgba(255, 255, 255, 0.6);
@@ -100,7 +118,6 @@
       cursor: default;
       opacity: 0.7;
     }
-    /* אנימציית מטוס */
     .plane-icon {
       width: 24px;
       height: 24px;
@@ -109,292 +126,217 @@
       animation: flyPlane 1.2s linear forwards;
     }
     @keyframes flyPlane {
-      0% {
-        transform: translateX(0) translateY(0) rotate(0deg);
-        opacity: 1;
-      }
-      50% {
-        transform: translateX(20px) translateY(-10px) rotate(15deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateX(60px) translateY(-20px) rotate(15deg);
-        opacity: 0;
-      }
+      0% {transform: translateX(0) translateY(0) rotate(0deg); opacity: 1;}
+      50% {transform: translateX(20px) translateY(-10px) rotate(15deg); opacity: 1;}
+      100% {transform: translateX(60px) translateY(-20px) rotate(15deg); opacity: 0;}
     }
-    .thankyou-message {
+    .thankyou-message, .error-message {
       display: none;
       margin-top: 15px;
-      color: green;
       font-size: 1.4rem;
       font-weight: 700;
       text-align: center;
       animation: fadeIn 1s ease forwards;
     }
+    .thankyou-message {
+      color: green;
+    }
     .error-message {
-      display: none;
-      margin-top: 15px;
       color: red;
-      font-weight: 700;
-      text-align: center;
-      animation: fadeIn 1s ease forwards;
     }
-    @keyframes fadeInUp {
-      0% {opacity: 0; transform: translateY(30px);}
-      100% {opacity: 1; transform: translateY(0);}
-    }
-    @keyframes fadeInLeft {
-      0% {opacity: 0; transform: translateX(20px);}
-      100% {opacity: 1; transform: translateX(0);}
-    }
-    @keyframes fadeInRight {
-      0% {opacity: 0; transform: translateX(-20px);}
-      100% {opacity: 1; transform: translateX(0);}
-    }
-    @keyframes fadeIn {
-      0% {opacity: 0;}
-      100% {opacity: 1;}
-    }
+    @keyframes fadeInUp {0% {opacity: 0; transform: translateY(30px);} 100% {opacity:1;transform:translateY(0);}}
+    @keyframes fadeInLeft {0% {opacity: 0; transform: translateX(20px);} 100% {opacity:1;transform:translateX(0);}}
+    @keyframes fadeInRight {0% {opacity: 0; transform: translateX(-20px);} 100% {opacity:1;transform:translateX(0);}}
+    @keyframes fadeIn {0% {opacity:0;} 100% {opacity:1;}}
     @media (max-width: 480px) {
-      form {
-        padding: 25px 20px;
-        border-radius: 12px;
-      }
-      h2 {
-        font-size: 1.7rem;
-      }
-      label {
-        font-size: 1rem;
-      }
-      input, select, textarea {
-        font-size: 1rem;
-        padding: 10px 14px;
-      }
-      button {
-        font-size: 1.15rem;
-        padding: 14px;
-      }
+      form { padding: 25px 20px; border-radius: 12px; }
+      h2 { font-size: 1.7rem; }
+      label { font-size: 1rem; }
+      input, select, textarea { font-size: 1rem; padding: 10px 14px; }
+      button { font-size: 1.15rem; padding: 14px; }
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 </head>
 <body>
 
-<div class="overlay">
-  <form id="registrationForm" autocomplete="off" spellcheck="false" novalidate>
-    <h2>טופס הרשמה לקורס</h2>
+  <a href="#top" class="fixed-logo">
+    <img src="images/logo.png" alt="לוגו יוזוק מדיק">
+  </a>
 
-    <label for="name">שם מלא <span style="color:red">*</span></label>
-    <input type="text" id="name" name="name" required autocomplete="name" />
+  <div class="overlay">
+    <form id="registrationForm" autocomplete="off" spellcheck="false" novalidate>
+      <h2 id="top">טופס הרשמה לקורס</h2>
 
-    <label for="phone">טלפון <span style="color:red">*</span></label>
-    <input type="tel" id="phone" name="phone" required pattern="[0-9+\-\s]{7,15}" placeholder="050-1234567" autocomplete="tel" />
+      <label for="name">שם מלא <span style="color:red">*</span></label>
+      <input type="text" id="name" name="name" required autocomplete="name" />
 
-    <label for="email">אימייל <span style="color:red">*</span></label>
-    <input type="email" id="email" name="email" required placeholder="example@mail.com" autocomplete="email" />
+      <label for="phone">טלפון <span style="color:red">*</span></label>
+      <input type="tel" id="phone" name="phone" required pattern="[0-9+\-\s]{7,15}" placeholder="050-1234567" autocomplete="tel" />
 
-    <label for="courseSelect">בחר קורס</label>
-    <select id="courseSelect" name="courseSelect" style="display:none;">
-      <option value="">-- בחר קורס מהרשימה --</option>
-    </select>
-    <input type="text" id="courseName" name="courseName" readonly style="display:none;" />
+      <label for="email">אימייל <span style="color:red">*</span></label>
+      <input type="email" id="email" name="email" required placeholder="example@mail.com" autocomplete="email" />
 
-    <label for="startDate">תאריך התחלה</label>
-    <input type="text" id="startDate" name="startDate" readonly />
+      <label for="courseSelect">בחר קורס</label>
+      <select id="courseSelect" name="courseSelect" style="display:none;">
+        <option value="">-- בחר קורס מהרשימה --</option>
+      </select>
+      <input type="text" id="courseName" name="courseName" readonly style="display:none;" />
 
-    <label for="endDate">תאריך סיום</label>
-    <input type="text" id="endDate" name="endDate" readonly />
+      <label for="startDate">תאריך התחלה</label>
+      <input type="text" id="startDate" name="startDate" readonly />
 
-    <label for="location">מיקום</label>
-    <input type="text" id="location" name="location" readonly />
+      <label for="endDate">תאריך סיום</label>
+      <input type="text" id="endDate" name="endDate" readonly />
 
-    <label for="paymentMethod">אופן תשלום</label>
-    <select id="paymentMethod" name="paymentMethod" required>
-      <option value="" disabled selected>בחר אופן תשלום</option>
-      <option value="אשראי">אשראי</option>
-      <option value="מזומן">מזומן</option>
-      <option value="העברה בנקאית">העברה בנקאית</option>
-      <option value="ביט">ביט</option>
-    </select>
+      <label for="location">מיקום</label>
+      <input type="text" id="location" name="location" readonly />
 
-    <label for="notes">הערות</label>
-    <textarea id="notes" name="notes" rows="4" placeholder="הקלד הערות אם יש..."></textarea>
+      <label for="paymentMethod">אופן תשלום</label>
+      <select id="paymentMethod" name="paymentMethod" required>
+        <option value="" disabled selected>בחר אופן תשלום</option>
+        <option value="אשראי">אשראי</option>
+        <option value="מזומן">מזומן</option>
+        <option value="העברה בנקאית">העברה בנקאית</option>
+        <option value="ביט">ביט</option>
+      </select>
 
-    <button type="submit" id="submitBtn">
-      <span class="btn-text">שלח טופס הרשמה</span>
-      <svg class="plane-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:none;">
-        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-      </svg>
-    </button>
-    <div class="thankyou-message" id="thankyouMessage">
-      השליחה הצליחה, ניצור איתך קשר בהקדם.
-    </div>
-    <div class="error-message" id="errorMessage">
-      <!-- הודעת שגיאה תופיע כאן -->
-    </div>
-  </form>
-</div>
+      <label for="notes">הערות</label>
+      <textarea id="notes" name="notes" rows="4" placeholder="הקלד הערות אם יש..."></textarea>
 
-<script>
-  emailjs.init("miOp6iToFLfbH1jk5");
+      <button type="submit" id="submitBtn">
+        <span class="btn-text">שלח טופס הרשמה</span>
+        <svg class="plane-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:none;">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+        </svg>
+      </button>
+      <div class="thankyou-message" id="thankyouMessage">
+        השליחה הצליחה, ניצור איתך קשר בהקדם.
+      </div>
+      <div class="error-message" id="errorMessage"></div>
+    </form>
+  </div>
 
-  function getQueryParams() {
-    const params = {};
-    const query = window.location.search.substring(1);
-    query.split("&").forEach(pair => {
-      const [key, value] = pair.split("=");
-      if (key) params[decodeURIComponent(key)] = decodeURIComponent(value || "");
-    });
-    return params;
-  }
+  <script>
+    emailjs.init("miOp6iToFLfbH1jk5");
 
-  function clearCourseFields() {
-    document.getElementById('courseName').value = '';
-    document.getElementById('startDate').value = '';
-    document.getElementById('endDate').value = '';
-    document.getElementById('location').value = '';
-  }
-
-  function fillCourseFields(courseObj) {
-    document.getElementById('courseName').value = courseObj.type || '';
-    document.getElementById('startDate').value = courseObj.startDate || '';
-    document.getElementById('endDate').value = courseObj.endDate || '';
-    document.getElementById('location').value = courseObj.location || '';
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    const params = getQueryParams();
-    const courseSelect = document.getElementById('courseSelect');
-    const courseNameInput = document.getElementById('courseName');
-
-    // אם יש פרמטרים מלאים בקישור, מגדירים ומסתירים תפריט בחירה
-    if (params.type && params.startDate && params.endDate && params.location) {
-      fillCourseFields({
-        type: params.type,
-        startDate: params.startDate,
-        endDate: params.endDate,
-        location: params.location
+    function getQueryParams() {
+      const params = {};
+      window.location.search.substring(1).split("&").forEach(pair => {
+        const [k,v] = pair.split("=");
+        if (k) params[decodeURIComponent(k)] = decodeURIComponent(v||"");
       });
-      courseNameInput.style.display = 'block';
-      courseSelect.style.display = 'none';
-    } else {
-      // אין פרמטרים, נטען רשימת קורסים מה-API ונציג את התפריט
-      courseNameInput.style.display = 'none';
-      courseSelect.style.display = 'block';
-
-      fetch('https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec')
-        .then(response => {
-          if (!response.ok) throw new Error('Network response was not ok');
-          return response.json();
-        })
-        .then(data => {
-          if (!Array.isArray(data) || data.length === 0) {
-            courseSelect.innerHTML = '<option value="">לא נמצאו קורסים זמינים</option>';
-            return;
-          }
-          courseSelect.innerHTML = '<option value="">-- בחר קורס מהרשימה --</option>';
-          data.forEach(course => {
-            const val = JSON.stringify(course);
-            const text = `${course.type} | ${course.startDate} - ${course.endDate} | ${course.location}`;
-            const option = document.createElement('option');
-            option.value = val;
-            option.textContent = text;
-            courseSelect.appendChild(option);
-          });
-
-          // כדי שהקורס הראשון בברירת מחדל יטען אוטומטית, בוחרים אותו
-          // אבל לא חובה לבחור תמיד - אפשר גם להשאיר ריק. כאן בוחר אוטומטית את הראשון אם רוצים:
-          /*
-          if(data.length > 0) {
-            courseSelect.selectedIndex = 1; // בוחר את האופציה הראשונה אחרי הכותרת
-            const selectedCourse = JSON.parse(courseSelect.value);
-            fillCourseFields(selectedCourse);
-          }
-          */
-        })
-        .catch(error => {
-          console.error('שגיאה בטעינת הקורסים:', error);
-          courseSelect.innerHTML = '<option value="">שגיאה בטעינת הקורסים</option>';
-        });
-
-      courseSelect.addEventListener('change', () => {
-        if (!courseSelect.value) {
-          clearCourseFields();
-          return;
-        }
-        try {
-          const selectedCourse = JSON.parse(courseSelect.value);
-          fillCourseFields(selectedCourse);
-        } catch (e) {
-          clearCourseFields();
-          console.error('שגיאה בפרשנות הקורס שנבחר:', e);
-        }
-      });
+      return params;
     }
 
-    const form = document.getElementById('registrationForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const thankyouMsg = document.getElementById('thankyouMessage');
-    const errorMsg = document.getElementById('errorMessage');
-    const btnText = submitBtn.querySelector('.btn-text');
-    const planeIcon = submitBtn.querySelector('.plane-icon');
+    function clearCourseFields() {
+      ['courseName','startDate','endDate','location'].forEach(id => document.getElementById(id).value = '');
+    }
 
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      errorMsg.style.display = 'none';
-      thankyouMsg.style.display = 'none';
+    function fillCourseFields(c) {
+      document.getElementById('courseName').value = c.type||'';
+      document.getElementById('startDate').value = c.startDate||'';
+      document.getElementById('endDate').value = c.endDate||'';
+      document.getElementById('location').value = c.location||'';
+    }
 
-      submitBtn.disabled = true;
-      btnText.textContent = "שולח את הטופס שלך...";
-      planeIcon.style.display = 'inline-block';
-      planeIcon.style.animation = 'none';
-      planeIcon.offsetHeight; 
-      planeIcon.style.animation = null;
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = getQueryParams();
+      const sel = document.getElementById('courseSelect');
+      const ci = document.getElementById('courseName');
 
-      const data = {
-        name: form.name.value.trim(),
-        phone: form.phone.value.trim(),
-        email: form.email.value.trim(),
-        course: form.courseName.value || (() => {
-          const sel = document.getElementById('courseSelect');
-          return sel.options[sel.selectedIndex] ? JSON.parse(sel.value).type : '';
-        })(),
-        startDate: form.startDate.value,
-        endDate: form.endDate.value,
-        location: form.location.value,
-        paymentMethod: form.paymentMethod.value,
-        notes: form.notes.value.trim()
-      };
+      if (params.type && params.startDate && params.endDate && params.location) {
+        fillCourseFields(params);
+        ci.style.display = 'block';
+        sel.style.display = 'none';
+      } else {
+        ci.style.display = 'none';
+        sel.style.display = 'block';
 
-      emailjs.send("service_45f1wyc", "template_18zogtj", data)
-        .then(() => {
-          submitBtn.disabled = false;
-          planeIcon.style.display = 'none';
-          btnText.textContent = "שלח הרשמה";
-          thankyouMsg.style.display = 'block';
-          errorMsg.style.display = 'none';
-        })
-        .catch((error) => {
-          submitBtn.disabled = false;
-          planeIcon.style.display = 'none';
-          btnText.textContent = "שלח הרשמה";
-          errorMsg.textContent = "אירעה שגיאה בשליחה. נסה שוב.";
-          errorMsg.style.display = 'block';
-          thankyouMsg.style.display = 'none';
-          console.error('שגיאה בשליחת המייל דרך EmailJS:', error);
+        fetch('https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec')
+          .then(r => { if (!r.ok) throw ''; return r.json(); })
+          .then(data => {
+            if (!Array.isArray(data) || data.length===0) {
+              sel.innerHTML = '<option>לא נמצאו קורסים זמינים</option>';
+              return;
+            }
+            sel.innerHTML = '<option value="">-- בחר קורס מהרשימה --</option>';
+            data.forEach(c => {
+              const opt = document.createElement('option');
+              opt.value = JSON.stringify(c);
+              opt.textContent = `${c.type} | ${c.startDate} - ${c.endDate} | ${c.location}`;
+              sel.appendChild(opt);
+            });
+          })
+          .catch(e => {
+            console.error(e);
+            sel.innerHTML = '<option>שגיאה בטעינת הקורסים</option>';
+          });
+
+        sel.addEventListener('change', () => {
+          if (!sel.value) return clearCourseFields();
+          try {
+            fillCourseFields(JSON.parse(sel.value));
+          } catch {
+            clearCourseFields();
+          }
         });
-    });
-  });
-</script>
+      }
 
-<script>
-nl_pos = "bl";
-nl_color = "gray";
-nl_compact = "1";
-nl_accordion = "1";
-nl_contact = "n:יוזוק מדיק|p:0533562608";
-</script>
-<script src="https://yuzok101.github.io/yuzukmedic/data/nagishli.js" charset="utf-8" defer></script>
+      const form = document.getElementById('registrationForm');
+      const sb = document.getElementById('submitBtn');
+      const th = document.getElementById('thankyouMessage');
+      const er = document.getElementById('errorMessage');
+      const bt = sb.querySelector('.btn-text');
+      const pl = sb.querySelector('.plane-icon');
+
+      form.addEventListener('submit', e => {
+        e.preventDefault();
+        er.style.display = 'none';
+        th.style.display = 'none';
+        sb.disabled = true;
+        bt.textContent = "שולח את הטופס שלך...";
+        pl.style.display = 'inline-block';
+        pl.style.animation = 'none';
+        pl.offsetHeight;
+        pl.style.animation = null;
+
+        const selCourse = sel.value ? JSON.parse(sel.value).type : '';
+        const data = {
+          name: form.name.value.trim(),
+          phone: form.phone.value.trim(),
+          email: form.email.value.trim(),
+          course: form.courseName.value || selCourse,
+          startDate: form.startDate.value,
+          endDate: form.endDate.value,
+          location: form.location.value,
+          paymentMethod: form.paymentMethod.value,
+          notes: form.notes.value.trim()
+        };
+
+        emailjs.send("service_45f1wyc", "template_18zogtj", data)
+          .then(() => {
+            sb.disabled = false;
+            pl.style.display = 'none';
+            bt.textContent = "שלח טופס הרשמה";
+            th.style.display = 'block';
+          })
+          .catch(() => {
+            sb.disabled = false;
+            pl.style.display = 'none';
+            bt.textContent = "שלח טופס הרשמה";
+            er.textContent = "אירעה שגיאה בשליחה. נסה שוב.";
+            er.style.display = 'block';
+          });
+      });
+    });
+  </script>
+
+  <script>
+    nl_pos = "bl"; nl_color = "gray"; nl_compact = "1"; nl_accordion = "1";
+    nl_contact = "n:יוזוק מדיק|p:0533562608";
+  </script>
+  <script src="https://yuzok101.github.io/yuzukmedic/data/nagishli.js" charset="utf-8" defer></script>
 
 </body>
 </html>
