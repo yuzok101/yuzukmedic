@@ -1,86 +1,136 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>יוז'וק מדיק | קורסי עזרה ראשונה</title>
-<link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="yozok-style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>יוז'וק מדיק | קורסי עזרה ראשונה</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="yozok-style.css">
+
+  <style>
+    /* באנר צף קבוע עליון */
+    .floating-banner {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background-color: #e60023;
+      color: white;
+      text-align: center;
+      z-index: 1000;
+      font-family: 'Heebo', sans-serif;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    .floating-banner-content {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 0.5rem;
+      font-size: 1rem;
+      direction: rtl;
+    }
+
+    .floating-banner a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .floating-banner a:hover {
+      text-decoration: underline;
+    }
+
+    body {
+      padding-top: 50px;
+    }
+  </style>
 </head>
+
 <body>
-<!-- הבאנר הקבוע עם לוגו -->
-<a href="index.html" class="banner">
-  <img src="logo.png" alt="הלוגו של יוז'וק">
-</a>
 
-<header class="hero">
-<div class="hero-overlay">
-<div class="hero-content">
-<h1>יוז'וק מדיק</h1>
-<p>לדעת, להציל חיים.</p>
-<a href="courses.html" class="btn">להרשמה לקורס הקרוב</a>
-</div>
-</div>
-</header>
+  <!-- באנר ניווט צף -->
+  <div class="floating-banner">
+    <div class="floating-banner-content">
+      <a href="index.html">דף הבית</a>
+      <a href="courses.html">קורסים</a>
+      <a href="register.html">הרשמה</a>
+      <a href="kesher.html">צור קשר</a>
+    </div>
+  </div>
 
-<nav class="main-nav">
-<ul>
-<li><a href="index.html">ראשי</a></li>
-<li><a href="register.html">הרשמה</a></li>
-<li><a href="courses.html">קורסים קרובים</a></li>
-<li><a href="kesher.html">צור קשר</a></li>
-</ul>
-</nav>
+  <!-- הבאנר הקבוע עם לוגו -->
+  <a href="index.html" class="banner">
+    <img src="logo.png" alt="הלוגו של יוז'וק">
+  </a>
 
-<main class="main-section">
-<section class="about">
-<h2>למה לבחור ביוז'וק מדיק?</h2>
-<p>הקורסים שלנו מועברים באופן ייחודי ובהתאמה מלאה לאופי משתתפי הקורס, כל חניך בקורס מגיש עזרה ראשונה מקבל חוברת מיוחדת שעוצבה, נערכה ונכתבה במיוחדת ע''י פראמדיק מוסמך, שהנגיש את התכנים שיהיו מובנים לכל חניך.
+  <header class="hero">
+    <div class="hero-overlay">
+      <div class="hero-content">
+        <h1>יוז'וק מדיק</h1>
+        <p>לדעת, להציל חיים.</p>
+        <a href="courses.html" class="btn">להרשמה לקורס הקרוב</a>
+      </div>
+    </div>
+  </header>
 
-במפגשים המעשיים, תחשפו לאופן הטיפול והגישה הנכונה והמקצועית למטופל הזקוק לסיוע, ע''מ להעשיר את הידע, נוספו לקורס תכנים שאינם ביסלבוס משרד הבריאות.
+  <nav class="main-nav">
+    <ul>
+      <li><a href="index.html">ראשי</a></li>
+      <li><a href="register.html">הרשמה</a></li>
+      <li><a href="courses.html">קורסים קרובים</a></li>
+      <li><a href="kesher.html">צור קשר</a></li>
+    </ul>
+  </nav>
 
-בוגרי קורסי יוז'וק מדיק לא נשארים לבד, הבוגרים מחוברים לפורום הבוגרים בפלטפורמות החברתיות השונות ויכולים להתייעץ בכל רגע נתון עם אחד ממדריכי הקורסים.
+  <main class="main-section">
+    <section class="about">
+      <h2>למה לבחור ביוז'וק מדיק?</h2>
+      <p>
+        הקורסים שלנו מועברים באופן ייחודי ובהתאמה מלאה לאופי משתתפי הקורס, כל חניך בקורס מגיש עזרה ראשונה מקבל חוברת מיוחדת שעוצבה, נערכה ונכתבה במיוחדת ע''י פראמדיק מוסמך, שהנגיש את התכנים שיהיו מובנים לכל חניך.
+        <br><br>
+        במפגשים המעשיים, תחשפו לאופן הטיפול והגישה הנכונה והמקצועית למטופל הזקוק לסיוע, ע''מ להעשיר את הידע, נוספו לקורס תכנים שאינם ביסלבוס משרד הבריאות.
+        <br><br>
+        בוגרי קורסי יוז'וק מדיק לא נשארים לבד, הבוגרים מחוברים לפורום הבוגרים בפלטפורמות החברתיות השונות ויכולים להתייעץ בכל רגע נתון עם אחד ממדריכי הקורסים.
+        <br><br>
+        בנוסף הקמנו קו טלפוני מיוחד לבוגרי הקורסים שאינם חשופים למדיה שם נשלח מידי שבוע פודקאסט רפואי מפי פראמדיקים ובעלי מקצוע.
+      </p>
+    </section>
 
-בנוסף הקמנו קו טלפוני מיוחד לבוגרי הקורסים שאינם חשופים למדיה שם נשלח מידי שבוע פודקאסט רפואי מפי פראמדיקים ובעלי מקצוע.
-</p>
-</section>
+    <section class="features">
+      <div class="feature-box">
+        <h3>מקצועיות</h3>
+        <p>לא מתפשרים על רף הגבוה של ההדרכה ומסננים מדריכים כדי להעביר קורס מקצועי ככל הניתן.</p>
+      </div>
+      <div class="feature-box">
+        <h3>קהילתיות</h3>
+        <p>שמירה על קשר עם בוגרי הקורסים וקבוצות מידע והעשרות רפואיות.</p>
+      </div>
+      <div class="feature-box">
+        <h3>נגישות</h3>
+        <p>כל קבוצת חניכים לפי האופי שלה ובהתאמה למגזר.</p>
+      </div>
+    </section>
+  </main>
 
-<section class="features">
-<div class="feature-box">
-<h3>מקצועיות</h3>
-<p>לא מתפשרים על רף הגבוה של ההדרכה ומסננים מדריכים כדי להעביר קורס מקצועי ככל הניתן.
-</p>
-</div>
-<div class="feature-box">
-<h3>קהילתיות</h3>
-<p>שמירה על קשר עם בוגרי הקורסים וקבוצות מידע והעשרות רפואיות.</p>
-</div>
-<div class="feature-box">
-<h3>נגישות</h3>
-<p>כל קבוצת חניכים לפי האופי שלה ובהתאמה למגזר.</p>
-</div>
-</section>
-</main>
+  <section class="cta-banner">
+    <h2>מוכן להציל חיים?</h2>
+    <p>הצטרף לקורסי העזרה הראשונה שלנו עכשיו!</p>
+    <a href="courses.html" class="cta-button">להרשמה לקורס</a>
+  </section>
 
-<section class="cta-banner">
-  <h2>מוכן להציל חיים?</h2>
-  <p>הצטרף לקורסי העזרה הראשונה שלנו עכשיו!</p>
-  <a href="courses.html" class="cta-button">להרשמה לקורס</a>
-</section>
+  <footer>
+    <p>&copy; 2025 יוזו'ק מדיק - כל הזכויות שמורות</p>
+  </footer>
 
-<footer>
-<p>&copy; 2025 יוזו'ק מדיק - כל הזכויות שמורות</p>
-</footer>
+  <script>
+    nl_pos = "bl";
+    nl_color = "gray";
+    nl_compact = "1";
+    nl_accordion = "1";
+    nl_contact = "n:יוזוק מדיק|p:0533562608";
+  </script>
+  <script src="https://yuzok101.github.io/yuzukmedic/data/nagishli.js" charset="utf-8" defer></script>
 
- <script>
-nl_pos = "bl";
-nl_color = "gray";
-nl_compact = "1";
-nl_accordion = "1";
-nl_contact = "n:יוזוק מדיק|p:0533562608";
-</script>
-<script src="https://yuzok101.github.io/yuzukmedic/data/nagishli.js" charset="utf-8" defer></script>
-  
 </body>
 </html>
