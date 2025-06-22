@@ -14,7 +14,6 @@
       background-size: cover;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
-      scroll-behavior: smooth;
     }
     .overlay {
       background: rgba(255, 255, 255, 0.6);
@@ -25,69 +24,366 @@
       justify-content: center;
       align-items: center;
     }
-    #fixedLogo {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      width: 100px;
-      z-index: 999;
-      cursor: pointer;
+    form {
+      position: relative;
+      background: rgba(255 255 255 / 0.7);
+      padding: 35px 30px;
+      border-radius: 14px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+      animation: fadeInUp 1s ease forwards;
     }
-    #backToTop {
-      position: fixed;
-      bottom: 20px;
-      left: 20px;
+    h2 {
+      text-align: center;
+      margin-bottom: 28px;
+      color: #1c3b6b;
+      font-weight: 700;
+      font-size: 2.2rem;
+      animation: fadeIn 1.3s ease forwards;
+    }
+    label {
+      display: block;
+      margin-top: 18px;
+      font-weight: 700;
+      color: #1c3b6b;
+      font-size: 1.15rem;
+      animation: fadeInLeft 1.5s ease forwards;
+    }
+    input, select, textarea {
+      width: 100%;
+      margin-top: 8px;
+      padding: 12px 16px;
+      font-size: 1.05rem;
+      border-radius: 8px;
+      border: 2px solid #1c3b6b;
+      transition: border-color 0.3s ease;
+      animation: fadeInRight 1.6s ease forwards;
+      background: rgba(255,255,255,0.95);
+      color: #1c3b6b;
+      box-sizing: border-box;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #004080;
+      box-shadow: 0 0 10px #004080;
+      background: #fff;
+    }
+    textarea {
+      resize: vertical;
+    }
+    button {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      margin-top: 32px;
+      padding: 16px;
+      font-size: 1.3rem;
       background-color: #1c3b6b;
       color: white;
       border: none;
-      border-radius: 50%;
-      width: 48px;
-      height: 48px;
-      font-size: 22px;
-      font-weight: bold;
-      display: none;
-      align-items: center;
-      justify-content: center;
+      border-radius: 10px;
       cursor: pointer;
-      box-shadow: 0 0 10px rgba(0,0,0,0.3);
-      z-index: 999;
+      font-weight: 800;
+      letter-spacing: 0.07em;
+      transition: background-color 0.4s ease, box-shadow 0.3s ease;
+      animation: fadeInUp 1.8s ease forwards;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-    #backToTop:hover {
+    button:hover:not(:disabled), button:focus:not(:disabled) {
       background-color: #004080;
+      box-shadow: 0 0 18px #004080;
     }
-    /* כל שאר העיצובים הקיימים כאן (form, button, input וכו') נשמרים כמות שהם */
+    button:disabled {
+      cursor: default;
+      opacity: 0.7;
+    }
+    /* אנימציית מטוס */
+    .plane-icon {
+      width: 24px;
+      height: 24px;
+      margin-left: 12px;
+      fill: white;
+      animation: flyPlane 1.2s linear forwards;
+    }
+    @keyframes flyPlane {
+      0% {
+        transform: translateX(0) translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      50% {
+        transform: translateX(20px) translateY(-10px) rotate(15deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateX(60px) translateY(-20px) rotate(15deg);
+        opacity: 0;
+      }
+    }
+    .thankyou-message {
+      display: none;
+      margin-top: 15px;
+      color: green;
+      font-size: 1.4rem;
+      font-weight: 700;
+      text-align: center;
+      animation: fadeIn 1s ease forwards;
+    }
+    .error-message {
+      display: none;
+      margin-top: 15px;
+      color: red;
+      font-weight: 700;
+      text-align: center;
+      animation: fadeIn 1s ease forwards;
+    }
+    @keyframes fadeInUp {
+      0% {opacity: 0; transform: translateY(30px);}
+      100% {opacity: 1; transform: translateY(0);}
+    }
+    @keyframes fadeInLeft {
+      0% {opacity: 0; transform: translateX(20px);}
+      100% {opacity: 1; transform: translateX(0);}
+    }
+    @keyframes fadeInRight {
+      0% {opacity: 0; transform: translateX(-20px);}
+      100% {opacity: 1; transform: translateX(0);}
+    }
+    @keyframes fadeIn {
+      0% {opacity: 0;}
+      100% {opacity: 1;}
+    }
+    @media (max-width: 480px) {
+      form {
+        padding: 25px 20px;
+        border-radius: 12px;
+      }
+      h2 {
+        font-size: 1.7rem;
+      }
+      label {
+        font-size: 1rem;
+      }
+      input, select, textarea {
+        font-size: 1rem;
+        padding: 10px 14px;
+      }
+      button {
+        font-size: 1.15rem;
+        padding: 14px;
+      }
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 </head>
 <body>
 
-<!-- לוגו קבוע -->
-<img id="fixedLogo" src="images/logo.png" alt="לוגו" onclick="window.scrollTo({top: 0, behavior: 'smooth'});" />
-
-<!-- כפתור חזרה למעלה בצד שמאל -->
-<button id="backToTop" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">↑</button>
-
-<!-- שאר הקוד שלך נשמר בדיוק כפי שסיפקת -->
 <div class="overlay">
   <form id="registrationForm" autocomplete="off" spellcheck="false" novalidate>
-    <!-- כל התוכן של הטופס בדיוק כפי ששלחת -->
+    <h2>טופס הרשמה לקורס</h2>
+
+    <label for="name">שם מלא <span style="color:red">*</span></label>
+    <input type="text" id="name" name="name" required autocomplete="name" />
+
+    <label for="phone">טלפון <span style="color:red">*</span></label>
+    <input type="tel" id="phone" name="phone" required pattern="[0-9+\-\s]{7,15}" placeholder="050-1234567" autocomplete="tel" />
+
+    <label for="email">אימייל <span style="color:red">*</span></label>
+    <input type="email" id="email" name="email" required placeholder="example@mail.com" autocomplete="email" />
+
+    <label for="courseSelect">בחר קורס</label>
+    <select id="courseSelect" name="courseSelect" style="display:none;">
+      <option value="">-- בחר קורס מהרשימה --</option>
+    </select>
+    <input type="text" id="courseName" name="courseName" readonly style="display:none;" />
+
+    <label for="startDate">תאריך התחלה</label>
+    <input type="text" id="startDate" name="startDate" readonly />
+
+    <label for="endDate">תאריך סיום</label>
+    <input type="text" id="endDate" name="endDate" readonly />
+
+    <label for="location">מיקום</label>
+    <input type="text" id="location" name="location" readonly />
+
+    <label for="paymentMethod">אופן תשלום</label>
+    <select id="paymentMethod" name="paymentMethod" required>
+      <option value="" disabled selected>בחר אופן תשלום</option>
+      <option value="אשראי">אשראי</option>
+      <option value="מזומן">מזומן</option>
+      <option value="העברה בנקאית">העברה בנקאית</option>
+      <option value="ביט">ביט</option>
+    </select>
+
+    <label for="notes">הערות</label>
+    <textarea id="notes" name="notes" rows="4" placeholder="הקלד הערות אם יש..."></textarea>
+
+    <button type="submit" id="submitBtn">
+      <span class="btn-text">שלח טופס הרשמה</span>
+      <svg class="plane-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:none;">
+        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+      </svg>
+    </button>
+    <div class="thankyou-message" id="thankyouMessage">
+      השליחה הצליחה, ניצור איתך קשר בהקדם.
+    </div>
+    <div class="error-message" id="errorMessage">
+      <!-- הודעת שגיאה תופיע כאן -->
+    </div>
   </form>
 </div>
 
 <script>
-  // הסקריפט שלך נשמר כמו שהוא
   emailjs.init("miOp6iToFLfbH1jk5");
 
-  // ... כל הקוד שלך כמו שהוא ...
+  function getQueryParams() {
+    const params = {};
+    const query = window.location.search.substring(1);
+    query.split("&").forEach(pair => {
+      const [key, value] = pair.split("=");
+      if (key) params[decodeURIComponent(key)] = decodeURIComponent(value || "");
+    });
+    return params;
+  }
 
-  // הוספת סקריפט להצגת כפתור החזרה למעלה
-  const backToTop = document.getElementById("backToTop");
-  window.addEventListener("scroll", () => {
-    if (window.scrollY > 200) {
-      backToTop.style.display = "flex";
+  function clearCourseFields() {
+    document.getElementById('courseName').value = '';
+    document.getElementById('startDate').value = '';
+    document.getElementById('endDate').value = '';
+    document.getElementById('location').value = '';
+  }
+
+  function fillCourseFields(courseObj) {
+    document.getElementById('courseName').value = courseObj.type || '';
+    document.getElementById('startDate').value = courseObj.startDate || '';
+    document.getElementById('endDate').value = courseObj.endDate || '';
+    document.getElementById('location').value = courseObj.location || '';
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const params = getQueryParams();
+    const courseSelect = document.getElementById('courseSelect');
+    const courseNameInput = document.getElementById('courseName');
+
+    // אם יש פרמטרים מלאים בקישור, מגדירים ומסתירים תפריט בחירה
+    if (params.type && params.startDate && params.endDate && params.location) {
+      fillCourseFields({
+        type: params.type,
+        startDate: params.startDate,
+        endDate: params.endDate,
+        location: params.location
+      });
+      courseNameInput.style.display = 'block';
+      courseSelect.style.display = 'none';
     } else {
-      backToTop.style.display = "none";
+      // אין פרמטרים, נטען רשימת קורסים מה-API ונציג את התפריט
+      courseNameInput.style.display = 'none';
+      courseSelect.style.display = 'block';
+
+      fetch('https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec')
+        .then(response => {
+          if (!response.ok) throw new Error('Network response was not ok');
+          return response.json();
+        })
+        .then(data => {
+          if (!Array.isArray(data) || data.length === 0) {
+            courseSelect.innerHTML = '<option value="">לא נמצאו קורסים זמינים</option>';
+            return;
+          }
+          courseSelect.innerHTML = '<option value="">-- בחר קורס מהרשימה --</option>';
+          data.forEach(course => {
+            const val = JSON.stringify(course);
+            const text = `${course.type} | ${course.startDate} - ${course.endDate} | ${course.location}`;
+            const option = document.createElement('option');
+            option.value = val;
+            option.textContent = text;
+            courseSelect.appendChild(option);
+          });
+
+          // כדי שהקורס הראשון בברירת מחדל יטען אוטומטית, בוחרים אותו
+          // אבל לא חובה לבחור תמיד - אפשר גם להשאיר ריק. כאן בוחר אוטומטית את הראשון אם רוצים:
+          /*
+          if(data.length > 0) {
+            courseSelect.selectedIndex = 1; // בוחר את האופציה הראשונה אחרי הכותרת
+            const selectedCourse = JSON.parse(courseSelect.value);
+            fillCourseFields(selectedCourse);
+          }
+          */
+        })
+        .catch(error => {
+          console.error('שגיאה בטעינת הקורסים:', error);
+          courseSelect.innerHTML = '<option value="">שגיאה בטעינת הקורסים</option>';
+        });
+
+      courseSelect.addEventListener('change', () => {
+        if (!courseSelect.value) {
+          clearCourseFields();
+          return;
+        }
+        try {
+          const selectedCourse = JSON.parse(courseSelect.value);
+          fillCourseFields(selectedCourse);
+        } catch (e) {
+          clearCourseFields();
+          console.error('שגיאה בפרשנות הקורס שנבחר:', e);
+        }
+      });
     }
+
+    const form = document.getElementById('registrationForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const thankyouMsg = document.getElementById('thankyouMessage');
+    const errorMsg = document.getElementById('errorMessage');
+    const btnText = submitBtn.querySelector('.btn-text');
+    const planeIcon = submitBtn.querySelector('.plane-icon');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      errorMsg.style.display = 'none';
+      thankyouMsg.style.display = 'none';
+
+      submitBtn.disabled = true;
+      btnText.textContent = "שולח את הטופס שלך...";
+      planeIcon.style.display = 'inline-block';
+      planeIcon.style.animation = 'none';
+      planeIcon.offsetHeight; 
+      planeIcon.style.animation = null;
+
+      const data = {
+        name: form.name.value.trim(),
+        phone: form.phone.value.trim(),
+        email: form.email.value.trim(),
+        course: form.courseName.value || (() => {
+          const sel = document.getElementById('courseSelect');
+          return sel.options[sel.selectedIndex] ? JSON.parse(sel.value).type : '';
+        })(),
+        startDate: form.startDate.value,
+        endDate: form.endDate.value,
+        location: form.location.value,
+        paymentMethod: form.paymentMethod.value,
+        notes: form.notes.value.trim()
+      };
+
+      emailjs.send("service_45f1wyc", "template_18zogtj", data)
+        .then(() => {
+          submitBtn.disabled = false;
+          planeIcon.style.display = 'none';
+          btnText.textContent = "שלח הרשמה";
+          thankyouMsg.style.display = 'block';
+          errorMsg.style.display = 'none';
+        })
+        .catch((error) => {
+          submitBtn.disabled = false;
+          planeIcon.style.display = 'none';
+          btnText.textContent = "שלח הרשמה";
+          errorMsg.textContent = "אירעה שגיאה בשליחה. נסה שוב.";
+          errorMsg.style.display = 'block';
+          thankyouMsg.style.display = 'none';
+          console.error('שגיאה בשליחת המייל דרך EmailJS:', error);
+        });
+    });
   });
 </script>
 
