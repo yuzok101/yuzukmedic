@@ -59,35 +59,6 @@
     line-height: 1;
   }
 
-  /* הניווט הכחול שמתחת לתמונה */
-  .main-nav {
-    background-color: #003366;
-    text-align: center;
-    margin-top: 0;
-    padding: 15px 0;
-  }
-
-  .main-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: inline-block;
-  }
-
-  .main-nav li {
-    display: inline-block;
-    margin: 0 20px;
-  }
-
-  .main-nav a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 20px 15px;
-    font-size: 1.2rem;
-    display: inline-block;
-  }
-
   /* באנר עליון עם תמונת רקע */
   .hero {
     background-image: url('images/hero-bg.jpg');
@@ -102,7 +73,9 @@
     align-items: center;     /* מרכז אנכי */
     text-align: center;
     padding: 0 15px;
-    margin-top: 80px; /* רווח כדי לא לבלבל עם הניווט הקבוע */
+
+    /* רווח מלמעלה שיכבד את הניווט הקבוע */
+    margin-top: 80px;
   }
 
   .hero-overlay {
@@ -139,9 +112,42 @@
     display: inline-block;
   }
 
+  /* הניווט הכחול שמתחת לתמונה */
+  .main-nav {
+    background-color: #003366;
+    text-align: center;
+    margin-top: 0;
+    padding: 15px 0;
+  }
+
+  .main-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+  }
+
+  .main-nav li {
+    display: inline-block;
+    margin: 0 20px;
+  }
+
+  .main-nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 20px 15px;
+    font-size: 1.2rem;
+    display: inline-block;
+  }
+
+  /* תוכן עמוד ראשי */
   .main-section {
     padding: 50px 20px;
     text-align: center;
+
+    /* רווח עליון כדי שהדף יתחיל מתחת לבאנר */
+    margin-top: 20px;
   }
 
   .about {
@@ -281,6 +287,7 @@
     </ul>
   </nav>
 
+  <!-- באנר עליון עם תמונת רקע -->
   <header class="hero">
     <div class="hero-overlay"></div>
     <div class="hero-content">
