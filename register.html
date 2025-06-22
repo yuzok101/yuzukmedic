@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>טופס הרשמה לקורס</title>
+  <title>טופס הרשמה</title>
   <style>
+    /* --- אותו CSS שלך ללא שינוי --- */
     @import url('https://fonts.googleapis.com/css2?family=Assistant&display=swap');
     html, body {
       margin: 0; padding: 0; height: 100%;
@@ -175,6 +176,7 @@
       }
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -193,7 +195,7 @@
 
     <label for="courseSelect">שם הקורס <span style="color:red">*</span></label>
     <select id="courseSelect" name="courseSelect" required>
-      <option value="" disabled selected>בחר קורס מהרשימה</option>
+      <option value="" disabled selected>טוען קורסים...</option>
     </select>
 
     <label for="startDate">תאריך התחלה</label>
@@ -226,22 +228,26 @@
     <div class="thankyou-message" id="thankyouMessage">
       השליחה הצליחה, ניצור איתך קשר בהקדם.
     </div>
-    <div class="error-message" id="errorMessage"></div>
+    <div class="error-message" id="errorMessage">
+      <!-- הודעת שגיאה תופיע כאן -->
+    </div>
   </form>
 </div>
 
 <script>
-  // כתובת ה-URL של ה-WebApp שלך בגוגל Apps Script - תחליף פה את ה-URL המלא שלך
+  emailjs.init("miOp6iToFLfbH1jk5");
+
+  // כאן תכניס את כתובת ה-WebApp של ה-Google Apps Script שלך
   const GOOGLE_WEBAPP_URL = "https://script.google.com/macros/s/YOUR_WEBAPP_ID/exec";
 
-  const form = document.getElementById('registrationForm');
   const courseSelect = document.getElementById('courseSelect');
   const startDate = document.getElementById('startDate');
   const endDate = document.getElementById('endDate');
   const locationInput = document.getElementById('location');
+  const form = document.getElementById('registrationForm');
+  const submitBtn = document.getElementById('submitBtn');
   const thankyouMsg = document.getElementById('thankyouMessage');
   const errorMsg = document.getElementById('errorMessage');
-  const submitBtn = document.getElementById('submitBtn');
   const btnText = submitBtn.querySelector('.btn-text');
   const planeIcon = submitBtn.querySelector('.plane-icon');
 
@@ -253,22 +259,34 @@
       if (!res.ok) throw new Error("שגיאה בטעינת הקורסים");
       courses = await res.json();
 
-      // ננקה את התפריט ונוסיף אופציות חדשות
-      courseSelect.innerHTML = '<option value="" disabled selected>בחר קורס מהרשימה</option>';
-      courses.forEach((course, index) => {
+      // ניקוי אפשרויות קודם
+      courseSelect.innerHTML = "";
+
+      if(courses.length === 0) {
+        courseSelect.innerHTML = '<option disabled>אין קורסים זמינים כרגע</option>';
+        return;
+      }
+
+      // הוספת אפשרויות קורסים
+      courses.forEach((course, i) => {
         const option = document.createElement('option');
-        option.value = index; // נשמור אינדקס למימוש מהיר
-        option.textContent = course.type || 'קורס לא ידוע';
+        option.value = i;
+        option.textContent = course.type || `קורס מספר ${i+1}`;
         courseSelect.appendChild(option);
       });
-    } catch (err) {
-      console.error(err);
-      alert("אירעה שגיאה בטעינת הקורסים, אנא רענן את הדף ונסה שוב.");
+
+      // נבחר אוטומטית את הקורס הראשון ונטען שדות
+      courseSelect.selectedIndex = 0;
+      fillCourseFields(0);
+
+    } catch (error) {
+      courseSelect.innerHTML = '<option disabled>שגיאה בטעינת הקורסים</option>';
+      console.error(error);
     }
   }
 
   function fillCourseFields(index) {
-    if (index === "" || index === null) {
+    if(index === "" || index === null || !courses[index]) {
       startDate.value = "";
       endDate.value = "";
       locationInput.value = "";
@@ -280,32 +298,27 @@
     locationInput.value = course.location || "";
   }
 
-  courseSelect.addEventListener('change', (e) => {
+  courseSelect.addEventListener('change', e => {
     fillCourseFields(e.target.value);
   });
 
-  form.addEventListener('submit', async (e) => {
+  form.addEventListener('submit', function(e) {
     e.preventDefault();
-    errorMsg.style.display = "none";
-    thankyouMsg.style.display = "none";
+    errorMsg.style.display = 'none';
+    thankyouMsg.style.display = 'none';
 
     // בדיקת שדות חובה
-    if (!form.name.value.trim() ||
-        !form.phone.value.trim() ||
-        !form.email.value.trim() ||
-        !form.paymentMethod.value ||
-        courseSelect.value === "") {
+    if(!form.name.value.trim() || !form.phone.value.trim() || !form.email.value.trim() || courseSelect.value === "" || !form.paymentMethod.value) {
       errorMsg.textContent = "אנא מלא את כל השדות המסומנים בכוכבית";
       errorMsg.style.display = "block";
       return;
     }
 
-    // השבתת הכפתור בזמן שליחה
     submitBtn.disabled = true;
     btnText.textContent = "שולח את הטופס שלך...";
     planeIcon.style.display = "inline-block";
     planeIcon.style.animation = "none";
-    planeIcon.offsetHeight; // ריסט לאנימציה
+    planeIcon.offsetHeight;
     planeIcon.style.animation = null;
 
     const selectedCourse = courses[courseSelect.value];
@@ -322,42 +335,44 @@
       notes: form.notes.value.trim()
     };
 
-    try {
-      const res = await fetch(GOOGLE_WEBAPP_URL, {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      const result = await res.json();
-      if (result.status === "success") {
-        thankyouMsg.style.display = "block";
-        errorMsg.style.display = "none";
-        form.reset();
-        // איפוס שדות הקורס
-        startDate.value = "";
-        endDate.value = "";
-        locationInput.value = "";
-        courseSelect.selectedIndex = 0;
-      } else {
-        throw new Error(result.message || "אירעה שגיאה בשליחה");
-      }
-    } catch (err) {
-      errorMsg.textContent = err.message || "אירעה שגיאה בשליחה, אנא נסה שוב.";
+    emailjs.send("service_45f1wyc", "template_18zogtj", data)
+    .then(() => {
+      submitBtn.disabled = false;
+      planeIcon.style.display = "none";
+      btnText.textContent = "שלח טופס הרשמה";
+      thankyouMsg.style.display = "block";
+      errorMsg.style.display = "none";
+      form.reset();
+      startDate.value = "";
+      endDate.value = "";
+      locationInput.value = "";
+      // בחר קורס ראשון מחדש אחרי איפוס הטופס
+      courseSelect.selectedIndex = 0;
+      fillCourseFields(0);
+    })
+    .catch((error) => {
+      submitBtn.disabled = false;
+      planeIcon.style.display = "none";
+      btnText.textContent = "שלח טופס הרשמה";
+      errorMsg.textContent = "אירעה שגיאה בשליחה. נסה שוב.";
       errorMsg.style.display = "block";
       thankyouMsg.style.display = "none";
-      console.error("שגיאה בשליחת הטופס:", err);
-    } finally {
-      submitBtn.disabled = false;
-      btnText.textContent = "שלח טופס הרשמה";
-      planeIcon.style.display = "none";
-    }
+      console.error('שגיאה בשליחת המייל דרך EmailJS:', error);
+    });
   });
 
-  // טעינת הקורסים בעת טעינת הדף
+  // טעינת קורסים עם טעינת הדף
   window.addEventListener('DOMContentLoaded', loadCourses);
 </script>
+
+<script>
+nl_pos = "bl";
+nl_color = "gray";
+nl_compact = "1";
+nl_accordion = "1";
+nl_contact = "n:יוזוק מדיק|p:0533562608";
+</script>
+<script src="https://yuzok101.github.io/yuzukmedic/data/nagishli.js" charset="utf-8" defer></script>
 
 </body>
 </html>
