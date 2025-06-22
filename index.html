@@ -4,86 +4,323 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>יוז'וק מדיק | קורסי עזרה ראשונה</title>
-
-<!-- גופן -->
 <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  body {
+    margin: 0;
+    font-family: 'Heebo', sans-serif;
+    background-color: #f5f5f5;
+    color: #222;
+    direction: rtl;
+    padding-top: 60px; /* רווח עליון בשביל הניווט הקבוע */
+  }
 
-<!-- קובץ ה-CSS -->
-<link rel="stylesheet" href="style.css" />
+  .hero {
+    background-image: url('images/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    position: relative;
+    color: white;
+  }
+
+  .hero-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .hero-content {
+    text-align: center;
+    max-width: 600px;
+    padding: 0 15px;
+  }
+
+  .hero-content h1 {
+    font-size: 4rem;
+    margin-bottom: 20px;
+  }
+
+  .hero-content p {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+  }
+
+  .btn {
+    background-color: #ffc107;
+    color: #000;
+    padding: 12px 24px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  /* ניווט רגיל (המקורי) */
+  .main-nav {
+    background-color: #003366;
+    text-align: center;
+    margin-top: 20px;
+  }
+
+  .main-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+  }
+
+  .main-nav li {
+    display: inline-block;
+    margin: 0 15px;
+  }
+
+  .main-nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 15px;
+    display: inline-block;
+  }
+
+  /* ניווט קבוע למעלה */
+  .fixed-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #003366;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+
+  .fixed-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+  }
+
+  .fixed-nav li {
+    display: inline-block;
+    margin: 0 15px;
+  }
+
+  .fixed-nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 15px;
+    display: inline-block;
+  }
+
+  .main-section {
+    padding: 50px 20px;
+    text-align: center;
+  }
+
+  .about {
+    margin-bottom: 50px;
+  }
+
+  .features {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+  }
+
+  .feature-box {
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    max-width: 300px;
+    text-align: center;
+  }
+
+  footer {
+    background-color: #003366;
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+  }
+
+  .cta-banner {
+    background: linear-gradient(to right, #004466, #0077aa);
+    color: white;
+    text-align: center;
+    padding: 60px 20px;
+    border-radius: 0;
+    margin-top: 60px;
+  }
+
+  .cta-banner h2 {
+    font-size: 2em;
+    margin-bottom: 10px;
+  }
+
+  .cta-banner p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+  }
+
+  .cta-button {
+    background-color: #ffffff;
+    color: #002244;
+    text-decoration: none;
+    padding: 14px 28px;
+    font-size: 1.1em;
+    font-weight: bold;
+    border-radius: 30px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  .cta-button:hover {
+    background-color: #002244;
+    color: #ffffff;
+  }
+
+  /* רספונסיביות לטלפון */
+  @media (max-width: 768px) {
+    .hero-content h1 {
+      font-size: 2.5rem;
+    }
+
+    .hero-content p {
+      font-size: 1.1rem;
+    }
+
+    .btn {
+      font-size: 1rem;
+      padding: 10px 20px;
+    }
+
+    /* ניווטים במובייל - נהפוך לרשימה אנכית (או אופציה אחרת) */
+    .main-nav ul,
+    .fixed-nav ul {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0;
+    }
+
+    .main-nav li,
+    .fixed-nav li {
+      display: block;
+      margin: 8px 0;
+    }
+
+    .main-nav a,
+    .fixed-nav a {
+      padding: 12px 20px;
+      font-size: 1rem;
+      display: block;
+    }
+
+    .features {
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .feature-box {
+      max-width: 90%;
+      margin: 0 auto;
+    }
+
+    body {
+      padding-top: 120px; /* הגדלנו מרווח עליון כי הניווט עכשיו בגובה גדול יותר */
+    }
+  }
+</style>
 </head>
 <body>
 
-<!-- ניווט קבוע למעלה עם לוגו וקישורים -->
-<nav class="main-nav">
-  <a href="index.html" class="logo-link">
-    <img src="logo.png" alt="הלוגו של יוז'וק" class="logo" />
+  <!-- ניווט קבוע למעלה -->
+  <nav class="main-nav fixed-nav">
+    <ul>
+      <li><a href="index.html">ראשי</a></li>
+      <li><a href="register.html">הרשמה</a></li>
+      <li><a href="courses.html">קורסים קרובים</a></li>
+      <li><a href="kesher.html">צור קשר</a></li>
+    </ul>
+  </nav>
+
+  <!-- הבאנר הקבוע עם לוגו -->
+  <a href="index.html" class="banner">
+    <img src="logo.png" alt="הלוגו של יוז'וק" />
   </a>
-  <ul>
-    <li><a href="index.html">ראשי</a></li>
-    <li><a href="register.html">הרשמה</a></li>
-    <li><a href="courses.html">קורסים קרובים</a></li>
-    <li><a href="kesher.html">צור קשר</a></li>
-  </ul>
-</nav>
 
-<header class="hero">
-  <div class="hero-overlay">
-    <div class="hero-content">
-      <h1>יוז'וק מדיק</h1>
-      <p>לדעת, להציל חיים.</p>
-      <a href="courses.html" class="btn">להרשמה לקורס הקרוב</a>
+  <header class="hero">
+    <div class="hero-overlay">
+      <div class="hero-content">
+        <h1>יוז'וק מדיק</h1>
+        <p>לדעת, להציל חיים.</p>
+        <a href="courses.html" class="btn">להרשמה לקורס הקרוב</a>
+      </div>
     </div>
-  </div>
-</header>
+  </header>
 
-<main class="main-section">
-  <section class="about">
-    <h2>למה לבחור ביוז'וק מדיק?</h2>
-    <p>
-      הקורסים שלנו מועברים באופן ייחודי ובהתאמה מלאה לאופי משתתפי הקורס, כל חניך בקורס מגיש עזרה ראשונה מקבל חוברת מיוחדת שעוצבה, נערכה ונכתבה במיוחדת ע''י פראמדיק מוסמך, שהנגיש את התכנים שיהיו מובנים לכל חניך.
-      <br /><br />
-      במפגשים המעשיים, תחשפו לאופן הטיפול והגישה הנכונה והמקצועית למטופל הזקוק לסיוע, ע''מ להעשיר את הידע, נוספו לקורס תכנים שאינם ביסלבוס משרד הבריאות.
-      <br /><br />
-      בוגרי קורסי יוז'וק מדיק לא נשארים לבד, הבוגרים מחוברים לפורום הבוגרים בפלטפורמות החברתיות השונות ויכולים להתייעץ בכל רגע נתון עם אחד ממדריכי הקורסים.
-      <br /><br />
-      בנוסף הקמנו קו טלפוני מיוחד לבוגרי הקורסים שאינם חשופים למדיה שם נשלח מידי שבוע פודקאסט רפואי מפי פראמדיקים ובעלי מקצוע.
-    </p>
+  <!-- הניווט הכחול המקורי מתחת לתמונה -->
+  <nav class="main-nav">
+    <ul>
+      <li><a href="index.html">ראשי</a></li>
+      <li><a href="register.html">הרשמה</a></li>
+      <li><a href="courses.html">קורסים קרובים</a></li>
+      <li><a href="kesher.html">צור קשר</a></li>
+    </ul>
+  </nav>
+
+  <main class="main-section">
+    <section class="about">
+      <h2>למה לבחור ביוז'וק מדיק?</h2>
+      <p>
+        הקורסים שלנו מועברים באופן ייחודי ובהתאמה מלאה לאופי משתתפי הקורס, כל חניך בקורס מגיש עזרה ראשונה מקבל חוברת מיוחדת שעוצבה, נערכה ונכתבה במיוחדת ע''י פראמדיק מוסמך, שהנגיש את התכנים שיהיו מובנים לכל חניך.
+
+        במפגשים המעשיים, תחשפו לאופן הטיפול והגישה הנכונה והמקצועית למטופל הזקוק לסיוע, ע''מ להעשיר את הידע, נוספו לקורס תכנים שאינם ביסלבוס משרד הבריאות.
+
+        בוגרי קורסי יוז'וק מדיק לא נשארים לבד, הבוגרים מחוברים לפורום הבוגרים בפלטפורמות החברתיות השונות ויכולים להתייעץ בכל רגע נתון עם אחד ממדריכי הקורסים.
+
+        בנוסף הקמנו קו טלפוני מיוחד לבוגרי הקורסים שאינם חשופים למדיה שם נשלח מידי שבוע פודקאסט רפואי מפי פראמדיקים ובעלי מקצוע.
+      </p>
+    </section>
+
+    <section class="features">
+      <div class="feature-box">
+        <h3>מקצועיות</h3>
+        <p>לא מתפשרים על רף הגבוה של ההדרכה ומסננים מדריכים כדי להעביר קורס מקצועי ככל הניתן.</p>
+      </div>
+      <div class="feature-box">
+        <h3>קהילתיות</h3>
+        <p>שמירה על קשר עם בוגרי הקורסים וקבוצות מידע והעשרות רפואיות.</p>
+      </div>
+      <div class="feature-box">
+        <h3>נגישות</h3>
+        <p>כל קבוצת חניכים לפי האופי שלה ובהתאמה למגזר.</p>
+      </div>
+    </section>
+  </main>
+
+  <section class="cta-banner">
+    <h2>מוכן להציל חיים?</h2>
+    <p>הצטרף לקורסי העזרה הראשונה שלנו עכשיו!</p>
+    <a href="courses.html" class="cta-button">להרשמה לקורס</a>
   </section>
 
-  <section class="features">
-    <div class="feature-box">
-      <h3>מקצועיות</h3>
-      <p>לא מתפשרים על רף הגבוה של ההדרכה ומסננים מדריכים כדי להעביר קורס מקצועי ככל הניתן.</p>
-    </div>
-    <div class="feature-box">
-      <h3>קהילתיות</h3>
-      <p>שמירה על קשר עם בוגרי הקורסים וקבוצות מידע והעשרות רפואיות.</p>
-    </div>
-    <div class="feature-box">
-      <h3>נגישות</h3>
-      <p>כל קבוצת חניכים לפי האופי שלה ובהתאמה למגזר.</p>
-    </div>
-  </section>
-</main>
+  <footer>
+    <p>&copy; 2025 יוזו'ק מדיק - כל הזכויות שמורות</p>
+  </footer>
 
-<section class="cta-banner">
-  <h2>מוכן להציל חיים?</h2>
-  <p>הצטרף לקורסי העזרה הראשונה שלנו עכשיו!</p>
-  <a href="courses.html" class="cta-button">להרשמה לקורס</a>
-</section>
-
-<footer>
-  <p>&copy; 2025 יוזו'ק מדיק - כל הזכויות שמורות</p>
-</footer>
-
-<script>
-nl_pos = "bl";
-nl_color = "gray";
-nl_compact = "1";
-nl_accordion = "1";
-nl_contact = "n:יוזוק מדיק|p:0533562608";
-</script>
-<script src="https://yuzok101.github.io/yuzukmedic/data/nagishli.js" charset="utf-8" defer></script>
-
+  <script>
+    nl_pos = "bl";
+    nl_color = "gray";
+    nl_compact = "1";
+    nl_accordion = "1";
+    nl_contact = "n:יוזוק מדיק|p:0533562608";
+  </script>
+  <script src="https://yuzok101.github.io/yuzukmedic/data/nagishli.js" charset="utf-8" defer></script>
 </body>
 </html>
