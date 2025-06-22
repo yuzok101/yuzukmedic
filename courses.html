@@ -144,19 +144,46 @@
       height: 120px;
       max-width: 100%;
       cursor: pointer;
-      background: transparent;
-      padding: 0;
-      border: none;
-      box-shadow: none;
-      border-radius: 0;
     }
 
     @keyframes swingLogo {
-      0%   { transform: rotate(0deg); }
-      25%  { transform: rotate(6deg); }
-      50%  { transform: rotate(0deg); }
-      75%  { transform: rotate(-6deg); }
-      100% { transform: rotate(0deg); }
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(6deg); }
+      75% { transform: rotate(-6deg); }
+    }
+
+    /* טעינה */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 60vh;
+      text-align: center;
+      color: white;
+      font-size: 26px;
+      font-weight: bold;
+      animation: fadein 1s ease-in-out;
+    }
+
+    .spinner {
+      margin: 20px auto;
+      width: 80px;
+      height: 80px;
+      border: 10px solid #fff;
+      border-top: 10px solid #1c3b6b;
+      border-radius: 50%;
+      animation: spin 1.5s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadein {
+      0% { opacity: 0; transform: scale(0.95); }
+      100% { opacity: 1; transform: scale(1); }
     }
 
     @media (max-width: 700px) {
@@ -167,27 +194,12 @@
 
       .course {
         max-width: 100%;
-        max-height: none;
         aspect-ratio: auto;
-        display: flex;
-        flex-direction: column;
-        height: auto;
       }
 
       .course img {
         height: 35vh;
-        width: 100%;
         object-fit: cover;
-        flex-shrink: 0;
-      }
-
-      .course-content {
-        padding: 15px;
-        overflow: visible !important;
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
       }
 
       #logo-button {
@@ -197,6 +209,16 @@
 
       #logo-button img {
         height: 90px;
+      }
+
+      .loading {
+        font-size: 22px;
+      }
+
+      .spinner {
+        width: 60px;
+        height: 60px;
+        border-width: 8px;
       }
     }
   </style>
@@ -211,7 +233,10 @@
 
   <main>
     <div class="container" id="coursesContainer">
-      <p style="text-align:center;font-size:20px;color:#fff;">טוען קורסים...</p>
+      <div class="loading" id="loadingBox">
+        <div class="spinner"></div>
+        טוען קורסים...
+      </div>
     </div>
   </main>
 
@@ -241,23 +266,17 @@
     }
 
     const imagePool = shuffleArray([
-      "images/1.jpg",
-      "images/2.jpg",
-      "images/3.jpg",
-      "images/4.jpg",
-      "images/5.jpg",
-      "images/6.jpg",
-      "images/7.jpg",
-      "images/8.jpg",
-      "images/9.jpg",
-      "images/10.jpg"
+      "images/1.jpg", "images/2.jpg", "images/3.jpg", "images/4.jpg",
+      "images/5.jpg", "images/6.jpg", "images/7.jpg", "images/8.jpg",
+      "images/9.jpg", "images/10.jpg"
     ]);
 
     (async () => {
       const response = await fetch(SHEET_URL);
       const courses = await response.json();
       const container = document.getElementById('coursesContainer');
-      container.innerHTML = '';
+      const loadingBox = document.getElementById('loadingBox');
+      if (loadingBox) loadingBox.remove();
 
       const now = new Date();
       let imageIndex = 0;
@@ -319,7 +338,7 @@
       }
 
       if (container.innerHTML.trim() === '') {
-        container.innerHTML = '<p style="text-align:center;font-size:18px;color:#fff;">אין כרגע קורסים זמינים.</p>';
+        container.innerHTML = '<p style="text-align:center;font-size:20px;color:#fff;">אין כרגע קורסים זמינים.</p>';
       }
     })();
   </script>
