@@ -1,68 +1,89 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>יוז'וק מדיק | קורסי עזרה ראשונה</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="yozok-style.css">
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="yozok-style.css" />
 
   <style>
-    /* באנר צף קבוע עליון */
+    body {
+      margin: 0;
+      padding-top: 70px; /* גובה הבאנר */
+      font-family: 'Heebo', sans-serif;
+    }
+
     .floating-banner {
       position: fixed;
       top: 0;
       width: 100%;
-      background-color: #e60023;
+      background: linear-gradient(90deg, #004080, #0074d9);
       color: white;
-      text-align: center;
       z-index: 1000;
-      font-family: 'Heebo', sans-serif;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      animation: slideDown 0.5s ease-out;
+    }
+
+    @keyframes slideDown {
+      from {
+        top: -60px;
+        opacity: 0;
+      }
+      to {
+        top: 0;
+        opacity: 1;
+      }
     }
 
     .floating-banner-content {
       display: flex;
-      justify-content: center;
-      gap: 2rem;
-      padding: 0.5rem;
-      font-size: 1rem;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 2rem;
       direction: rtl;
     }
 
-    .floating-banner a {
+    .logo-img {
+      height: 40px;
+      vertical-align: middle;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-links a {
       color: white;
       text-decoration: none;
       font-weight: bold;
+      transition: color 0.3s ease;
     }
 
-    .floating-banner a:hover {
-      text-decoration: underline;
-    }
-
-    body {
-      padding-top: 50px;
+    .nav-links a:hover {
+      color: #ffffcc;
     }
   </style>
 </head>
 
 <body>
 
-  <!-- באנר ניווט צף -->
+  <!-- באנר צף עם לוגו -->
   <div class="floating-banner">
     <div class="floating-banner-content">
-      <a href="index.html">דף הבית</a>
-      <a href="courses.html">קורסים</a>
-      <a href="register.html">הרשמה</a>
-      <a href="kesher.html">צור קשר</a>
+      <a href="index.html" class="logo-link">
+        <img src="logo.png" alt="יוז'וק מדיק" class="logo-img" />
+      </a>
+      <nav class="nav-links">
+        <a href="index.html">🏠 דף הבית</a>
+        <a href="courses.html">📚 קורסים</a>
+        <a href="register.html">📝 הרשמה</a>
+        <a href="kesher.html">📞 צור קשר</a>
+      </nav>
     </div>
   </div>
-
-  <!-- הבאנר הקבוע עם לוגו -->
-  <a href="index.html" class="banner">
-    <img src="logo.png" alt="הלוגו של יוז'וק">
-  </a>
 
   <header class="hero">
     <div class="hero-overlay">
@@ -87,28 +108,28 @@
     <section class="about">
       <h2>למה לבחור ביוז'וק מדיק?</h2>
       <p>
-        הקורסים שלנו מועברים באופן ייחודי ובהתאמה מלאה לאופי משתתפי הקורס, כל חניך בקורס מגיש עזרה ראשונה מקבל חוברת מיוחדת שעוצבה, נערכה ונכתבה במיוחדת ע''י פראמדיק מוסמך, שהנגיש את התכנים שיהיו מובנים לכל חניך.
+        הקורסים שלנו מועברים באופן ייחודי ובהתאמה מלאה לאופי משתתפי הקורס, כל חניך בקורס מגיש עזרה ראשונה מקבל חוברת מיוחדת שעוצבה, נערכה ונכתבה במיוחדת ע"י פראמדיק מוסמך, שהנגיש את התכנים שיהיו מובנים לכל חניך.
         <br><br>
-        במפגשים המעשיים, תחשפו לאופן הטיפול והגישה הנכונה והמקצועית למטופל הזקוק לסיוע, ע''מ להעשיר את הידע, נוספו לקורס תכנים שאינם ביסלבוס משרד הבריאות.
+        במפגשים המעשיים, תחשפו לאופן הטיפול והגישה הנכונה והמקצועית למטופל הזקוק לסיוע. על מנת להעשיר את הידע, נוספו לקורס תכנים שאינם ביסלבוס משרד הבריאות.
         <br><br>
-        בוגרי קורסי יוז'וק מדיק לא נשארים לבד, הבוגרים מחוברים לפורום הבוגרים בפלטפורמות החברתיות השונות ויכולים להתייעץ בכל רגע נתון עם אחד ממדריכי הקורסים.
+        בוגרי קורסי יוז'וק מדיק לא נשארים לבד – הם מחוברים לפורום הבוגרים בפלטפורמות החברתיות ויכולים להתייעץ בכל רגע עם מדריך הקורס.
         <br><br>
-        בנוסף הקמנו קו טלפוני מיוחד לבוגרי הקורסים שאינם חשופים למדיה שם נשלח מידי שבוע פודקאסט רפואי מפי פראמדיקים ובעלי מקצוע.
+        בנוסף, הקמנו קו טלפוני לבוגרי הקורסים שאינם חשופים למדיה – שם נשלח מדי שבוע פודקאסט רפואי ממדריכים מוסמכים.
       </p>
     </section>
 
     <section class="features">
       <div class="feature-box">
         <h3>מקצועיות</h3>
-        <p>לא מתפשרים על רף הגבוה של ההדרכה ומסננים מדריכים כדי להעביר קורס מקצועי ככל הניתן.</p>
+        <p>לא מתפשרים על רף גבוה ומסננים מדריכים בקפידה להעברת קורסים איכותיים.</p>
       </div>
       <div class="feature-box">
         <h3>קהילתיות</h3>
-        <p>שמירה על קשר עם בוגרי הקורסים וקבוצות מידע והעשרות רפואיות.</p>
+        <p>שמירה על קשר עם בוגרי הקורסים והקמת קבוצות העשרה רפואית.</p>
       </div>
       <div class="feature-box">
         <h3>נגישות</h3>
-        <p>כל קבוצת חניכים לפי האופי שלה ובהתאמה למגזר.</p>
+        <p>התאמה מדויקת של הקורסים למגזר החרדי ולצרכים הייחודיים של כל קבוצה.</p>
       </div>
     </section>
   </main>
@@ -120,7 +141,7 @@
   </section>
 
   <footer>
-    <p>&copy; 2025 יוזו'ק מדיק - כל הזכויות שמורות</p>
+    <p>&copy; 2025 יוז'וק מדיק - כל הזכויות שמורות</p>
   </footer>
 
   <script>
