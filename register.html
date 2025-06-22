@@ -129,47 +129,21 @@
       text-align: center;
       animation: fadeIn 1s ease forwards;
     }
-    @keyframes fadeInUp {
-      0% {opacity: 0; transform: translateY(30px);}
-      100% {opacity: 1; transform: translateY(0);}
-    }
-    @keyframes fadeInLeft {
-      0% {opacity: 0; transform: translateX(20px);}
-      100% {opacity: 1; transform: translateX(0);}
-    }
-    @keyframes fadeInRight {
-      0% {opacity: 0; transform: translateX(-20px);}
-      100% {opacity: 1; transform: translateX(0);}
-    }
-    @keyframes fadeIn {
-      0% {opacity: 0;}
-      100% {opacity: 1;}
-    }
+    @keyframes fadeInUp { 0% {opacity: 0; transform: translateY(30px);} 100% {opacity: 1; transform: translateY(0);} }
+    @keyframes fadeInLeft { 0% {opacity: 0; transform: translateX(20px);} 100% {opacity: 1; transform: translateX(0);} }
+    @keyframes fadeInRight { 0% {opacity: 0; transform: translateX(-20px);} 100% {opacity: 1; transform: translateX(0);} }
+    @keyframes fadeIn { 0% {opacity: 0;} 100% {opacity: 1;} }
     @media (max-width: 480px) {
-      form {
-        padding: 25px 20px;
-        border-radius: 12px;
-      }
-      h2 {
-        font-size: 1.7rem;
-      }
-      label {
-        font-size: 1rem;
-      }
-      input, select, textarea {
-        font-size: 1rem;
-        padding: 10px 14px;
-      }
-      button {
-        font-size: 1.15rem;
-        padding: 14px;
-      }
+      form { padding: 25px 20px; border-radius: 12px; }
+      h2 { font-size: 1.7rem; }
+      label { font-size: 1rem; }
+      input, select, textarea { font-size: 1rem; padding: 10px 14px; }
+      button { font-size: 1.15rem; padding: 14px; }
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 </head>
 <body>
-
 <div class="overlay">
   <form id="registrationForm" autocomplete="off" spellcheck="false" novalidate>
     <h2>טופס הרשמה לקורס</h2>
@@ -180,7 +154,7 @@
     <label for="email">אימייל <span style="color:red">*</span></label>
     <input type="email" id="email" name="email" required placeholder="example@mail.com" autocomplete="email" />
     <label for="courseSelect">שם הקורס</label>
-    <select id="courseSelect" name="courseSelect" style="display:none;"></select>
+    <select id="courseSelect" name="courseSelect"></select>
     <input type="text" id="courseName" name="courseName" readonly />
     <label for="startDate">תאריך התחלה</label>
     <input type="text" id="startDate" name="startDate" readonly />
@@ -208,102 +182,93 @@
     <div class="error-message" id="errorMessage"></div>
   </form>
 </div>
-
 <script>
 emailjs.init("miOp6iToFLfbH1jk5");
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec';
-function getQueryParams() {
-  const params = {};
-  const query = window.location.search.substring(1);
-  query.split("&").forEach(pair => {
-    const [key, value] = pair.split("=");
-    if (key) params[decodeURIComponent(key)] = decodeURIComponent(value || "");
-  });
-  return params;
-}
-function parseDate(str) {
-  const [d,m,y] = str.split('.');
-  return new Date(`${y}-${m}-${d}`);
-}
-async function loadCoursesToSelect() {
-  try {
-    const res = await fetch(SHEET_URL);
-    const courses = await res.json();
-    const now = new Date();
-    const sel = document.getElementById('courseSelect');
-    courses.filter(c => parseDate(c.startDate) >= now).forEach(c => {
-      const opt = document.createElement('option');
-      opt.value = JSON.stringify(c);
-      opt.textContent = `${c.type} | ${c.startDate} - ${c.endDate} | ${c.location}`;
-      sel.appendChild(opt);
+
+const courseSelect = document.getElementById('courseSelect');
+const courseNameInput = document.getElementById('courseName');
+const startDateInput = document.getElementById('startDate');
+const endDateInput = document.getElementById('endDate');
+const locationInput = document.getElementById('location');
+let courseData = [];
+
+fetch("https://script.google.com/macros/s/AKfycbx_S_dCvuOWfDe3ypYZKoN8ACfPNMUNJ8j7I1weAjr_rNizvqU9HntnGFQu-FW92Ql0yw/exec")
+  .then(res => res.json())
+  .then(data => {
+    courseData = data;
+    courseSelect.innerHTML = '<option disabled selected>בחר קורס מהרשימה</option>';
+    data.forEach((item, index) => {
+      const option = document.createElement('option');
+      option.value = index;
+      option.textContent = `${item.type} - ${item.startDate}`;
+      courseSelect.appendChild(option);
     });
-    sel.style.display = 'block';
-    sel.addEventListener('change', e => {
-      const c = JSON.parse(e.target.value);
-      document.getElementById('courseName').value = c.type;
-      document.getElementById('startDate').value = c.startDate;
-      document.getElementById('endDate').value = c.endDate;
-      document.getElementById('location').value = c.location;
-    });
-  } catch (err) {
-    console.error('שגיאה בטעינת קורסים:', err);
-  }
-}
-document.addEventListener('DOMContentLoaded', async () => {
-  const params = getQueryParams();
-  if (params.type && params.startDate && params.endDate && params.location) {
-    document.getElementById('courseName').value = params.type;
-    document.getElementById('startDate').value = params.startDate;
-    document.getElementById('endDate').value = params.endDate;
-    document.getElementById('location').value = params.location;
-    document.getElementById('courseName').style.display = 'block';
-    document.getElementById('courseSelect').style.display = 'none';
-  } else {
-    document.getElementById('courseName').style.display = 'none';
-    await loadCoursesToSelect();
-  }
-  const form = document.getElementById('registrationForm');
-  const submitBtn = document.getElementById('submitBtn');
-  const thankMsg = document.getElementById('thankyouMessage');
-  const errMsg = document.getElementById('errorMessage');
-  const btnText = submitBtn.querySelector('.btn-text');
-  const planeIcon = submitBtn.querySelector('.plane-icon');
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    errMsg.style.display = 'none';
-    thankMsg.style.display = 'none';
-    submitBtn.disabled = true;
-    btnText.textContent = "שולח את הטופס שלך...";
-    planeIcon.style.display = 'inline-block';
-    planeIcon.offsetHeight;
-    planeIcon.style.animation = null;
-    const data = {
-      name: form.name.value.trim(),
-      phone: form.phone.value.trim(),
-      email: form.email.value.trim(),
-      course: form.courseName.value,
-      startDate: form.startDate.value,
-      endDate: form.endDate.value,
-      location: form.location.value,
-      paymentMethod: form.paymentMethod.value,
-      notes: form.notes.value.trim()
-    };
-    emailjs.send("service_45f1wyc", "template_18zogtj", data)
-      .then(() => {
-        submitBtn.disabled = false;
-        planeIcon.style.display = 'none';
-        btnText.textContent = "שלח טופס הרשמה";
-        thankMsg.style.display = 'block';
-      })
-      .catch(error => {
-        submitBtn.disabled = false;
-        planeIcon.style.display = 'none';
-        btnText.textContent = "שלח טופס הרשמה";
-        errMsg.textContent = "אירעה שגיאה בשליחה. נסה שוב.";
-        errMsg.style.display = 'block';
-        console.error('שגיאה ב־EmailJS:', error);
-      });
+  })
+  .catch(err => {
+    console.error("שגיאה בטעינת הקורסים:", err);
+    document.getElementById('errorMessage').textContent = 'לא ניתן לטעון את רשימת הקורסים. נסה שוב מאוחר יותר.';
+    document.getElementById('errorMessage').style.display = 'block';
   });
+
+courseSelect.addEventListener('change', () => {
+  const selected = courseData[courseSelect.value];
+  courseNameInput.value = selected.type;
+  startDateInput.value = selected.startDate;
+  endDateInput.value = selected.endDate;
+  locationInput.value = selected.location;
+});
+
+const form = document.getElementById('registrationForm');
+const submitBtn = document.getElementById('submitBtn');
+const thankyouMsg = document.getElementById('thankyouMessage');
+const errorMsg = document.getElementById('errorMessage');
+const btnText = submitBtn.querySelector('.btn-text');
+const planeIcon = submitBtn.querySelector('.plane-icon');
+
+form.addEventListener('submit', function(e) {
+  e.preventDefault();
+  errorMsg.style.display = 'none';
+  thankyouMsg.style.display = 'none';
+
+  submitBtn.disabled = true;
+  btnText.textContent = "שולח את הטופס שלך...";
+  planeIcon.style.display = 'inline-block';
+  planeIcon.style.animation = 'none';
+  planeIcon.offsetHeight;
+  planeIcon.style.animation = null;
+
+  const selectedIndex = courseSelect.value;
+  const selectedCourse = courseData[selectedIndex];
+
+  const data = {
+    name: form.name.value.trim(),
+    phone: form.phone.value.trim(),
+    email: form.email.value.trim(),
+    course: selectedCourse ? selectedCourse.type : form.courseName.value,
+    startDate: selectedCourse ? selectedCourse.startDate : form.startDate.value,
+    endDate: selectedCourse ? selectedCourse.endDate : form.endDate.value,
+    location: selectedCourse ? selectedCourse.location : form.location.value,
+    paymentMethod: form.paymentMethod.value,
+    notes: form.notes.value.trim()
+  };
+
+  emailjs.send("service_45f1wyc", "template_18zogtj", data)
+    .then(() => {
+      submitBtn.disabled = false;
+      planeIcon.style.display = 'none';
+      btnText.textContent = "שלח טופס הרשמה";
+      thankyouMsg.style.display = 'block';
+      errorMsg.style.display = 'none';
+    })
+    .catch((error) => {
+      submitBtn.disabled = false;
+      planeIcon.style.display = 'none';
+      btnText.textContent = "שלח טופס הרשמה";
+      errorMsg.textContent = "אירעה שגיאה בשליחה. נסה שוב.";
+      errorMsg.style.display = 'block';
+      thankyouMsg.style.display = 'none';
+      console.error('שגיאה בשליחת המייל דרך EmailJS:', error);
+    });
 });
 </script>
 <script>
