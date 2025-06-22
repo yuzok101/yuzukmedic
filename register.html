@@ -100,7 +100,6 @@
       cursor: default;
       opacity: 0.7;
     }
-    /* אנימציית מטוס */
     .plane-icon {
       width: 24px;
       height: 24px;
@@ -193,9 +192,11 @@
     <label for="email">אימייל <span style="color:red">*</span></label>
     <input type="email" id="email" name="email" required placeholder="example@mail.com" autocomplete="email" />
 
-    <label for="courseSelect">שם הקורס</label>
-    <select id="courseSelect" name="courseSelect" style="display:none;"></select>
-    <input type="text" id="courseName" name="courseName" readonly />
+    <label for="courseSelect">בחר קורס</label>
+    <select id="courseSelect" name="courseSelect" required></select>
+
+    <label for="courseName">שם הקורס (ניתן לשינוי)</label>
+    <input type="text" id="courseName" name="courseName" />
 
     <label for="startDate">תאריך התחלה</label>
     <input type="text" id="startDate" name="startDate" readonly />
@@ -227,14 +228,18 @@
     <div class="thankyou-message" id="thankyouMessage">
       השליחה הצליחה, ניצור איתך קשר בהקדם.
     </div>
-    <div class="error-message" id="errorMessage">
-      <!-- הודעת שגיאה תופיע כאן -->
-    </div>
+    <div class="error-message" id="errorMessage"></div>
   </form>
 </div>
 
 <script>
   emailjs.init("miOp6iToFLfbH1jk5");
+
+  const courses = [
+    { type: "קורס עזרה ראשונה", startDate: "15.07.2025", endDate: "20.07.2025", location: "תל אביב" },
+    { type: "קורס חובשים", startDate: "01.08.2025", endDate: "05.08.2025", location: "ירושלים" },
+    { type: "קורס מדריכים", startDate: "10.09.2025", endDate: "15.09.2025", location: "באר שבע" }
+  ];
 
   function getQueryParams() {
     const params = {};
@@ -246,21 +251,61 @@
     return params;
   }
 
+  function fillCourseFields(course) {
+    document.getElementById('courseName').value = course.type;
+    document.getElementById('startDate').value = course.startDate;
+    document.getElementById('endDate').value = course.endDate;
+    document.getElementById('location').value = course.location;
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
+    const courseSelect = document.getElementById('courseSelect');
+    const courseNameInput = document.getElementById('courseName');
+
+    // טען את הקורסים ל-select
+    courses.forEach((course, i) => {
+      const option = document.createElement('option');
+      option.value = i;
+      option.textContent = `${course.type} | ${course.startDate} - ${course.endDate} | ${course.location}`;
+      courseSelect.appendChild(option);
+    });
+
     const params = getQueryParams();
 
     if (params.type && params.startDate && params.endDate && params.location) {
-      document.getElementById('courseName').value = params.type;
-      document.getElementById('startDate').value = params.startDate;
-      document.getElementById('endDate').value = params.endDate;
-      document.getElementById('location').value = params.location;
-      document.getElementById('courseName').style.display = 'block';
-      document.getElementById('courseSelect').style.display = 'none';
+      // יש פרמטרים, מגדיר את הקורס לפי הפרמטרים האלו
+      const courseFromParams = {
+        type: params.type,
+        startDate: params.startDate,
+        endDate: params.endDate,
+        location: params.location
+      };
+      fillCourseFields(courseFromParams);
+
+      // מנסה לסנכרן select לפי הטקסט אם נמצא
+      const foundIndex = courses.findIndex(c => c.type === params.type && c.startDate === params.startDate && c.endDate === params.endDate && c.location === params.location);
+      if (foundIndex !== -1) {
+        courseSelect.value = foundIndex;
+      } else {
+        courseSelect.selectedIndex = -1; // לא בחר כלום כי לא נמצא
+      }
+
     } else {
-      document.getElementById('courseName').style.display = 'none';
-      document.getElementById('courseSelect').style.display = 'block';
-      // כאן אפשר להוסיף טעינת קורסים אם תרצה
+      // אין פרמטרים, בוחר כברירת מחדל את הקורס הראשון
+      courseSelect.selectedIndex = 0;
+      fillCourseFields(courses[0]);
     }
+
+    // כשמשנים את הבחירה ב-select מעדכנים את השדות
+    courseSelect.addEventListener('change', e => {
+      const idx = e.target.value;
+      if (idx !== "") {
+        const course = courses[idx];
+        fillCourseFields(course);
+      }
+    });
+
+    // אם רוצים, אפשר לאפשר גם שינוי ידני בשדה הטקסט של שם הקורס (כבר מותר)
 
     const form = document.getElementById('registrationForm');
     const submitBtn = document.getElementById('submitBtn');
@@ -278,18 +323,17 @@
       btnText.textContent = "משתף...";
       planeIcon.style.display = 'inline-block';
       planeIcon.style.animation = 'none';
-      // פעולה לאתחול האנימציה מחדש
-      planeIcon.offsetHeight; 
+      planeIcon.offsetHeight; // restart animation
       planeIcon.style.animation = null;
+
+      // אוספים את הערכים, אם שדה קורסName ריק - לוקחים מה-select
+      const courseNameVal = courseNameInput.value.trim() || (courseSelect.value !== "" ? courses[courseSelect.value].type : "");
 
       const data = {
         name: form.name.value.trim(),
         phone: form.phone.value.trim(),
         email: form.email.value.trim(),
-        course: form.courseName.value || (() => {
-          const sel = document.getElementById('courseSelect');
-          return sel.options[sel.selectedIndex] ? JSON.parse(sel.value).type : '';
-        })(),
+        course: courseNameVal,
         startDate: form.startDate.value,
         endDate: form.endDate.value,
         location: form.location.value,
@@ -304,7 +348,6 @@
           btnText.textContent = "שלח הרשמה";
           thankyouMsg.style.display = 'block';
           errorMsg.style.display = 'none';
-          // שומר על הטופס פתוח לשינויים או רישומים נוספים
         })
         .catch((error) => {
           submitBtn.disabled = false;
