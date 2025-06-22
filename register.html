@@ -121,32 +121,6 @@
         transform: translateX(60px) translateY(-20px) rotate(15deg);
         opacity: 0;
       }
-<style>
-  .fixed-logo {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 9999;
-    display: block;
-    transition: transform 0.3s ease;
-  }
-
-  .fixed-logo img {
-    height: 60px;
-    width: auto;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  }
-
-  .fixed-logo:hover {
-    transform: scale(1.05);
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-</style>
-
     }
     .thankyou-message {
       display: none;
@@ -205,10 +179,6 @@
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 </head>
 <body>
-
-<a href="#top" class="fixed-logo">
-  <img src="images/logo.png" alt="לוגו יוזוק מדיק">
-</a>
 
 <div class="overlay">
   <form id="registrationForm" autocomplete="off" spellcheck="false" novalidate>
