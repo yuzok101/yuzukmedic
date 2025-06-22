@@ -7,32 +7,36 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Assistant&display=swap');
     html, body {
-      margin: 0; padding: 0; height: 100%;
+      margin: 0;
+      padding: 0;
+      height: 100%;
       font-family: 'Assistant', Arial, sans-serif;
       direction: rtl;
       background: url('images/11.jpg') no-repeat center center fixed;
       background-size: cover;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      scroll-behavior: smooth;
     }
-    /* לוגו קבוע */
-    .fixed-logo {
+
+    #logo-button {
       position: fixed;
-      top: 20px;
+      top: 80px;
       left: 20px;
-      z-index: 9999;
-      transition: transform 0.3s ease;
+      z-index: 2000;
+      animation: swingLogo 2.5s infinite ease-in-out;
+      transform-origin: top center;
     }
-    .fixed-logo img {
-      height: 60px;
-      width: auto;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+
+    #logo-button img {
+      height: 120px;
+      max-width: 100%;
+      cursor: pointer;
     }
-    .fixed-logo:hover {
-      transform: scale(1.05);
+
+    @keyframes swingLogo {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(6deg); }
+      75% { transform: rotate(-6deg); }
     }
+
     .overlay {
       background: rgba(255, 255, 255, 0.6);
       min-height: 100vh;
@@ -42,32 +46,32 @@
       justify-content: center;
       align-items: center;
     }
+
     form {
-      position: relative;
-      background: rgba(255 255 255 / 0.7);
+      background: rgba(255, 255, 255, 0.7);
       padding: 35px 30px;
       border-radius: 14px;
       max-width: 600px;
       width: 100%;
       box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-      animation: fadeInUp 1s ease forwards;
     }
+
     h2 {
       text-align: center;
       margin-bottom: 28px;
       color: #1c3b6b;
       font-weight: 700;
       font-size: 2.2rem;
-      animation: fadeIn 1.3s ease forwards;
     }
+
     label {
       display: block;
       margin-top: 18px;
       font-weight: 700;
       color: #1c3b6b;
       font-size: 1.15rem;
-      animation: fadeInLeft 1.5s ease forwards;
     }
+
     input, select, textarea {
       width: 100%;
       margin-top: 8px;
@@ -75,24 +79,19 @@
       font-size: 1.05rem;
       border-radius: 8px;
       border: 2px solid #1c3b6b;
-      transition: border-color 0.3s ease;
-      animation: fadeInRight 1.6s ease forwards;
       background: rgba(255,255,255,0.95);
       color: #1c3b6b;
       box-sizing: border-box;
     }
+
     input:focus, select:focus, textarea:focus {
       outline: none;
       border-color: #004080;
       box-shadow: 0 0 10px #004080;
       background: #fff;
     }
-    textarea {
-      resize: vertical;
-    }
+
     button {
-      position: relative;
-      overflow: hidden;
       width: 100%;
       margin-top: 32px;
       padding: 16px;
@@ -103,21 +102,11 @@
       border-radius: 10px;
       cursor: pointer;
       font-weight: 800;
-      letter-spacing: 0.07em;
-      transition: background-color 0.4s ease, box-shadow 0.3s ease;
-      animation: fadeInUp 1.8s ease forwards;
       display: flex;
       justify-content: center;
       align-items: center;
     }
-    button:hover:not(:disabled), button:focus:not(:disabled) {
-      background-color: #004080;
-      box-shadow: 0 0 18px #004080;
-    }
-    button:disabled {
-      cursor: default;
-      opacity: 0.7;
-    }
+
     .plane-icon {
       width: 24px;
       height: 24px;
@@ -125,63 +114,57 @@
       fill: white;
       animation: flyPlane 1.2s linear forwards;
     }
+
     @keyframes flyPlane {
-      0% {transform: translateX(0) translateY(0) rotate(0deg); opacity: 1;}
-      50% {transform: translateX(20px) translateY(-10px) rotate(15deg); opacity: 1;}
-      100% {transform: translateX(60px) translateY(-20px) rotate(15deg); opacity: 0;}
+      0% { transform: translateX(0) translateY(0) rotate(0deg); opacity: 1; }
+      50% { transform: translateX(20px) translateY(-10px) rotate(15deg); opacity: 1; }
+      100% { transform: translateX(60px) translateY(-20px) rotate(15deg); opacity: 0; }
     }
+
     .thankyou-message, .error-message {
       display: none;
       margin-top: 15px;
       font-size: 1.4rem;
       font-weight: 700;
       text-align: center;
-      animation: fadeIn 1s ease forwards;
     }
-    .thankyou-message {
-      color: green;
-    }
-    .error-message {
-      color: red;
-    }
-    @keyframes fadeInUp {0% {opacity: 0; transform: translateY(30px);} 100% {opacity:1;transform:translateY(0);}}
-    @keyframes fadeInLeft {0% {opacity: 0; transform: translateX(20px);} 100% {opacity:1;transform:translateX(0);}}
-    @keyframes fadeInRight {0% {opacity: 0; transform: translateX(-20px);} 100% {opacity:1;transform:translateX(0);}}
-    @keyframes fadeIn {0% {opacity:0;} 100% {opacity:1;}}
+
+    .thankyou-message { color: green; }
+    .error-message { color: red; }
+
     @media (max-width: 480px) {
-      form { padding: 25px 20px; border-radius: 12px; }
+      form { padding: 25px 20px; }
       h2 { font-size: 1.7rem; }
       label { font-size: 1rem; }
       input, select, textarea { font-size: 1rem; padding: 10px 14px; }
       button { font-size: 1.15rem; padding: 14px; }
+      #logo-button img { height: 90px; }
     }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 </head>
 <body>
 
-  <a href="#top" class="fixed-logo">
-    <img src="images/logo.png" alt="לוגו יוזוק מדיק">
+  <!-- כפתור הלוגו בצד שמאל -->
+  <a href="index.html" id="logo-button">
+    <img src="images/logo.png" alt="לוגו יוז'וק מדיק" />
   </a>
 
   <div class="overlay">
     <form id="registrationForm" autocomplete="off" spellcheck="false" novalidate>
-      <h2 id="top">טופס הרשמה לקורס</h2>
+      <h2>טופס הרשמה לקורס</h2>
 
       <label for="name">שם מלא <span style="color:red">*</span></label>
-      <input type="text" id="name" name="name" required autocomplete="name" />
+      <input type="text" id="name" name="name" required />
 
       <label for="phone">טלפון <span style="color:red">*</span></label>
-      <input type="tel" id="phone" name="phone" required pattern="[0-9+\-\s]{7,15}" placeholder="050-1234567" autocomplete="tel" />
+      <input type="tel" id="phone" name="phone" required placeholder="050-1234567" />
 
       <label for="email">אימייל <span style="color:red">*</span></label>
-      <input type="email" id="email" name="email" required placeholder="example@mail.com" autocomplete="email" />
+      <input type="email" id="email" name="email" required placeholder="example@mail.com" />
 
-      <label for="courseSelect">בחר קורס</label>
-      <select id="courseSelect" name="courseSelect" style="display:none;">
-        <option value="">-- בחר קורס מהרשימה --</option>
-      </select>
-      <input type="text" id="courseName" name="courseName" readonly style="display:none;" />
+      <label for="courseName">שם הקורס</label>
+      <input type="text" id="courseName" name="courseName" readonly />
 
       <label for="startDate">תאריך התחלה</label>
       <input type="text" id="startDate" name="startDate" readonly />
@@ -210,130 +193,67 @@
           <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
         </svg>
       </button>
-      <div class="thankyou-message" id="thankyouMessage">
-        השליחה הצליחה, ניצור איתך קשר בהקדם.
-      </div>
-      <div class="error-message" id="errorMessage"></div>
+
+      <div class="thankyou-message" id="thankyouMessage">השליחה הצליחה, ניצור איתך קשר בהקדם.</div>
+      <div class="error-message" id="errorMessage">אירעה שגיאה בשליחה. נסה שוב.</div>
     </form>
   </div>
 
   <script>
     emailjs.init("miOp6iToFLfbH1jk5");
 
-    function getQueryParams() {
-      const params = {};
-      window.location.search.substring(1).split("&").forEach(pair => {
-        const [k,v] = pair.split("=");
-        if (k) params[decodeURIComponent(k)] = decodeURIComponent(v||"");
-      });
-      return params;
-    }
+    document.getElementById('registrationForm').addEventListener('submit', function(e) {
+      e.preventDefault();
 
-    function clearCourseFields() {
-      ['courseName','startDate','endDate','location'].forEach(id => document.getElementById(id).value = '');
-    }
+      const submitBtn = document.getElementById('submitBtn');
+      const btnText = submitBtn.querySelector('.btn-text');
+      const planeIcon = submitBtn.querySelector('.plane-icon');
+      const thankyouMsg = document.getElementById('thankyouMessage');
+      const errorMsg = document.getElementById('errorMessage');
 
-    function fillCourseFields(c) {
-      document.getElementById('courseName').value = c.type||'';
-      document.getElementById('startDate').value = c.startDate||'';
-      document.getElementById('endDate').value = c.endDate||'';
-      document.getElementById('location').value = c.location||'';
-    }
+      errorMsg.style.display = 'none';
+      thankyouMsg.style.display = 'none';
+      submitBtn.disabled = true;
+      btnText.textContent = "שולח...";
+      planeIcon.style.display = 'inline-block';
+      planeIcon.style.animation = 'none';
+      planeIcon.offsetHeight;
+      planeIcon.style.animation = null;
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const params = getQueryParams();
-      const sel = document.getElementById('courseSelect');
-      const ci = document.getElementById('courseName');
+      const form = e.target;
+      const data = {
+        name: form.name.value,
+        phone: form.phone.value,
+        email: form.email.value,
+        course: form.courseName.value,
+        startDate: form.startDate.value,
+        endDate: form.endDate.value,
+        location: form.location.value,
+        paymentMethod: form.paymentMethod.value,
+        notes: form.notes.value
+      };
 
-      if (params.type && params.startDate && params.endDate && params.location) {
-        fillCourseFields(params);
-        ci.style.display = 'block';
-        sel.style.display = 'none';
-      } else {
-        ci.style.display = 'none';
-        sel.style.display = 'block';
-
-        fetch('https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec')
-          .then(r => { if (!r.ok) throw ''; return r.json(); })
-          .then(data => {
-            if (!Array.isArray(data) || data.length===0) {
-              sel.innerHTML = '<option>לא נמצאו קורסים זמינים</option>';
-              return;
-            }
-            sel.innerHTML = '<option value="">-- בחר קורס מהרשימה --</option>';
-            data.forEach(c => {
-              const opt = document.createElement('option');
-              opt.value = JSON.stringify(c);
-              opt.textContent = `${c.type} | ${c.startDate} - ${c.endDate} | ${c.location}`;
-              sel.appendChild(opt);
-            });
-          })
-          .catch(e => {
-            console.error(e);
-            sel.innerHTML = '<option>שגיאה בטעינת הקורסים</option>';
-          });
-
-        sel.addEventListener('change', () => {
-          if (!sel.value) return clearCourseFields();
-          try {
-            fillCourseFields(JSON.parse(sel.value));
-          } catch {
-            clearCourseFields();
-          }
+      emailjs.send("service_45f1wyc", "template_18zogtj", data)
+        .then(() => {
+          submitBtn.disabled = false;
+          planeIcon.style.display = 'none';
+          btnText.textContent = "שלח הרשמה";
+          thankyouMsg.style.display = 'block';
+        })
+        .catch(() => {
+          submitBtn.disabled = false;
+          planeIcon.style.display = 'none';
+          btnText.textContent = "שלח הרשמה";
+          errorMsg.style.display = 'block';
         });
-      }
-
-      const form = document.getElementById('registrationForm');
-      const sb = document.getElementById('submitBtn');
-      const th = document.getElementById('thankyouMessage');
-      const er = document.getElementById('errorMessage');
-      const bt = sb.querySelector('.btn-text');
-      const pl = sb.querySelector('.plane-icon');
-
-      form.addEventListener('submit', e => {
-        e.preventDefault();
-        er.style.display = 'none';
-        th.style.display = 'none';
-        sb.disabled = true;
-        bt.textContent = "שולח את הטופס שלך...";
-        pl.style.display = 'inline-block';
-        pl.style.animation = 'none';
-        pl.offsetHeight;
-        pl.style.animation = null;
-
-        const selCourse = sel.value ? JSON.parse(sel.value).type : '';
-        const data = {
-          name: form.name.value.trim(),
-          phone: form.phone.value.trim(),
-          email: form.email.value.trim(),
-          course: form.courseName.value || selCourse,
-          startDate: form.startDate.value,
-          endDate: form.endDate.value,
-          location: form.location.value,
-          paymentMethod: form.paymentMethod.value,
-          notes: form.notes.value.trim()
-        };
-
-        emailjs.send("service_45f1wyc", "template_18zogtj", data)
-          .then(() => {
-            sb.disabled = false;
-            pl.style.display = 'none';
-            bt.textContent = "שלח טופס הרשמה";
-            th.style.display = 'block';
-          })
-          .catch(() => {
-            sb.disabled = false;
-            pl.style.display = 'none';
-            bt.textContent = "שלח טופס הרשמה";
-            er.textContent = "אירעה שגיאה בשליחה. נסה שוב.";
-            er.style.display = 'block';
-          });
-      });
     });
   </script>
 
   <script>
-    nl_pos = "bl"; nl_color = "gray"; nl_compact = "1"; nl_accordion = "1";
+    nl_pos = "bl";
+    nl_color = "gray";
+    nl_compact = "1";
+    nl_accordion = "1";
     nl_contact = "n:יוזוק מדיק|p:0533562608";
   </script>
   <script src="https://yuzok101.github.io/yuzukmedic/data/nagishli.js" charset="utf-8" defer></script>
