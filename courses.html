@@ -42,24 +42,29 @@
     }
 
     main {
-      padding-top: 180px;
+      padding-top: 220px;
       padding-bottom: 80px;
     }
 
     /* Filters */
     .filters {
       max-width: 1400px;
-      margin: 20px auto 0;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.8);
+      margin: 40px auto 0;
+      padding: 10px 20px;
+      padding-top: 20px;
+      padding-bottom: 10px;
+      background: rgba(255, 255, 255, 0.85);
       border-radius: 12px;
       display: flex;
       flex-wrap: wrap;
       gap: 16px;
       justify-content: space-between;
+      align-items: center;
+      transform: translateY(30px);
     }
 
-    .filters select, .filters input[type="date"] {
+    .filters select,
+    .filters input[type="date"] {
       padding: 10px;
       border: 2px solid #1c3b6b;
       border-radius: 8px;
@@ -68,6 +73,22 @@
       background-color: #fff;
       min-width: 150px;
       flex: 1;
+    }
+
+    .filters .reset-button {
+      background-color: #ccc;
+      color: #1c3b6b;
+      border: 2px solid #1c3b6b;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filters .reset-button:hover {
+      background-color: #1c3b6b;
+      color: white;
     }
 
     .container {
@@ -271,6 +292,7 @@
     <select id="typeFilter">
       <option value="">הכשרה</option>
     </select>
+    <button class="reset-button" id="resetFilters">איפוס סינון</button>
   </div>
 
   <main>
@@ -357,6 +379,20 @@
       document.getElementById('targetFilter').onchange = e => { filters.target = e.target.value; renderCourses(); };
       document.getElementById('dateFilter').onchange = e => { filters.date = e.target.value; renderCourses(); };
       document.getElementById('typeFilter').onchange = e => { filters.type = e.target.value; renderCourses(); };
+
+      document.getElementById('resetFilters').onclick = () => {
+        filters.location = '';
+        filters.target = '';
+        filters.date = '';
+        filters.type = '';
+
+        document.getElementById('locationFilter').value = '';
+        document.getElementById('targetFilter').value = '';
+        document.getElementById('dateFilter').value = '';
+        document.getElementById('typeFilter').value = '';
+
+        renderCourses();
+      };
 
       async function renderCourses() {
         container.innerHTML = '';
