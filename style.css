@@ -4,7 +4,7 @@ body {
   font-family: 'Heebo', sans-serif;
   background-color: #f9f9f9;
   color: #333;
-  padding-top: 60px; /* לדחוף את התוכן למטה בגלל הניווט הקבוע */
+  padding-top: 60px; /* דוחף את התוכן למטה בגלל הניווט הקבוע */
   direction: rtl;
 }
 
@@ -18,10 +18,12 @@ body {
   box-shadow: 0 2px 5px rgba(0,0,0,0.5);
   z-index: 10000;
   height: 60px;
+  line-height: 60px; /* מרכז אנכי */
   display: flex;
   align-items: center;
   padding: 0 20px;
   gap: 30px;
+  overflow: hidden; /* למנוע הגדלה לא רצויה */
 }
 
 /* לוגו בתוך הניווט */
@@ -32,7 +34,9 @@ body {
 }
 
 .logo {
-  height: 40px;
+  height: 40px; /* קטן יחסית לגובה הבאנר */
+  width: auto;
+  display: block;
 }
 
 /* רשימת הקישורים - ממורכזת אופקית ואנכית */
@@ -43,27 +47,27 @@ body {
   display: flex;
   gap: 30px;
   flex-grow: 1;
-  justify-content: center; /* מרכז את כל הקישורים אופקית */
-  align-items: center;    /* מרכז את כל הפריטים אנכית */
+  justify-content: center;
+  align-items: center;
 }
 
 /* קישורים ממורכזים אנכית ואופקית */
 .main-nav ul li a {
-  color: #eee; /* טקסט בהיר */
+  color: #eee;
   text-decoration: none;
   font-weight: 700;
   font-size: 16px;
   padding: 10px 15px;
   transition: color 0.3s ease;
 
-  display: flex;           /* הופך את הלינק ל-flex */
-  justify-content: center; /* מרכז אופקי */
-  align-items: center;     /* מרכז אנכי */
-  height: 100%;            /* תופס את גובה ההורה */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 .main-nav ul li a:hover {
-  color: #1e90ff; /* כחול בהיר בהובר */
+  color: #1e90ff;
 }
 
 /* סגנונות להירו (hero) */
@@ -153,13 +157,14 @@ body {
   font-size: 22px;
 }
 
-/* באנר קריאה לפעולה */
+/* באנר קריאה לפעולה - במקום המקורי */
 .cta-banner {
   background-color: #1e90ff;
   color: white;
   text-align: center;
   padding: 40px 20px;
-  margin-top: 60px;
+  margin-top: 60px; /* להחזיר למקום */
+  position: static;
 }
 
 .cta-banner h2 {
