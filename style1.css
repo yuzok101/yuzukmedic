@@ -1,103 +1,79 @@
 body {
-  margin: 0;
   font-family: 'Heebo', sans-serif;
-  background: url('images/reka1.jpg') no-repeat center center fixed;
-  background-size: cover;
-  direction: rtl;
-}
-
-h1 {
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
-  background-color: #cce7ff; /* כחול בהיר */
-  color: #003366;
-  text-align: center;
-  padding: 15px;
   margin: 0;
-  font-size: 28px;
-  z-index: 1000;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  background: url('images/bg.jpg') no-repeat center center fixed;
+  background-size: cover;
 }
 
 .container {
-  padding-top: 100px;
-  padding-bottom: 30px;
   max-width: 1200px;
-  margin: 0 auto;
+  margin: auto;
+  padding: 40px 20px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
 }
 
-#courses {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 24px;
+h1 {
+  text-align: center;
+  color: #003366;
+  margin-bottom: 40px;
 }
 
 .course {
-  background-color: rgba(255, 255, 255, 0.95);
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  width: 48%;
-  min-width: 280px;
-  max-width: 400px;
   display: flex;
   flex-direction: column;
+  background: white;
+  border-radius: 16px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  transition: transform 0.3s;
-}
-
-.course:hover {
-  transform: scale(1.02);
 }
 
 .course img {
   width: 100%;
-  height: 200px;
+  height: auto;
   object-fit: cover;
 }
 
 .course-content {
-  padding: 15px;
+  padding: 20px;
 }
 
 .course-content h2 {
   margin-top: 0;
-  font-size: 20px;
+  font-size: 1.8em;
+  color: #003366;
 }
 
 .course-content p {
   margin: 5px 0;
+  font-size: 1.1em;
 }
 
 .register-button {
   display: inline-block;
-  margin-top: 10px;
-  padding: 10px 16px;
-  background-color: #0088cc;
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #003366;
   color: white;
-  text-decoration: none;
+  border: none;
   border-radius: 8px;
-  transition: background-color 0.3s;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 1em;
 }
 
-.register-button:hover {
-  background-color: #005f88;
-}
-
-/* התאמה למסכים קטנים */
-@media (max-width: 768px) {
+@media (min-width: 768px) {
   .course {
-    width: 90%;
-  }
-
-  h1 {
-    font-size: 24px;
-    padding: 10px;
+    flex-direction: row;
   }
 
   .course img {
-    height: 160px;
+    width: 300px;
+    height: 100%;
+  }
+
+  .course-content {
+    flex: 1;
   }
 }
