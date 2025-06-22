@@ -312,20 +312,31 @@
           courseSelect.appendChild(option);
         });
 
-        // מאזין לבחירה של קורס שימלא את השדות
-        courseSelect.addEventListener('change', () => {
-          if (!courseSelect.value) {
+        // פונקציה למילוי השדות לפי בחירת קורס
+        function fillCourseFields(value) {
+          if (!value) {
             courseName.value = '';
             startDate.value = '';
             endDate.value = '';
             location.value = '';
             return;
           }
-          const selected = JSON.parse(courseSelect.value);
+          const selected = JSON.parse(value);
           courseName.value = selected.type;
           startDate.value = selected.startDate;
           endDate.value = selected.endDate;
           location.value = selected.location;
+        }
+
+        // בחר את הקורס הראשון (האופציה הראשונה אחרי "בחר קורס מהרשימה")
+        if (courseSelect.options.length > 1) {
+          courseSelect.selectedIndex = 1;
+          fillCourseFields(courseSelect.value);
+        }
+
+        // מאזין לשינוי בחירת הקורס
+        courseSelect.addEventListener('change', () => {
+          fillCourseFields(courseSelect.value);
         });
 
       } catch(err) {
@@ -380,7 +391,6 @@
           btnText.textContent = "שלח הרשמה";
           thankyouMsg.style.display = 'block';
           errorMsg.style.display = 'none';
-          // הטופס נשאר פתוח לשינויים
         })
         .catch((error) => {
           submitBtn.disabled = false;
