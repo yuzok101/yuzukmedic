@@ -44,6 +44,34 @@
     main {
       padding-top: 220px;
       padding-bottom: 80px;
+      transition: filter 0.3s ease;
+    }
+
+    /* כפתור סינון */
+    #filterToggleBtn {
+      display: none;
+      position: fixed;
+      top: 140px;
+      right: 20px;
+      z-index: 2100;
+      background-color: #1c3b6b;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    /* Overlay לטשטוש */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
     }
 
     /* Filters */
@@ -61,6 +89,8 @@
       justify-content: space-between;
       align-items: center;
       transform: translateY(30px);
+      transition: all 0.3s ease;
+      z-index: 3000;
     }
 
     .filters select,
@@ -266,8 +296,32 @@
       }
 
       .filters {
+        position: fixed;
+        top: 200px;
+        right: 10px;
+        left: 10px;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        transform: translateY(-200%);
         flex-direction: column;
-        gap: 10px;
+      }
+
+      .filters.open {
+        transform: translateY(0);
+      }
+
+      #filterToggleBtn {
+        display: block;
+      }
+
+      .overlay.show {
+        display: block;
+      }
+
+      body.filter-open main {
+        filter: blur(4px);
       }
     }
   </style>
@@ -279,6 +333,11 @@
   </a>
 
   <header>הקורסים הקרובים שלנו</header>
+
+  <!-- 🔽 כפתור סינון לפלאפון -->
+  <button id="filterToggleBtn">סינון</button>
+  <!-- 🔽 רקע מטושטש בזמן סינון -->
+  <div class="overlay" id="overlay"></div>
 
   <!-- Filters Section -->
   <div class="filters">
