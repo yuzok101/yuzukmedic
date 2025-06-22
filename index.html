@@ -12,7 +12,7 @@
     background-color: #f5f5f5;
     color: #222;
     direction: rtl;
-    padding-top: 60px; /* רווח עליון בשביל הניווט הקבוע */
+    padding-top: 0; /* בלי רווח מעל */
   }
 
   .hero {
@@ -22,37 +22,41 @@
     height: 100vh;
     position: relative;
     color: white;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
   }
 
   .hero-overlay {
     background-color: rgba(0, 0, 0, 0.5);
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: absolute; 
+    top: 0; left: 0; right: 0; bottom: 0;
   }
 
   .hero-content {
-    text-align: center;
+    position: relative;
     max-width: 600px;
     padding: 0 15px;
+    z-index: 1;
   }
 
   .hero-content h1 {
-    font-size: 4rem;
-    margin-bottom: 20px;
+    font-size: 5rem; /* הגדלנו */
+    margin-bottom: 25px;
   }
 
   .hero-content p {
-    font-size: 1.5rem;
-    margin-bottom: 30px;
+    font-size: 1.8rem; /* הגדלנו */
+    margin-bottom: 35px;
   }
 
   .btn {
     background-color: #ffc107;
     color: #000;
-    padding: 12px 24px;
-    font-size: 1.2rem;
+    padding: 16px 32px; /* הגדלנו */
+    font-size: 1.4rem; /* הגדלנו */
     border: none;
     border-radius: 5px;
     text-decoration: none;
@@ -71,14 +75,13 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 15px;
-    height: 60px;
+    padding: 0 20px;
+    height: 80px; /* גדל מ-60 */
     box-sizing: border-box;
   }
 
-  /* לוגו בתוך הניווט הקבוע */
   .fixed-nav .logo {
-    height: 40px; /* גובה הלוגו מותאם לגובה הניווט */
+    height: 60px; /* גדל מ-40 */
     flex-shrink: 0;
   }
 
@@ -87,7 +90,7 @@
     padding: 0;
     margin: 0;
     display: flex;
-    gap: 20px;
+    gap: 25px; /* יותר רווח */
   }
 
   .fixed-nav li {
@@ -98,16 +101,18 @@
     color: white;
     text-decoration: none;
     font-weight: bold;
-    padding: 15px 10px;
+    padding: 20px 15px; /* יותר פדינג */
+    font-size: 1.2rem; /* פונט יותר גדול */
     display: inline-block;
     line-height: 1;
   }
 
-  /* ניווט רגיל (המקורי) */
+  /* הניווט הכחול שמתחת לתמונה */
   .main-nav {
     background-color: #003366;
     text-align: center;
     margin-top: 20px;
+    padding: 15px 0; /* גובה מוגדל */
   }
 
   .main-nav ul {
@@ -119,14 +124,15 @@
 
   .main-nav li {
     display: inline-block;
-    margin: 0 15px;
+    margin: 0 20px; /* רווח מוגדל */
   }
 
   .main-nav a {
     color: white;
     text-decoration: none;
     font-weight: bold;
-    padding: 15px;
+    padding: 20px 15px; /* פדינג מוגדל */
+    font-size: 1.2rem; /* פונט גדול יותר */
     display: inline-block;
   }
 
@@ -199,58 +205,50 @@
 
   /* רספונסיביות לטלפון */
   @media (max-width: 768px) {
-    body {
-      padding-top: 80px; /* מעט יותר מקום לניווט בגובה גבוה יותר */
-    }
-
-    .hero-content h1 {
-      font-size: 2.5rem;
-    }
-
-    .hero-content p {
-      font-size: 1.1rem;
-    }
-
-    .btn {
-      font-size: 1rem;
-      padding: 10px 20px;
-    }
-
     .fixed-nav {
-      height: 80px;
-      padding: 0 10px;
+      height: 100px; /* גדל */
+      padding: 0 15px;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
+      gap: 12px;
     }
 
     .fixed-nav .logo {
-      height: 50px;
+      height: 70px; /* גדל */
       margin-bottom: 5px;
     }
 
     .fixed-nav ul {
       flex-wrap: wrap;
       justify-content: center;
-      gap: 15px;
-    }
-
-    .fixed-nav li {
-      margin: 0;
+      gap: 18px;
     }
 
     .fixed-nav a {
-      padding: 10px 8px;
-      font-size: 1rem;
+      padding: 15px 10px;
+      font-size: 1.1rem;
     }
 
     .main-nav ul,
     .main-nav li,
     .main-nav a {
       display: block;
-      margin: 8px 0;
-      padding: 12px 0;
-      font-size: 1rem;
+      margin: 10px 0;
+      padding: 15px 0;
+      font-size: 1.1rem;
+    }
+
+    .hero-content h1 {
+      font-size: 3.5rem;
+    }
+
+    .hero-content p {
+      font-size: 1.3rem;
+    }
+
+    .btn {
+      font-size: 1.2rem;
+      padding: 14px 28px;
     }
 
     .features {
@@ -270,7 +268,7 @@
   <!-- ניווט קבוע למעלה עם לוגו -->
   <nav class="main-nav fixed-nav">
     <a href="index.html" class="logo">
-      <img src="logo.png" alt="הלוגו של יוז'וק" height="40" />
+      <img src="logo.png" alt="הלוגו של יוז'וק" height="60" />
     </a>
     <ul>
       <li><a href="index.html">ראשי</a></li>
@@ -280,14 +278,12 @@
     </ul>
   </nav>
 
-  <!-- הבאנר הקבוע עם לוגו (הלוגו הוצאנו מהבאנר, כי הוא עכשיו בתוך הניווט הקבוע) -->
   <header class="hero">
-    <div class="hero-overlay">
-      <div class="hero-content">
-        <h1>יוז'וק מדיק</h1>
-        <p>לדעת, להציל חיים.</p>
-        <a href="courses.html" class="btn">להרשמה לקורס הקרוב</a>
-      </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <h1>יוז'וק מדיק</h1>
+      <p>לדעת, להציל חיים.</p>
+      <a href="courses.html" class="btn">להרשמה לקורס הקרוב</a>
     </div>
   </header>
 
