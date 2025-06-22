@@ -59,6 +59,50 @@
     display: inline-block;
   }
 
+  /* ניווט קבוע למעלה עם לוגו */
+  .fixed-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #003366;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    height: 60px;
+    box-sizing: border-box;
+  }
+
+  /* לוגו בתוך הניווט הקבוע */
+  .fixed-nav .logo {
+    height: 40px; /* גובה הלוגו מותאם לגובה הניווט */
+    flex-shrink: 0;
+  }
+
+  .fixed-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 20px;
+  }
+
+  .fixed-nav li {
+    display: inline-block;
+  }
+
+  .fixed-nav a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 15px 10px;
+    display: inline-block;
+    line-height: 1;
+  }
+
   /* ניווט רגיל (המקורי) */
   .main-nav {
     background-color: #003366;
@@ -79,37 +123,6 @@
   }
 
   .main-nav a {
-    color: white;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 15px;
-    display: inline-block;
-  }
-
-  /* ניווט קבוע למעלה */
-  .fixed-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #003366;
-    z-index: 1000;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-  }
-
-  .fixed-nav ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: inline-block;
-  }
-
-  .fixed-nav li {
-    display: inline-block;
-    margin: 0 15px;
-  }
-
-  .fixed-nav a {
     color: white;
     text-decoration: none;
     font-weight: bold;
@@ -186,6 +199,10 @@
 
   /* רספונסיביות לטלפון */
   @media (max-width: 768px) {
+    body {
+      padding-top: 80px; /* מעט יותר מקום לניווט בגובה גבוה יותר */
+    }
+
     .hero-content h1 {
       font-size: 2.5rem;
     }
@@ -199,26 +216,41 @@
       padding: 10px 20px;
     }
 
-    /* ניווטים במובייל - נהפוך לרשימה אנכית (או אופציה אחרת) */
-    .main-nav ul,
-    .fixed-nav ul {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 0;
+    .fixed-nav {
+      height: 80px;
+      padding: 0 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
     }
 
-    .main-nav li,
+    .fixed-nav .logo {
+      height: 50px;
+      margin-bottom: 5px;
+    }
+
+    .fixed-nav ul {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+
     .fixed-nav li {
+      margin: 0;
+    }
+
+    .fixed-nav a {
+      padding: 10px 8px;
+      font-size: 1rem;
+    }
+
+    .main-nav ul,
+    .main-nav li,
+    .main-nav a {
       display: block;
       margin: 8px 0;
-    }
-
-    .main-nav a,
-    .fixed-nav a {
-      padding: 12px 20px;
+      padding: 12px 0;
       font-size: 1rem;
-      display: block;
     }
 
     .features {
@@ -230,17 +262,16 @@
       max-width: 90%;
       margin: 0 auto;
     }
-
-    body {
-      padding-top: 120px; /* הגדלנו מרווח עליון כי הניווט עכשיו בגובה גדול יותר */
-    }
   }
 </style>
 </head>
 <body>
 
-  <!-- ניווט קבוע למעלה -->
+  <!-- ניווט קבוע למעלה עם לוגו -->
   <nav class="main-nav fixed-nav">
+    <a href="index.html" class="logo">
+      <img src="logo.png" alt="הלוגו של יוז'וק" height="40" />
+    </a>
     <ul>
       <li><a href="index.html">ראשי</a></li>
       <li><a href="register.html">הרשמה</a></li>
@@ -249,11 +280,7 @@
     </ul>
   </nav>
 
-  <!-- הבאנר הקבוע עם לוגו -->
-  <a href="index.html" class="banner">
-    <img src="logo.png" alt="הלוגו של יוז'וק" />
-  </a>
-
+  <!-- הבאנר הקבוע עם לוגו (הלוגו הוצאנו מהבאנר, כי הוא עכשיו בתוך הניווט הקבוע) -->
   <header class="hero">
     <div class="hero-overlay">
       <div class="hero-content">
