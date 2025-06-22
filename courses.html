@@ -42,8 +42,32 @@
     }
 
     main {
-      padding-top: 100px;
+      padding-top: 180px;
       padding-bottom: 80px;
+    }
+
+    /* Filters */
+    .filters {
+      max-width: 1400px;
+      margin: 20px auto 0;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: space-between;
+    }
+
+    .filters select, .filters input[type="date"] {
+      padding: 10px;
+      border: 2px solid #1c3b6b;
+      border-radius: 8px;
+      font-size: 16px;
+      color: #1c3b6b;
+      background-color: #fff;
+      min-width: 150px;
+      flex: 1;
     }
 
     .container {
@@ -152,7 +176,6 @@
       75% { transform: rotate(-6deg); }
     }
 
-    /* טעינה */
     .loading {
       display: flex;
       justify-content: center;
@@ -220,6 +243,11 @@
         height: 60px;
         border-width: 8px;
       }
+
+      .filters {
+        flex-direction: column;
+        gap: 10px;
+      }
     }
   </style>
 </head>
@@ -230,6 +258,20 @@
   </a>
 
   <header>הקורסים הקרובים שלנו</header>
+
+  <!-- Filters Section -->
+  <div class="filters">
+    <select id="locationFilter">
+      <option value="">עיר</option>
+    </select>
+    <select id="targetFilter">
+      <option value="">קהל יעד</option>
+    </select>
+    <input type="date" id="dateFilter" />
+    <select id="typeFilter">
+      <option value="">הכשרה</option>
+    </select>
+  </div>
 
   <main>
     <div class="container" id="coursesContainer">
@@ -281,65 +323,91 @@
       const now = new Date();
       let imageIndex = 0;
 
-      function toQueryString(params) {
-        return Object.entries(params).map(([k,v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v)).join('&');
-      }
+      const locations = new Set();
+      const targets = new Set();
+      const types = new Set();
 
       for (const course of courses) {
-        const startDate = parseDate(course.startDate);
-        if (startDate < now) continue;
+        locations.add(course.location);
+        targets.add(course.target);
+        types.add(course.type);
+      }
 
-        const endDate = parseDate(course.endDate);
-        const hebrewStart = await getHebrewDateStr(startDate);
-        const hebrewEnd = await getHebrewDateStr(endDate);
-        const imagePath = imagePool[imageIndex] || "images/default.jpg";
-        imageIndex++;
-
-        const div = document.createElement('div');
-        div.className = 'course';
-
-        const queryParams = toQueryString({
-          type: course.type || '',
-          startDate: course.startDate || '',
-          endDate: course.endDate || '',
-          location: course.location || ''
+      function populateSelect(select, values) {
+        values.forEach(val => {
+          const option = document.createElement('option');
+          option.value = val;
+          option.textContent = val;
+          select.appendChild(option);
         });
+      }
 
-        div.innerHTML = `
-          <img src="${imagePath}" alt="תמונה">
-          <div class="course-content">
-            <div>
-              <h2>${course.type || 'קורס'}</h2>
-              <p>
-                <span>תאריך התחלה:</span> ${course.startDate} |
-                <span>תאריך סיום:</span> ${course.endDate}
-              </p>
-              <p class="hebrew-date">${hebrewStart} – ${hebrewEnd}</p>
-              <p><span>ימים:</span> ${course.days}</p>
-              <p><span>שעות:</span> ${course.hours}</p>
-              <p><span>מחיר:</span> ${course.price}</p>
-              <p><span>קהל יעד:</span> ${course.target}</p>
-              <p><span>מיקום:</span> ${course.location}</p>
+      populateSelect(document.getElementById('locationFilter'), locations);
+      populateSelect(document.getElementById('targetFilter'), targets);
+      populateSelect(document.getElementById('typeFilter'), types);
+
+      const filters = {
+        location: '',
+        target: '',
+        date: '',
+        type: ''
+      };
+
+      document.getElementById('locationFilter').onchange = e => { filters.location = e.target.value; renderCourses(); };
+      document.getElementById('targetFilter').onchange = e => { filters.target = e.target.value; renderCourses(); };
+      document.getElementById('dateFilter').onchange = e => { filters.date = e.target.value; renderCourses(); };
+      document.getElementById('typeFilter').onchange = e => { filters.type = e.target.value; renderCourses(); };
+
+      async function renderCourses() {
+        container.innerHTML = '';
+        for (const course of courses) {
+          const startDate = parseDate(course.startDate);
+          if (startDate < now) continue;
+
+          if (filters.location && course.location !== filters.location) continue;
+          if (filters.target && course.target !== filters.target) continue;
+          if (filters.type && course.type !== filters.type) continue;
+          if (filters.date && parseDate(course.startDate) < new Date(filters.date)) continue;
+
+          const endDate = parseDate(course.endDate);
+          const hebrewStart = await getHebrewDateStr(startDate);
+          const hebrewEnd = await getHebrewDateStr(endDate);
+          const imagePath = imagePool[imageIndex++] || "images/default.jpg";
+
+          const div = document.createElement('div');
+          div.className = 'course';
+
+          div.innerHTML = `
+            <img src="${imagePath}" alt="תמונה">
+            <div class="course-content">
+              <div>
+                <h2>${course.type || 'קורס'}</h2>
+                <p><span>תאריך התחלה:</span> ${course.startDate} | <span>תאריך סיום:</span> ${course.endDate}</p>
+                <p class="hebrew-date">${hebrewStart} – ${hebrewEnd}</p>
+                <p><span>ימים:</span> ${course.days}</p>
+                <p><span>שעות:</span> ${course.hours}</p>
+                <p><span>מחיר:</span> ${course.price}</p>
+                <p><span>קהל יעד:</span> ${course.target}</p>
+                <p><span>מיקום:</span> ${course.location}</p>
+              </div>
+              <button class="register-btn">להרשמה</button>
             </div>
-            <button class="register-btn">להרשמה</button>
-          </div>
-        `;
+          `;
 
-        div.addEventListener('click', (e) => {
-          if(e.target.classList.contains('register-btn')){
-            window.location.href = `register.html?${queryParams}`;
-            e.stopPropagation();
-          } else {
-            window.location.href = `register.html?${queryParams}`;
-          }
-        });
+          div.addEventListener('click', (e) => {
+            const query = `type=${course.type}&startDate=${course.startDate}&endDate=${course.endDate}&location=${course.location}`;
+            window.location.href = `register.html?${query}`;
+          });
 
-        container.appendChild(div);
+          container.appendChild(div);
+        }
+
+        if (!container.innerHTML.trim()) {
+          container.innerHTML = '<p style="text-align:center;font-size:20px;color:#fff;">אין כרגע קורסים זמינים.</p>';
+        }
       }
 
-      if (container.innerHTML.trim() === '') {
-        container.innerHTML = '<p style="text-align:center;font-size:20px;color:#fff;">אין כרגע קורסים זמינים.</p>';
-      }
+      renderCourses();
     })();
   </script>
 
