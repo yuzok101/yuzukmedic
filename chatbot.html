@@ -3,215 +3,184 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>צ׳אט בוט קורסים</title>
+  <title>צ׳אט בוט</title>
   <style>
-    /* עיצוב הכפתור הצף */
-    #chatbot-button {
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: flex-start;
+      align-items: flex-end;
+      background: #f0f0f0;
+    }
+    #chatbot {
       position: fixed;
       bottom: 20px;
       left: 20px;
-      width: 60px;
-      height: 60px;
-      background: #007bff;
-      border-radius: 50%;
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-      animation: float 3s ease-in-out infinite;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-    #chatbot-button svg {
-      fill: white;
-      width: 30px;
-      height: 30px;
-    }
-
-    /* עיצוב חלונית הצ׳אט */
-    #chatbot-window {
-      position: fixed;
-      bottom: 90px;
-      left: 20px;
       width: 320px;
       max-width: 90vw;
-      height: 420px;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-      display: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      border-radius: 10px;
+      background: white;
+      display: flex;
       flex-direction: column;
       overflow: hidden;
-      font-family: Arial, sans-serif;
-      z-index: 10000;
+      font-size: 14px;
     }
-
-    #chatbot-header {
+    #chat-header {
       background: #007bff;
       color: white;
-      padding: 12px 16px;
+      padding: 10px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+    }
+    #chat-header .icon {
+      width: 24px;
+      height: 24px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #007bff;
       font-weight: bold;
       font-size: 18px;
-      text-align: center;
-      user-select: none;
+      animation: shake 3s infinite;
     }
-
-    #chatbot-messages {
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-4px); }
+      40%, 80% { transform: translateX(4px); }
+    }
+    #chat-messages {
       flex: 1;
-      padding: 12px;
+      padding: 10px;
       overflow-y: auto;
-      background: #f4f6fb;
-      font-size: 14px;
+      max-height: 300px;
+      background: #f9f9f9;
     }
-
     .message {
-      margin-bottom: 12px;
-      clear: both;
-      max-width: 80%;
-      word-wrap: break-word;
+      margin-bottom: 10px;
+      line-height: 1.4;
     }
     .message.user {
-      background: #007bff;
-      color: white;
-      padding: 8px 14px;
-      border-radius: 16px 16px 0 16px;
-      float: right;
+      text-align: right;
+      color: #007bff;
+      font-weight: 600;
     }
     .message.bot {
-      background: #e5e5ea;
-      color: #000;
-      padding: 8px 14px;
-      border-radius: 16px 16px 16px 0;
-      float: left;
+      text-align: left;
+      color: #333;
+      background: #e1e7f0;
+      padding: 6px 8px;
+      border-radius: 8px;
+      display: inline-block;
+      max-width: 80%;
+      white-space: pre-wrap;
+      word-wrap: break-word;
     }
-
-    #chatbot-input-container {
+    #chat-input-container {
       display: flex;
       border-top: 1px solid #ddd;
-      padding: 8px;
-      background: #fff;
     }
-
-    #chatbot-input {
+    #chat-input {
       flex: 1;
-      padding: 8px 12px;
+      border: none;
+      padding: 10px;
       font-size: 14px;
-      border-radius: 20px;
-      border: 1px solid #ccc;
       outline: none;
     }
-
-    #chatbot-send {
+    #chat-send {
       background: #007bff;
       border: none;
       color: white;
-      padding: 8px 16px;
-      margin-left: 8px;
-      border-radius: 20px;
+      padding: 10px 15px;
       cursor: pointer;
       font-weight: bold;
-      user-select: none;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s;
     }
-    #chatbot-send:hover {
+    #chat-send:hover {
       background: #0056b3;
     }
-
-    /* רספונסיביות לפלאפון */
+    /* Responsive */
     @media (max-width: 400px) {
-      #chatbot-window {
-        width: 90vw;
-        height: 60vh;
-        bottom: 70px;
-        left: 5vw;
+      #chatbot {
+        width: 95vw;
+        left: 2.5vw;
       }
     }
   </style>
 </head>
 <body>
-
-<button id="chatbot-button" aria-label="פתח צ׳אט">
-  <!-- אייקון בועת שיחה SVG -->
-  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-    <path d="M4 4h16v12H5.17L4 17.17V4z" />
-  </svg>
-</button>
-
-<div id="chatbot-window" role="dialog" aria-modal="true" aria-labelledby="chatbot-header">
-  <div id="chatbot-header">צ׳אט בוט קורסים</div>
-  <div id="chatbot-messages" role="log" aria-live="polite"></div>
-  <form id="chatbot-form" autocomplete="off" aria-label="שלח הודעה לצ׳אט">
-    <div id="chatbot-input-container">
-      <input type="text" id="chatbot-input" placeholder="כתוב כאן..." required />
-      <button type="submit" id="chatbot-send">שלח</button>
+  <div id="chatbot">
+    <div id="chat-header">
+      <div class="icon" title="צ׳אט בוט">💬</div>
+      צ׳אט תמיכה
     </div>
-  </form>
-</div>
+    <div id="chat-messages"></div>
+    <form id="chat-form">
+      <input type="text" id="chat-input" autocomplete="off" placeholder="כתוב כאן..." required />
+      <button type="submit" id="chat-send">שלח</button>
+    </form>
+  </div>
 
-<script>
-  const backendURL = "https://chatbotbackend-jnm6aa1rs-5s-projects-069b639b.vercel.app/chat";
+  <script>
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    const chatMessages = document.getElementById('chat-messages');
 
-  const chatbotButton = document.getElementById('chatbot-button');
-  const chatbotWindow = document.getElementById('chatbot-window');
-  const chatbotMessages = document.getElementById('chatbot-messages');
-  const chatbotForm = document.getElementById('chatbot-form');
-  const chatbotInput = document.getElementById('chatbot-input');
+    // כתובת ה-API המעודכנת שלך
+    const backendURL = 'https://chatbotbackend-l81l9o0zn-5s-projects-069b639b.vercel.app/chat';
 
-  // פותח/סוגר את חלונית הצ׳אט
-  chatbotButton.addEventListener('click', () => {
-    if (chatbotWindow.style.display === 'flex') {
-      chatbotWindow.style.display = 'none';
-    } else {
-      chatbotWindow.style.display = 'flex';
-      chatbotInput.focus();
+    function addMessage(text, sender) {
+      const div = document.createElement('div');
+      div.classList.add('message', sender);
+      div.textContent = text;
+      chatMessages.appendChild(div);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
     }
-  });
 
-  // פונקציה להוספת הודעה לחלון
-  function addMessage(text, sender) {
-    const msg = document.createElement('div');
-    msg.classList.add('message', sender);
-    msg.textContent = text;
-    chatbotMessages.appendChild(msg);
-    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-  }
+    chatForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      const message = chatInput.value.trim();
+      if (!message) return;
 
-  // שליחת הודעה לשרת ולקבל תשובה
-  chatbotForm.addEventListener('submit', async e => {
-    e.preventDefault();
-    const userText = chatbotInput.value.trim();
-    if (!userText) return;
+      addMessage(message, 'user');
+      chatInput.value = '';
+      addMessage('מגיב...', 'bot');
 
-    addMessage(userText, 'user');
-    chatbotInput.value = '';
-    addMessage('טוען...', 'bot');
+      try {
+        const res = await fetch(backendURL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message }),
+        });
 
-    try {
-      const response = await fetch(backendURL, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({ message: userText }),
-      });
+        if (!res.ok) {
+          throw new Error('שגיאה בשרת');
+        }
 
-      if (!response.ok) throw new Error('שגיאה בשרת');
+        const data = await res.json();
+        // הסר את ההודעה "מגיב..."
+        const botTyping = chatMessages.querySelector('.message.bot:last-child');
+        if (botTyping) botTyping.remove();
 
-      const data = await response.json();
-      // מחליף את 'טוען...' בתשובה אמיתית
-      const loadingMsg = chatbotMessages.querySelector('.bot:last-child');
-      if (loadingMsg) loadingMsg.textContent = data.reply || 'לא הצלחתי לעזור לך, אפשר לנסות בקישור הבא: https://yuzok101.github.io/yuzukmedic/kesher.html';
+        addMessage(data.reply, 'bot');
+      } catch (error) {
+        // הסר את ההודעה "מגיב..."
+        const botTyping = chatMessages.querySelector('.message.bot:last-child');
+        if (botTyping) botTyping.remove();
 
-    } catch (error) {
-      const loadingMsg = chatbotMessages.querySelector('.bot:last-child');
-      if (loadingMsg) loadingMsg.textContent = 'אירעה שגיאה, נסה שוב מאוחר יותר.';
-      console.error(error);
-    }
-  });
-</script>
-
+        addMessage('אירעה שגיאה, נסה שוב מאוחר יותר.', 'bot');
+        console.error(error);
+      }
+    });
+  </script>
 </body>
 </html>
