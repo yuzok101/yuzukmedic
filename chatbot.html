@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>צ'אט בוט חכם - קורסים</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0; height: 100%; width: 100%;
+      font-family: Arial, sans-serif;
+      direction: rtl;
+      background: transparent;
+      overflow: hidden;
+    }
+    #chat-toggle {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background-color: #007bff;
+      color: white;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 30px;
+      text-align: center;
+      line-height: 60px;
+      cursor: pointer;
+      z-index: 9999;
+      box-shadow: 0 0 15px rgba(0,123,255,0.7);
+      user-select: none;
+    }
+    #chatbot-box {
+      position: fixed;
+      bottom: 90px;
+      left: 20px;
+      width: 360px;
+      height: 480px;
+      background-color: #fff;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.25);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 9999;
+      border: 1px solid #007bff;
+    }
+    #chat-header {
+      background-color: #007bff;
+      color: white;
+      padding: 12px;
+      font-weight: bold;
+      text-align: center;
+      user-select: none;
+    }
+    #chat-messages {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      background: #f0f4ff;
+      white-space: pre-wrap;
+      font-size: 14px;
+      line-height: 1.4em;
+    }
+    #chat-input-box {
+      display: flex;
+      padding: 10px;
+      border-top: 1px solid #ccc;
+      gap: 5px;
+    }
+    #chat-input {
+      flex: 1;
+      padding: 10px;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      outline: none;
+    }
+    #chat-input:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 5px #007bff;
+    }
+    #chat-input-box button {
+      background-color: #007bff;
+      border: none;
+      color: white;
+      padding: 10px 16px;
+      font-size: 14px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      user-select: none;
+    }
+    #chat-input-box button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<div id="chat-toggle" title="פתח צ'אט">💬</div>
+
+<div id="chatbot-box" aria-live="polite" role="region" aria-label="צ'אט בוט">
+  <div id="chat-header">צ'אט קורסים חכם</div>
+  <div id="chat-messages" tabindex="0"></div>
+  <div id="chat-input-box">
+    <input type="text" id="chat-input" aria-label="שאל שאלה על הקורסים" autocomplete="off" />
+    <button id="send-btn" aria-label="שלח הודעה">שלח</button>
+  </div>
+</div>
+
+<script>
+  // כאן תשים את כתובת השרת שלך
+  const API_BASE_URL = "http://localhost:3000/api/chat";
+
+  const GOOGLE_SHEETS_API = 'https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec';
+
+  const CONTACT_URL = "https://yuzok101.github.io/yuzukmedic/kesher.html";
+
+  let coursesData = [];
+  let knowledgeText = "";
+
+  let chatMessages, chatInput, chatToggle, chatbotBox;
+
+  async function loadCourses() {
+    try {
+      const res = await fetch(GOOGLE_SHEETS_API);
+      const data = await res.json();
+      if (Array.isArray(data) && data.length > 0) {
+        coursesData = data;
+        appendMessage("בוט", "טוען מידע על הקורסים. אפשר לשאול כל דבר!");
+      } else {
+        appendMessage("בוט", "לא נמצאו קורסים במערכת.");
+      }
+    } catch (e) {
+      appendMessage("בוט", "שגיאה בטעינת המידע, נסה שנית מאוחר יותר.");
+      console.error(e);
+    }
+  }
+
+  async function loadKnowledgeText() {
+    try {
+      const res = await fetch("/data/1234.txt");
+      if (res.ok) {
+        knowledgeText = await res.text();
+        appendMessage("בוט", "טען מידע נוסף מקובץ טקסט.");
+      }
+    } catch(e) {
+      console.error("שגיאה בטעינת טקסט מ-1234.txt:", e);
+    }
+  }
+
+  function appendMessage(sender, text) {
+    const msg = document.createElement("div");
+    msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
+    chatMessages.appendChild(msg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  function searchLocalCourses(query) {
+    query = query.toLowerCase();
+
+    for (let c of coursesData) {
+      let dateStart = c['תאריך התחלה'] || "";
+      let dateEnd = c['תאירך סיום'] || "";
+      let days = c['ימי מפגשים'] || "";
+      let hours = c['שעות'] || "";
+      let price = c['מחיר'] || "";
+      let audience = c['קהל יעד'] || "";
+      let location = c['מיקום'] || "";
+      let notes = c['הערות'] || "";
+      let training = c['הכשרה'] || "";
+
+      let combinedText = [dateStart, dateEnd, days, hours, price, audience, location, notes, training].join(" ").toLowerCase();
+
+      if (combinedText.includes(query)) {
+        return `קורס: ${training || "לא צויין"}\nתאריך התחלה: ${dateStart}\nתאריך סיום: ${dateEnd}\nימי מפגשים: ${days}\nשעות: ${hours}\nמחיר: ${price}\nקהל יעד: ${audience}\nמיקום: ${location}\nהערות: ${notes}`;
+      }
+    }
+    return null;
+  }
+
+  async function callOpenAI(question, contextText) {
+    try {
+      const messages = [
+        {
+          role: "system",
+          content: "אתה עוזר דיגיטלי לענות רק על שאלות על קורסים בהתאם למידע הבא. אם לא בטוח, תגיד 'לא הצלחתי לעזור לך' ותן את הקישור ליצירת קשר."
+        },
+        {
+          role: "user",
+          content: contextText + "\n\nשאלה: " + question
+        }
+      ];
+
+      const response = await fetch(API_BASE_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          messages,
+          max_tokens: 400,
+          temperature: 0.2
+        })
+      });
+
+      if (!response.ok) {
+        console.error("שגיאה בקריאה לשרת ה-API:", response.status);
+        return null;
+      }
+
+      const data = await response.json();
+
+      let answer = data.choices?.[0]?.message?.content.trim();
+
+      if (!answer || answer.toLowerCase().includes("i'm sorry") || answer.toLowerCase().includes("לא")) {
+        return null;
+      }
+
+      return answer;
+
+    } catch (e) {
+      console.error(e);
+      return null;
+    }
+  }
+
+  async function sendMessage() {
+    const question = chatInput.value.trim();
+    if (!question) return;
+
+    appendMessage("אתה", question);
+    chatInput.value = "";
+    chatInput.disabled = true;
+
+    let localAnswer = searchLocalCourses(question);
+
+    if (localAnswer) {
+      appendMessage("בוט", localAnswer);
+      chatInput.disabled = false;
+      chatInput.focus();
+      return;
+    }
+
+    const contextTextCourses = coursesData.map(c => {
+      return `קורס: ${c['הכשרה'] || "לא צויין"} - תאריך התחלה: ${c['תאריך התחלה'] || "לא ידוע"}, מחיר: ${c['מחיר'] || "לא ידוע"}`;
+    }).join("\n");
+
+    const fullContext = contextTextCourses + "\n\nידע נוסף:\n" + knowledgeText;
+
+    let gptAnswer = await callOpenAI(question, fullContext);
+
+    if (gptAnswer) {
+      appendMessage("בוט", gptAnswer);
+    } else {
+      appendMessage("בוט", `לא הצלחתי לעזור לך. אם תרצה, פנה אלינו דרך עמוד יצירת הקשר:\n${CONTACT_URL}`);
+    }
+
+    chatInput.disabled = false;
+    chatInput.focus();
+  }
+
+  window.onload = () => {
+    chatToggle = document.getElementById("chat-toggle");
+    chatbotBox = document.getElementById("chatbot-box");
+    chatMessages = document.getElementById("chat-messages");
+    chatInput = document.getElementById("chat-input");
+
+    chatToggle.addEventListener("click", () => {
+      if (chatbotBox.style.display === "flex") chatbotBox.style.display = "none";
+      else {
+        chatbotBox.style.display = "flex";
+        chatInput.focus();
+      }
+    });
+
+    document.getElementById("send-btn").addEventListener("click", sendMessage);
+
+    chatInput.addEventListener("keydown", e => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+
+    loadCourses();
+    loadKnowledgeText();
+  };
+</script>
+
+</body>
+</html>
