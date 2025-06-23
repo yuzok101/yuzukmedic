@@ -2,9 +2,13 @@
 <html lang="he" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <title>צ'אט בוט קורסים</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>צ'אטבוט פרימיום</title>
   <style>
-    body, html {
+    * {
+      box-sizing: border-box;
+    }
+    body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: transparent;
@@ -23,136 +27,180 @@
       line-height: 60px;
       cursor: pointer;
       z-index: 9999;
+      animation: float 2s ease-in-out infinite;
+      user-select: none;
     }
-    #chatbot-box {
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+      100% { transform: translateY(0); }
+    }
+    #chatbox {
       position: fixed;
       bottom: 90px;
       left: 20px;
       width: 360px;
-      height: 480px;
-      background-color: #fff;
-      border-radius: 15px;
-      box-shadow: 0 0 20px rgba(0,0,0,0.25);
+      max-height: 520px;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 10px;
       display: none;
       flex-direction: column;
-      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       z-index: 9999;
-      border: 1px solid #007bff;
     }
     #chat-header {
       background-color: #007bff;
       color: white;
-      padding: 12px;
-      text-align: center;
+      padding: 10px;
       font-weight: bold;
+      text-align: center;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      user-select: none;
     }
     #chat-messages {
-      flex: 1;
       padding: 10px;
       overflow-y: auto;
-      background: #f0f4ff;
+      flex: 1;
       font-size: 14px;
+      background: #f9f9f9;
+      direction: rtl;
     }
-    #chat-input-box {
+    .message {
+      margin-bottom: 10px;
+      padding: 8px 12px;
+      border-radius: 15px;
+      max-width: 80%;
+      display: inline-block;
+      clear: both;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+    }
+    .user {
+      background-color: #d0e6ff;
+      align-self: flex-end;
+      float: right;
+      text-align: right;
+    }
+    .bot {
+      background-color: #e2e2e2;
+      align-self: flex-start;
+      float: left;
+      text-align: right;
+    }
+    #chat-input-container {
       display: flex;
       padding: 10px;
       border-top: 1px solid #ccc;
-      gap: 5px;
+      gap: 6px;
     }
     #chat-input {
       flex: 1;
-      padding: 10px;
+      padding: 8px;
+      border-radius: 6px;
       border: 1px solid #ccc;
-      border-radius: 5px;
+      font-size: 14px;
     }
-    #chat-input-box button {
+    #send-btn {
       background-color: #007bff;
       color: white;
       border: none;
-      padding: 10px 16px;
-      border-radius: 5px;
+      padding: 8px 14px;
+      border-radius: 6px;
       cursor: pointer;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
 
-<div id="chat-toggle">💬</div>
+<div id="chat-toggle" title="פתיחת הצ'אט">💬</div>
 
-<div id="chatbot-box">
-  <div id="chat-header">צ'אט קורסים חכם</div>
-  <div id="chat-messages"></div>
-  <div id="chat-input-box">
-    <input type="text" id="chat-input" placeholder="מה ברצונך לדעת?" />
-    <button onclick="sendMessage()">שלח</button>
+<div id="chatbox" role="dialog" aria-labelledby="chat-header" aria-modal="true" aria-hidden="true">
+  <div id="chat-header">יועץ קורסים חכם</div>
+  <div id="chat-messages" aria-live="polite" aria-relevant="additions"></div>
+  <div id="chat-input-container">
+    <input id="chat-input" type="text" placeholder="שאל אותי כל דבר..." aria-label="שאלתך בצ'אט" autocomplete="off" />
+    <button id="send-btn" aria-label="שלח הודעה">שלח</button>
   </div>
 </div>
 
 <script>
-  const chatToggle = document.getElementById("chat-toggle");
-  const chatbotBox = document.getElementById("chatbot-box");
-  const chatMessages = document.getElementById("chat-messages");
-  const chatInput = document.getElementById("chat-input");
+  const toggle = document.getElementById("chat-toggle");
+  const chatbox = document.getElementById("chatbox");
+  const input = document.getElementById("chat-input");
+  const sendBtn = document.getElementById("send-btn");
+  const messages = document.getElementById("chat-messages");
 
-  const CONTACT_URL = "https://yuzok101.github.io/yuzukmedic/kesher.html";
-  const SHEET_API_URL = "https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec";
-  const OPENAI_API_KEY = "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";
+  const apiKey = "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";
 
-  let courses = [];
+  // כתובת הסקריפט של Google Sheets API
+  const sheetURL = "https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec";
+
+  // משתנים לאחסון מידע
   let extraText = "";
+  let courseData = "";
+  let chatHistory = [];
 
-  chatToggle.onclick = () => {
-    chatbotBox.style.display = chatbotBox.style.display === "flex" ? "none" : "flex";
-  };
-
-  function appendMessage(sender, text) {
-    const msg = document.createElement("div");
-    msg.innerHTML = `<strong>${sender}:</strong> ${text}`;
-    chatMessages.appendChild(msg);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
+  // טען טקסט מקובץ 1234.txt
+  async function loadText() {
+    try {
+      const res = await fetch("1234.txt");
+      extraText = await res.text();
+    } catch (e) {
+      console.error("שגיאה בטעינת הקובץ 1234.txt:", e);
+    }
   }
 
-  async function loadData() {
+  // טען קורסים מ-Google Sheets
+  async function loadCourses() {
     try {
-      const res = await fetch(SHEET_API_URL);
-      courses = await res.json();
+      const res = await fetch(sheetURL);
+      const data = await res.json();
+      courseData = data.map(course => {
+        return Object.entries(course).map(([k, v]) => `${k}: ${v}`).join("\n");
+      }).join("\n\n");
     } catch (e) {
       console.error("שגיאה בטעינת הקורסים:", e);
     }
-
-    try {
-      const txt = await fetch("1234.txt");
-      extraText = await txt.text();
-    } catch (e) {
-      console.error("שגיאה בטעינת קובץ טקסט:", e);
-    }
   }
 
-  function localSearch(query) {
-    query = query.toLowerCase();
-    for (let c of courses) {
-      const all = Object.values(c).join(" ").toLowerCase();
-      if (all.includes(query)) {
-        return `
-קורס: ${c['הכשרה'] || ''}
-תאריך התחלה: ${c['תאריך התחלה'] || ''}
-תאריך סיום: ${c['תאירך סיום'] || ''}
-שעות: ${c['שעות'] || ''}
-מיקום: ${c['מיקום'] || ''}
-קהל יעד: ${c['קהל יעד'] || ''}
-מחיר: ${c['מחיר'] || ''}
-הערות: ${c['הערות'] || ''}
-        `.trim();
-      }
-    }
-    return null;
+  // הוספת הודעה לצ'אט
+  function addMessage(text, sender) {
+    const msg = document.createElement("div");
+    msg.className = `message ${sender}`;
+    msg.textContent = text;
+    messages.appendChild(msg);
+    messages.scrollTop = messages.scrollHeight;
   }
 
-  async function askOpenAI(question) {
-    const fullContext = courses.map(c => JSON.stringify(c)).join("\n") + "\n" + extraText;
-    const messages = [
-      { role: "system", content: "ענה רק על שאלות על הקורסים. אם אינך יודע, הפנה לעמוד יצירת קשר." },
-      { role: "user", content: fullContext + "\n\nשאלה: " + question }
+  // שלח הודעה ל-OpenAI
+  async function sendMessage() {
+    const userInput = input.value.trim();
+    if (!userInput) return;
+
+    addMessage(userInput, "user");
+    input.value = "";
+    
+    // הוספת שאלה להיסטוריה
+    chatHistory.push({ role: "user", content: userInput });
+
+    const systemPrompt = `
+אתה יועץ אישי חכם של אתר קורסים. ענה תמיד בצורה אנושית, נעימה ומפורטת.
+להלן מידע על הקורסים הזמינים (השתמש במידע כדי לענות):
+${courseData}
+
+בנוסף, יש לך מידע נוסף זה:
+${extraText}
+
+ענה על שאלות המשתמש בהתחשב במידע זה. אם אינך יודע לענות, אמור בצורה מנומסת: "מצטער, לא הצלחתי לעזור לך. ניתן ליצור קשר כאן: https://yuzok101.github.io/yuzukmedic/kesher.html"
+    `;
+
+    // הוספת system prompt להיסטוריה בכל פעם מחדש
+    const messagesForAPI = [
+      { role: "system", content: systemPrompt },
+      ...chatHistory
     ];
 
     try {
@@ -160,43 +208,50 @@
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${OPENAI_API_KEY}`
+          "Authorization": `Bearer ${apiKey}`
         },
         body: JSON.stringify({
           model: "gpt-3.5-turbo",
-          messages,
+          messages: messagesForAPI,
           max_tokens: 500,
-          temperature: 0.4
+          temperature: 0.6
         })
       });
-
       const data = await res.json();
-      return data.choices?.[0]?.message?.content?.trim();
-    } catch (e) {
-      console.error("שגיאה ב-GPT:", e);
-      return null;
+      const reply = data.choices?.[0]?.message?.content || "מצטער, לא הצלחתי להבין. תוכל לנסות שוב?";
+      
+      addMessage(reply, "bot");
+      // הוספת תשובת הבוט להיסטוריה
+      chatHistory.push({ role: "assistant", content: reply });
+    } catch (err) {
+      console.error("שגיאה ב-GPT:", err);
+      addMessage("אירעה שגיאה. נסה שוב מאוחר יותר.", "bot");
     }
   }
 
-  async function sendMessage() {
-    const question = chatInput.value.trim();
-    if (!question) return;
-
-    appendMessage("אתה", question);
-    chatInput.value = "";
-
-    const local = localSearch(question);
-    if (local) {
-      appendMessage("בוט", local);
-      return;
+  // הצגת/הסתרת החלונית
+  toggle.onclick = () => {
+    if (chatbox.style.display === "flex") {
+      chatbox.style.display = "none";
+      chatbox.setAttribute("aria-hidden", "true");
+    } else {
+      chatbox.style.display = "flex";
+      chatbox.setAttribute("aria-hidden", "false");
+      input.focus();
     }
+  };
 
-    const gpt = await askOpenAI(question);
-    if (gpt) appendMessage("בוט", gpt);
-    else appendMessage("בוט", `לא הצלחתי לעזור לך. צור קשר: ${CONTACT_URL}`);
+  sendBtn.onclick = sendMessage;
+  input.addEventListener("keypress", e => {
+    if (e.key === "Enter") sendMessage();
+  });
+
+  // טעינת הנתונים בהתחלה
+  async function initialize() {
+    await loadText();
+    await loadCourses();
   }
-
-  window.onload = loadData;
+  initialize();
 </script>
 
 </body>
