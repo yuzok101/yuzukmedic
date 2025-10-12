@@ -7,51 +7,20 @@
   <link rel="icon" type="image/png" href="images/logo.png">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@400;700;900&display=swap');
-
-    html, body {
-      margin:0; padding:0; height:100%;
-      font-family:'Assistant', Arial, sans-serif;
+    html, body { margin:0; padding:0; height:100%; font-family:'Assistant', Arial, sans-serif;
       background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
       display:flex; justify-content:center; align-items:center;
       overflow:hidden; text-align:center; color:white;
     }
-
-    .thankyou-container {
-      position:relative;
-      max-width:800px; width:95%;
-      padding:60px; border-radius:25px;
-      background: rgba(10,25,50,0.9);
-      box-shadow: 0 30px 70px rgba(0,0,0,0.6);
-      animation:fadeIn 1s ease forwards;
-      z-index:2;
+    .thankyou-container { position:relative; max-width:800px; width:95%; padding:60px; border-radius:25px;
+      background: rgba(10,25,50,0.9); box-shadow: 0 30px 70px rgba(0,0,0,0.6);
+      animation:fadeIn 1s ease forwards; z-index:2;
     }
-
-    h1 {
-      font-size:4rem; font-weight:900;
-      margin-bottom:30px; color:#00bfff;
-      text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
-    }
-
-    p {
-      font-size:2rem; font-weight:800;
-      color:#a0d8ef; margin-bottom:40px;
-      text-shadow: 1px 1px 8px rgba(0,0,0,0.4);
-    }
-
-    canvas {
-      position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;
-    }
-
-    @keyframes fadeIn { 
-      0% {opacity:0; transform:translateY(40px);} 
-      100% {opacity:1; transform:translateY(0);} 
-    }
-
-    @media(max-width:480px){
-      h1{font-size:2.5rem;} 
-      p{font-size:1.5rem;} 
-      .thankyou-container{padding:30px;}
-    }
+    h1 { font-size:4rem; font-weight:900; margin-bottom:30px; color:#00bfff; text-shadow: 2px 2px 10px rgba(0,0,0,0.5);}
+    p { font-size:2rem; font-weight:800; color:#a0d8ef; margin-bottom:40px; text-shadow: 1px 1px 8px rgba(0,0,0,0.4);}
+    canvas { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1; }
+    @keyframes fadeIn { 0% {opacity:0; transform:translateY(40px);} 100% {opacity:1; transform:translateY(0);} }
+    @media(max-width:480px){ h1{font-size:2.5rem;} p{font-size:1.5rem;} .thankyou-container{padding:30px;} }
   </style>
 </head>
 <body>
@@ -67,7 +36,7 @@
 if(!window.confettiLoaded){
   window.confettiLoaded = true;
 
-  // ---- קונפטי מקצועי ----
+  // ---- קונפטי ----
   const canvas = document.getElementById('confetti');
   const ctx = canvas.getContext('2d');
   let W = canvas.width = window.innerWidth;
@@ -84,6 +53,7 @@ if(!window.confettiLoaded){
       this.tiltAngleIncrement = Math.random()*0.07 + 0.05;
     }
     update() {
+      if(!this.tiltAngle) this.tiltAngle = 0;
       this.tiltAngle += this.tiltAngleIncrement;
       this.y += (Math.cos(this.d) + 3 + this.r/2)/2;
       this.x += Math.sin(this.d)/2;
@@ -117,23 +87,24 @@ if(!window.confettiLoaded){
   window.addEventListener('resize',()=>{ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; });
 
   // ---- שליחת הנתונים לגוגל שיטס ----
-  const data = JSON.parse(localStorage.getItem('registrationData') || '{}');
+  const storedData = JSON.parse(localStorage.getItem('registrationData') || '{}');
 
-  if(Object.keys(data).length){
+  if(Object.keys(storedData).length){
+    // התאמת השדות בדיוק לסקריפט ב-Google Sheets
     const payload = {
-      name1: data.name1 || "",      // שם פרטי
-      name: data.name || "",        // שם משפחה
-      idNumber: data.idNumber || "",// תעודת זהות
-      city: data.city || "",
-      phone: data.phone || "",
-      email: data.email || "",
-      course: data.course || "",
-      startDate: data.startDate || "",
-      endDate: data.endDate || "",
-      location: data.location || "",
-      paymentMethod: data.paymentMethod || "",
-      price: data.price || "",
-      notes: data.notes || ""
+      name1: storedData.firstName || storedData.name1 || "",  // שם פרטי
+      name: storedData.lastName || storedData.name || "",     // שם משפחה
+      idNumber: storedData.idNumber || "",                   // תעודת זהות
+      city: storedData.city || "",
+      phone: storedData.phone || "",
+      email: storedData.email || "",
+      course: storedData.course || storedData.courseName || "",
+      startDate: storedData.startDate || "",
+      endDate: storedData.endDate || "",
+      location: storedData.location || "",
+      paymentMethod: storedData.paymentMethod || "",
+      price: storedData.price || "",
+      notes: storedData.notes || ""
     };
 
     const params = new URLSearchParams(payload).toString();
@@ -144,8 +115,6 @@ if(!window.confettiLoaded){
       .then(txt => {
         console.log('Data sent to Google Sheets:', txt);
         localStorage.removeItem('registrationData'); // ניקוי
-
-        // הסרת ה-query string מה-URL
         if(window.history.replaceState){
           window.history.replaceState(null, null, window.location.pathname);
         }
