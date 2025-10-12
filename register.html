@@ -62,19 +62,16 @@
     <select id="paymentMethod" name="paymentMethod" required>
       <option value="" disabled selected>בחר אופן תשלום</option>
       <option value="אשראי">אשראי</option>
-      <option value="מזומן">מזומן</option>
-      <option value="העברה בנקאית">העברה בנקאית</option>
-      <option value="ביט">ביט</option>
     </select>
 
     <label for="notes">הערות</label>
     <textarea id="notes" name="notes" rows="4" placeholder="הקלד הערות אם יש..."></textarea>
 
     <button type="submit" id="submitBtn">
-      <span class="btn-text">שלח טופס הרשמה</span>
+      <span class="btn-text">עבור לתשום מאובטח </span>
     </button>
     <div class="thankyou-message" id="thankyouMessage">
-      הטופס נשלח בהצלחה (ללא מייל).
+      עובר לתשלום מאובטח
     </div>
     <div class="error-message" id="errorMessage"></div>
   </form>
@@ -172,7 +169,7 @@
       errorMsg.style.display='none';
       thankyouMsg.style.display='none';
       submitBtn.disabled=true;
-      btnText.textContent="שולח את הטופס שלך...";
+      btnText.textContent="עבור לתשלום מאובטח...";
 
       const data={
         name: form.name.value.trim(),
@@ -191,14 +188,14 @@
 
       if(!data.email || !data.phone || !data.course){
         submitBtn.disabled=false;
-        btnText.textContent="שלח הרשמה";
+        btnText.textContent="עבור לתשום מאובטח";
         errorMsg.textContent="אנא מלא את כל השדות החובה: מייל, טלפון וקורס.";
         errorMsg.style.display='block';
         return;
       }
 
       submitBtn.disabled=false;
-      btnText.textContent="שלח הרשמה";
+      btnText.textContent="המשך לתשלום מאובטח";
       thankyouMsg.style.display='block';
     });
   });
