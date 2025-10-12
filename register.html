@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const data={
       name: form.name.value.trim(),
-      numberid: form.numberid.value.trim(),
+     numberid: form.numberid?.value.trim() || '',
       address: form.address ? form.address.value.trim() : '',
       city: form.city.value.trim(),
       phone: form.phone.value.trim(),
