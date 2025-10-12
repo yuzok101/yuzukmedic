@@ -108,17 +108,16 @@ window.addEventListener('resize',()=>{ W=canvas.width=window.innerWidth; H=canva
 const data = JSON.parse(localStorage.getItem('registrationData') || '{}');
 
 if(Object.keys(data).length){
-  fetch('https://script.google.com/macros/s/AKfycbylWrhRsD6K5-U4-nQBiq7xZ0KaCPD6h9qpEyDWkKq1sv7WrYTtNUU9ShLA76DxXrdjJA/exec',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body: JSON.stringify(data)
-  })
-  .then(()=> {
-    console.log('Data sent to Google Sheets');
-    // ניקוי הנתונים אחרי שליחה
-    localStorage.removeItem('registrationData');
-  })
-  .catch(err=>console.error(err));
+  const params = new URLSearchParams(data).toString();
+  const url = `https://script.google.com/macros/s/AKfycbylWrhRsD6K5-U4-nQBiq7xZ0KaCPD6h9qpEyDWkKq1sv7WrYTtNUU9ShLA76DxXrdjJA/exec?${params}`;
+
+  fetch(url)
+    .then(res => res.text())
+    .then(t => {
+      console.log('Data sent to Google Sheets:', t);
+      localStorage.removeItem('registrationData'); // ניקוי
+    })
+    .catch(err => console.error('Error sending data:', err));
 } else {
   console.log('אין נתונים לשליחה');
 }
