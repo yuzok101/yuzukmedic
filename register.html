@@ -201,9 +201,9 @@ document.addEventListener('DOMContentLoaded', () => {
     btnText.textContent = "מעביר לתשלום...";
 
     const data = {
-        name1: form.firstName.value.trim(),   // שם פרטי
-        name: form.lastName.value.trim(),     // שם משפחה
-        idNumber: form.idNumber.value.trim(), // ת.ז
+        name1: form.firstName.value.trim(),
+        name: form.lastName.value.trim(),
+        idNumber: form.idNumber.value.trim(),
         phone: form.phone.value.trim(),
         email: form.email.value.trim(),
         city: form.city.value.trim(),
@@ -220,24 +220,49 @@ document.addEventListener('DOMContentLoaded', () => {
         price: form.price.value.trim()
     };
 
-    // בדיקה אם השדות החובה מלאים
-    if(!data.email || !data.phone || !data.course || !data.paymentMethod){
+    // --- בדיקות ---
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const idRegex = /^[0-9]{5,10}$/;
+    const yearRegex = /^(19|20)\d{2}$/;
+
+    if(!data.name1 || !data.name || !data.email || !data.phone || !data.course || !data.paymentMethod){
         submitBtn.disabled = false;
         btnText.textContent = "עבור לתשלום מאובטח";
-        errorMsg.textContent = "אנא מלא את כל השדות החובה: מייל, טלפון, קורס ואופן תשלום.";
+        errorMsg.textContent = "אנא מלא את כל השדות החובה: שם פרטי, שם משפחה, מייל, טלפון, קורס ואופן תשלום.";
         errorMsg.style.display='block';
         return;
     }
 
-    // אם אופן התשלום אינו "אשראי" – הפניה לדף kesher
+    if(!emailRegex.test(data.email)){
+        submitBtn.disabled = false;
+        btnText.textContent = "עבור לתשלום מאובטח";
+        errorMsg.textContent = "כתובת המייל לא חוקית.";
+        errorMsg.style.display='block';
+        return;
+    }
+
+    if(!idRegex.test(data.idNumber)){
+        submitBtn.disabled = false;
+        btnText.textContent = "עבור לתשלום מאובטח";
+        errorMsg.textContent = "תעודת זהות לא חוקית.";
+        errorMsg.style.display='block';
+        return;
+    }
+
+    if(data.birthYear && !yearRegex.test(data.birthYear)){
+        submitBtn.disabled = false;
+        btnText.textContent = "עבור לתשלום מאובטח";
+        errorMsg.textContent = "שנת לידה לא חוקית (יש להזין שנה בין 1900 ל-2099).";
+        errorMsg.style.display='block';
+        return;
+    }
+
     if(data.paymentMethod !== "אשראי"){
         window.location.href = "kesher";
         return;
     }
 
-    // שמירה ב-localStorage
     localStorage.setItem('registrationData', JSON.stringify(data));
-
     setTimeout(() => {
         redirectToInvoice(data);
     }, 1000);
