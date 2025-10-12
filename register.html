@@ -125,10 +125,21 @@ function redirectToInvoice(data) {
   const baseURL = 'https://user.yeshinvoice.co.il/payment/c24d17e2-fadf-4f5e-b232-00017476e1fe';
   const url = new URL(baseURL);
 
-  ['firstName','lastName','idNumber','phone','email','city','birthYear','notes','course','startDate','endDate','location','paymentMethod','price']
-  .forEach(key => {
-    url.searchParams.set(key, data[key] || '');
-  });
+  // כאן שיניתי את שם הפרמטר של השם הפרטי ל"שם"
+  url.searchParams.set('שם', data.firstName || '');
+  url.searchParams.set('שם_משפחה', data.lastName || '');
+  url.searchParams.set('תעודת_זהות', data.idNumber || '');
+  url.searchParams.set('טלפון', data.phone || '');
+  url.searchParams.set('מייל', data.email || '');
+  url.searchParams.set('עיר', data.city || '');
+  url.searchParams.set('שנת_לידה', data.birthYear || '');
+  url.searchParams.set('הערות', data.notes || '');
+  url.searchParams.set('קורס', data.course || '');
+  url.searchParams.set('תאריך_תחלה', data.startDate || '');
+  url.searchParams.set('תאריך_סיום', data.endDate || '');
+  url.searchParams.set('מיקום', data.location || '');
+  url.searchParams.set('אופן_תשלום', data.paymentMethod || '');
+  url.searchParams.set('מחיר', data.price || '');
 
   window.location.href = url.toString();
 }
