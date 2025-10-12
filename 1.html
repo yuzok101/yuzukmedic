@@ -2,60 +2,93 @@
 <html lang="he">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>התשלום אושר</title>
+  <title>תשלום אושר</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    /* רקע צבעוני עם גרדיאנט נע */
+    @import url('https://fonts.googleapis.com/css2?family=Assistant&display=swap');
     body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #a1c4fd, #c2e9fb);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
-      font-family: 'Arial', sans-serif;
+      font-family: 'Assistant', sans-serif;
+      background: linear-gradient(to bottom right, #e3f2fd, #bbdefb);
+      text-align: center;
+      direction: rtl;
+      color: #1c3b6b;
+      padding-top: 100px;
     }
-
-    @keyframes gradientBG {
-      0% {background-position: 0% 50%;}
-      50% {background-position: 100% 50%;}
-      100% {background-position: 0% 50%;}
-    }
-
-    /* כיתוב גדול וצבעוני */
-    h1 {
-      font-size: 5rem;
-      color: #fff;
-      text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
-      animation: textPop 2s ease infinite alternate;
-    }
-
-    @keyframes textPop {
-      0% {transform: scale(1);}
-      50% {transform: scale(1.1);}
-      100% {transform: scale(1);}
-    }
-
-    /* הוספת צבע משתנה לכיתוב */
-    h1 span {
+    .container {
       display: inline-block;
-      animation: colorShift 3s infinite;
+      background: white;
+      border-radius: 14px;
+      padding: 40px 50px;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+      animation: fadeIn 1s ease;
     }
-
-    @keyframes colorShift {
-      0% {color: #ff6b6b;}
-      25% {color: #feca57;}
-      50% {color: #48dbfb;}
-      75% {color: #1dd1a1;}
-      100% {color: #ff6b6b;}
+    h1 {
+      font-size: 2.4rem;
+      color: #0d47a1;
+      margin-bottom: 20px;
+    }
+    p {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
+    // אתחול EmailJS
+    emailjs.init("miOp6iToFLfbH1jk5");
+
+    // פונקציה לקריאת פרמטרים מהכתובת
+    function getQueryParams() {
+      const params = {};
+      const query = window.location.search.substring(1);
+      query.split("&").forEach(pair => {
+        const [key, value] = pair.split("=");
+        if (key) params[decodeURIComponent(key)] = decodeURIComponent(value || "");
+      });
+      return params;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const params = getQueryParams();
+
+      // מציג על המסך
+      document.getElementById("name").textContent = params.name || "לקוח";
+      document.getElementById("course").textContent = params.course || "קורס";
+      document.getElementById("amount").textContent = params.amount || "0";
+      document.getElementById("startDate").textContent = params.startDate || "";
+      document.getElementById("endDate").textContent = params.endDate || "";
+      document.getElementById("location").textContent = params.location || "";
+
+      // שולח את המייל אליך
+      const data = {
+        name: params.name || "",
+        phone: params.phone || "",
+        email: params.email || "",
+        course: params.course || "",
+        startDate: params.startDate || "",
+        endDate: params.endDate || "",
+        location: params.location || "",
+        amount: params.amount || ""
+      };
+
+      emailjs.send("service_45f1wyc", "template_18zogtj", data)
+        .then(() => console.log("נשלח מייל אחרי תשלום בהצלחה"))
+        .catch(() => console.error("שגיאה בשליחת מייל"));
+    });
+  </script>
 </head>
 <body>
-  <h1>
-    <span>הת</span><span>שו</span><span>לם</span> <span>או</span><span>שר</span>
-  </h1>
+  <div class="container">
+    <h1>✅ התשלום אושר בהצלחה!</h1>
+    <p>תודה לך, <strong id="name"></strong>.</p>
+    <p>ההרשמה לקורס <strong id="course"></strong> הושלמה.</p>
+    <p>תאריכים: <span id="startDate"></span> - <span id="endDate"></span></p>
+    <p>מיקום: <span id="location"></span></p>
+    <p>סכום ששולם: <strong id="amount"></strong> ₪</p>
+  </div>
 </body>
 </html>
