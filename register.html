@@ -223,8 +223,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // שמירת הנתונים ב-sessionStorage כדי שנוכל לשלוח אחרי התשלום
-sessionStorage.setItem('registrationData', JSON.stringify(data));
+    // שמירת הנתונים ב-localStorage כדי שנוכל לשלוח אחרי התשלום
+localStorage.setItem('registrationData', JSON.stringify(data));
 
     redirectToInvoice(data);
   });
