@@ -7,7 +7,8 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Assistant&display=swap');
     html, body { margin:0; padding:0; height:100%; font-family:'Assistant', Arial, sans-serif; direction:rtl;
-      background:url('images/11.jpg') no-repeat center center fixed; background-size:cover; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      background:url('images/11.jpg') no-repeat center center fixed; background-size:cover;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
     .overlay { background: rgba(255,255,255,0.6); min-height:100vh; padding:40px 15px; box-sizing:border-box; display:flex; justify-content:center; align-items:center; }
     form { position:relative; background:rgba(255 255 255 / 0.7); padding:35px 30px; border-radius:14px; max-width:600px; width:100%; box-shadow:0 8px 25px rgba(0,0,0,0.25); animation:fadeInUp 1s ease forwards; }
@@ -117,22 +118,17 @@
     document.getElementById('location').value = courseObj.location || '';
   }
 
+  // הפניה ל-YesInvoice עם כל הנתונים ב-URL
   function redirectToInvoice(data) {
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = 'https://user.yeshinvoice.co.il/payment/7fa9075d-1b2a-43aa-8078-173c2ae9eb2c';
+    const baseURL = 'https://user.yeshinvoice.co.il/payment/7fa9075d-1b2a-43aa-8078-173c2ae9eb2c';
+    const url = new URL(baseURL);
 
     ['name','numberid','address','city','phone','mobile','email','course','startDate','endDate','location','paymentMethod','price','notes']
     .forEach(key => {
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = key;
-      input.value = data[key] || '';
-      form.appendChild(input);
+      url.searchParams.set(key, data[key] || '');
     });
 
-    document.body.appendChild(form);
-    form.submit();
+    window.location.href = url.toString();
   }
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -192,14 +188,12 @@
 
     const form=document.getElementById('registrationForm');
     const submitBtn=document.getElementById('submitBtn');
-    const thankyouMsg=document.getElementById('thankyouMessage');
     const errorMsg=document.getElementById('errorMessage');
     const btnText=submitBtn.querySelector('.btn-text');
 
     form.addEventListener('submit', function(e){
       e.preventDefault();
       errorMsg.style.display='none';
-      thankyouMsg.style.display='none';
       submitBtn.disabled=true;
       btnText.textContent="מעביר לתשלום...";
 
@@ -231,7 +225,7 @@
         return;
       }
 
-      // שליחה אוטומטית ל-YesInvoice
+      // הפניה ל-YesInvoice דרך URL
       redirectToInvoice(data);
     });
   });
