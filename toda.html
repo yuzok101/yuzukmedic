@@ -36,7 +36,7 @@
 if(!window.confettiLoaded){
   window.confettiLoaded = true;
 
-  // ---- קונפטי (לוגיקה גרפית) ----
+  // ---- קונפטי ----
   const canvas = document.getElementById('confetti');
   const ctx = canvas.getContext('2d');
   let W = canvas.width = window.innerWidth;
@@ -86,20 +86,20 @@ if(!window.confettiLoaded){
   drawConfetti();
   window.addEventListener('resize',()=>{ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; });
 
-  // ---- שליחת הנתונים לגוגל שיטס (התיקון הוא כאן!) ----
+  // ---- שליחת הנתונים לגוגל שיטס ----
   const storedData = JSON.parse(localStorage.getItem('registrationData') || '{}');
 
   if(Object.keys(storedData).length){
-    // *** האובייקט payload תוקן וכולל עכשיו את birthYear ***
+    // *** קטע הקוד הזה תוקן וכולל את birthYear בשורה הנכונה ***
     const payload = {
-      name1: storedData.firstName || storedData.name1 || "",  
-      name: storedData.lastName || storedData.name || "",     
-      idNumber: storedData.idNumber || "",                   
-      city: storedData.city || "",
-      phone: storedData.phone || "",
-      email: storedData.email || "",
-      **birthYear: storedData.birthYear || "",** // 💥 הוספה קריטית של שנת הלידה
-      course: storedData.course || storedData.courseName || "",
+      name1: storedData.firstName || storedData.name1 || "",  // 1. שם פרטי
+      name: storedData.lastName || storedData.name || "",     // 2. שם משפחה
+      idNumber: storedData.idNumber || "",                   // 3. תעודת זהות
+      city: storedData.city || "",                            // 4. עיר
+      phone: storedData.phone || "",                          // 5. טלפון
+      email: storedData.email || "",                          // 6. מייל
+      **birthYear: storedData.birthYear || "",** // 7. שנת לידה (התוספת)
+      course: storedData.course || storedData.courseName || "",// 8. קורס
       startDate: storedData.startDate || "",
       endDate: storedData.endDate || "",
       location: storedData.location || "",
@@ -109,7 +109,6 @@ if(!window.confettiLoaded){
     };
 
     const params = new URLSearchParams(payload).toString();
-    // ודא שכתובת ה-URL הזו היא הכתובת המעודכנת של פריסת ה-Apps Script שלך
     const url = `https://script.google.com/macros/s/AKfycbxJyCauhe_6PBPmPrpBhNX8dYwG4v7ZSS-Er20ld7MNJtWlc0H4T3YK4Fpf4407W6zNDA/exec?${params}`;
 
     fetch(url)
