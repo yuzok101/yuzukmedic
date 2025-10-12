@@ -224,6 +224,10 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+
+    // שמירת הנתונים ב-sessionStorage כדי שנוכל לשלוח אחרי התשלום
+sessionStorage.setItem('registrationData', JSON.stringify(data));
+
     redirectToInvoice(data);
   });
 });
