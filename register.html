@@ -1,3 +1,68 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>טופס הרשמה</title>
+  <style>
+    /* כל הסגנונות שלך נשמרים כפי שהם */
+  </style>
+
+  <!-- טעינת ספריית EmailJS -->
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+</head>
+<body>
+<div class="overlay">
+  <form id="registrationForm" autocomplete="off" spellcheck="false" novalidate>
+    <h2>טופס הרשמה לקורס</h2>
+
+    <label for="name">שם מלא <span style="color:red">*</span></label>
+    <input type="text" id="name" name="name" autocomplete="name" />
+
+    <label for="phone">טלפון <span style="color:red">*</span></label>
+    <input type="tel" id="phone" name="phone" />
+
+    <label for="email">אימייל <span style="color:red">*</span></label>
+    <input type="email" id="email" name="email" />
+
+    <label for="courseSelect">בחר קורס</label>
+    <select id="courseSelect" name="courseSelect" style="display:none;">
+      <option value="">-- בחר קורס מהרשימה --</option>
+    </select>
+    <input type="text" id="courseName" name="courseName" readonly style="display:none;" />
+
+    <label for="startDate">תאריך התחלה</label>
+    <input type="text" id="startDate" name="startDate" readonly />
+
+    <label for="endDate">תאריך סיום</label>
+    <input type="text" id="endDate" name="endDate" readonly />
+
+    <label for="location">מיקום</label>
+    <input type="text" id="location" name="location" readonly />
+
+    <label for="paymentMethod">אופן תשלום</label>
+    <select id="paymentMethod" name="paymentMethod" required>
+      <option value="" disabled selected>בחר אופן תשלום</option>
+      <option value="אשראי">אשראי</option>
+      <option value="מזומן">מזומן</option>
+      <option value="העברה בנקאית">העברה בנקאית</option>
+      <option value="ביט">ביט</option>
+    </select>
+
+    <label for="notes">הערות</label>
+    <textarea id="notes" name="notes" rows="4"></textarea>
+
+    <button type="submit" id="submitBtn">
+      <span class="btn-text">שלח טופס הרשמה</span>
+      <svg class="plane-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:none;">
+        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+      </svg>
+    </button>
+    <div class="thankyou-message" id="thankyouMessage">השליחה הצליחה, ניצור איתך קשר בהקדם.</div>
+    <div class="error-message" id="errorMessage"></div>
+  </form>
+</div>
+
 <script>
 emailjs.init("miOp6iToFLfbH1jk5");
 
@@ -106,22 +171,17 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // שליחה ל־EmailJS
     emailjs.send("service_45f1wyc", "template_18zogtj", data)
       .then(() => {
-        // שליחה ל־Google Sheets
         return fetch("https://script.google.com/macros/s/AKfycbw13Ym4c0MLFGruTaq7WT08qoAqytQ5E66J6NiAs-H9muwnjkb1cvF2EgRUfdL2sr6UGQ/exec", {
           method: "POST",
           body: JSON.stringify(data)
         });
       })
       .then(() => {
-        // הפניה ליש חשבונית עם URL להחזרה אחרי התשלום
         const successUrl = "https://yuzok101.github.io/yuzukmedic/1";
         const basePayUrl = "https://user.yeshinvoice.co.il/payment/7fa9075d-1b2a-43aa-8078-173c2ae9eb2c";
-        const payUrl = `${basePayUrl}?name=${encodeURIComponent(data.name)}&numberid=${encodeURIComponent("")}&address=${encodeURIComponent("")}&city=${encodeURIComponent("")}&phone=${encodeURIComponent(data.phone)}&mobile=${encodeURIComponent(data.phone)}&email=${encodeURIComponent(data.email)}&price=${encodeURIComponent("")}&return_url=${encodeURIComponent(successUrl)}`;
-
-        // הפנייה לדף התשלום
+        const payUrl = `${basePayUrl}?name=${encodeURIComponent(data.name)}&numberid=&address=&city=&phone=${encodeURIComponent(data.phone)}&mobile=${encodeURIComponent(data.phone)}&email=${encodeURIComponent(data.email)}&price=&return_url=${encodeURIComponent(successUrl)}`;
         window.location.href = payUrl;
       })
       .catch(() => {
@@ -134,3 +194,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
+</body>
+</html>
