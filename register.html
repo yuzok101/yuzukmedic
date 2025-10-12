@@ -213,10 +213,10 @@ document.addEventListener('DOMContentLoaded', () => {
       notes: form.notes.value.trim()
     };
 
-    if(!data.email || !data.phone || !data.course || !data.numberid){
+    if(!data.email || !data.phone || !data.course ){
       submitBtn.disabled=false;
       btnText.textContent="עבור לתשלום מאובטח";
-      errorMsg.textContent="אנא מלא את כל השדות החובה: מייל, טלפון, קורס ותעודת זהות.";
+      errorMsg.textContent="אנא מלא את כל השדות החובה: מייל, טלפון, וקורס.";
       errorMsg.style.display='block';
       return;
     }
