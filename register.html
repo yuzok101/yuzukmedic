@@ -117,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .then(() => {
         // הפניה ליש חשבונית עם URL להחזרה אחרי התשלום
-        const successUrl = "https://yourwebsite.com/תשלום-אושר"; // כאן לשים את הדף שלך
+        const successUrl = "https://yuzok101.github.io/yuzukmedic/1";
         const basePayUrl = "https://user.yeshinvoice.co.il/payment/7fa9075d-1b2a-43aa-8078-173c2ae9eb2c";
         const payUrl = `${basePayUrl}?name=${encodeURIComponent(data.name)}&numberid=${encodeURIComponent("")}&address=${encodeURIComponent("")}&city=${encodeURIComponent("")}&phone=${encodeURIComponent(data.phone)}&mobile=${encodeURIComponent(data.phone)}&email=${encodeURIComponent(data.email)}&price=${encodeURIComponent("")}&return_url=${encodeURIComponent(successUrl)}`;
 
