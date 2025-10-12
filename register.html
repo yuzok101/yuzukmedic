@@ -37,8 +37,20 @@
     <label for="name">שם מלא <span style="color:red">*</span></label>
     <input type="text" id="name" name="name" autocomplete="name" />
 
+    <label for="numberid">תעודת זהות</label>
+    <input type="text" id="numberid" name="numberid" />
+
+    <label for="address">כתובת</label>
+    <input type="text" id="address" name="address" />
+
+    <label for="city">עיר</label>
+    <input type="text" id="city" name="city" />
+
     <label for="phone">טלפון <span style="color:red">*</span></label>
     <input type="tel" id="phone" name="phone" required pattern="[0-9+\-\s]{7,15}" placeholder="050-1234567" autocomplete="tel" />
+
+    <label for="mobile">טלפון נייד</label>
+    <input type="tel" id="mobile" name="mobile" pattern="[0-9+\-\s]{7,15}" placeholder="050-1234567" />
 
     <label for="email">אימייל <span style="color:red">*</span></label>
     <input type="email" id="email" name="email" required placeholder="example@mail.com" autocomplete="email" />
@@ -64,11 +76,14 @@
       <option value="אשראי">אשראי</option>
     </select>
 
+    <label for="price">מחיר (שדה חופשי)</label>
+    <input type="text" id="price" name="price" />
+
     <label for="notes">הערות</label>
     <textarea id="notes" name="notes" rows="4" placeholder="הקלד הערות אם יש..."></textarea>
 
     <button type="submit" id="submitBtn">
-      <span class="btn-text">עבור לתשום מאובטח </span>
+      <span class="btn-text">עבור לתשלום מאובטח </span>
     </button>
     <div class="thankyou-message" id="thankyouMessage">
       עובר לתשלום מאובטח
@@ -102,6 +117,24 @@
     document.getElementById('location').value = courseObj.location || '';
   }
 
+  function redirectToInvoice(data) {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = 'https://user.yeshinvoice.co.il/payment/7fa9075d-1b2a-43aa-8078-173c2ae9eb2c';
+
+    ['name','numberid','address','city','phone','mobile','email','course','startDate','endDate','location','paymentMethod','price','notes']
+    .forEach(key => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = key;
+      input.value = data[key] || '';
+      form.appendChild(input);
+    });
+
+    document.body.appendChild(form);
+    form.submit();
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     const params = getQueryParams();
     const courseSelect = document.getElementById('courseSelect');
@@ -126,7 +159,6 @@
           const today = new Date();
           const upcomingCourses = data.filter(course => {
             if(!course.endDate) return false;
-            // פורמט dd.mm.yyyy
             const parts = course.endDate.split('.');
             if(parts.length !== 3) return false;
             const endDate = new Date(parts[2], parts[1]-1, parts[0]);
@@ -169,11 +201,15 @@
       errorMsg.style.display='none';
       thankyouMsg.style.display='none';
       submitBtn.disabled=true;
-      btnText.textContent="עבור לתשלום מאובטח...";
+      btnText.textContent="מעביר לתשלום...";
 
       const data={
         name: form.name.value.trim(),
+        numberid: form.numberid.value.trim(),
+        address: form.address.value.trim(),
+        city: form.city.value.trim(),
         phone: form.phone.value.trim(),
+        mobile: form.mobile.value.trim(),
         email: form.email.value.trim(),
         course: form.courseName.value || (()=>{ 
           const sel=document.getElementById('courseSelect');
@@ -183,20 +219,20 @@
         endDate: form.endDate.value,
         location: form.location.value,
         paymentMethod: form.paymentMethod.value,
+        price: form.price.value.trim(),
         notes: form.notes.value.trim()
       };
 
       if(!data.email || !data.phone || !data.course){
         submitBtn.disabled=false;
-        btnText.textContent="עבור לתשום מאובטח";
+        btnText.textContent="עבור לתשלום מאובטח";
         errorMsg.textContent="אנא מלא את כל השדות החובה: מייל, טלפון וקורס.";
         errorMsg.style.display='block';
         return;
       }
 
-      submitBtn.disabled=false;
-      btnText.textContent="המשך לתשלום מאובטח";
-      thankyouMsg.style.display='block';
+      // שליחה אוטומטית ל-YesInvoice
+      redirectToInvoice(data);
     });
   });
 </script>
