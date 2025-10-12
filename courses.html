@@ -508,7 +508,7 @@
         `;
 
         div.addEventListener('click', (e) => {
-          const query = `type=${course.type}&startDate=${course.startDate}&endDate=${course.endDate}&location=${course.location}`;
+         const query = `type=${encodeURIComponent(course.type)}&startDate=${encodeURIComponent(course.startDate)}&endDate=${encodeURIComponent(course.endDate)}&location=${encodeURIComponent(course.location)}&price=${encodeURIComponent(course.price)}`;
           window.location.href = `register.html?${query}`;
         });
 
@@ -533,3 +533,4 @@
   nl_contact = "n:יוזוק מדיק|p:0533562608";
 </script>
 <script src="https://yuzok101.github.io/yuzukmedic/data/nagishli.js" charset="utf-8" defer></script>
+
