@@ -36,21 +36,32 @@
   <form id="registrationForm" autocomplete="off" spellcheck="false" novalidate>
     <h2>טופס הרשמה לקורס</h2>
 
-    <label for="name">שם התלמיד <span style="color:red">*</span></label>
-    <input type="text" id="name" name="name" autocomplete="name" />
+    <!-- סדר חדש -->
+    <label for="firstName">שם פרטי <span style="color:red">*</span></label>
+    <input type="text" id="firstName" name="firstName" autocomplete="given-name" />
 
-    <label for="age">שנת לידת - תלמיד <span style="color:red">*</span></label>
-    <input type="text" id="age" name="age" autocomplete="age" />
+    <label for="lastName">שם משפחה <span style="color:red">*</span></label>
+    <input type="text" id="lastName" name="lastName" autocomplete="family-name" />
 
-    <label for="city">עיר מגורים</label>
-    <input type="text" id="city" name="city" />
+    <label for="idNumber">ת.ז <span style="color:red">*</span></label>
+    <input type="text" id="idNumber" name="idNumber" />
 
     <label for="phone">טלפון <span style="color:red">*</span></label>
     <input type="tel" id="phone" name="phone" required pattern="[0-9+\-\s]{7,15}" placeholder="050-1234567" autocomplete="tel" />
 
-    <label for="email">אימייל <span style="color:red">*</span></label>
+    <label for="email">מייל <span style="color:red">*</span></label>
     <input type="email" id="email" name="email" required placeholder="example@mail.com" autocomplete="email" />
 
+    <label for="city">עיר</label>
+    <input type="text" id="city" name="city" />
+
+    <label for="birthYear">שנת לידה</label>
+    <input type="text" id="birthYear" name="birthYear" />
+
+    <label for="notes">הערות</label>
+    <textarea id="notes" name="notes" rows="4" placeholder="הקלד הערות אם יש..."></textarea>
+
+    <!-- קורסים ותשלום -->
     <label for="courseSelect">בחר קורס</label>
     <select id="courseSelect" name="courseSelect">
       <option value="">-- בחר קורס מהרשימה --</option>
@@ -74,9 +85,6 @@
 
     <label for="price">מחיר</label>
     <input type="text" id="price" name="price" readonly />
-
-    <label for="notes">הערות</label>
-    <textarea id="notes" name="notes" rows="4" placeholder="הקלד הערות אם יש..."></textarea>
 
     <button type="submit" id="submitBtn">
       <span class="btn-text">עבור לתשלום מאובטח </span>
@@ -117,7 +125,7 @@ function redirectToInvoice(data) {
   const baseURL = 'https://user.yeshinvoice.co.il/payment/c24d17e2-fadf-4f5e-b232-00017476e1fe';
   const url = new URL(baseURL);
 
-  ['name','numberid','address','city','phone','mobile','email','course','startDate','endDate','location','paymentMethod','price','notes']
+  ['firstName','lastName','idNumber','phone','email','city','birthYear','notes','course','startDate','endDate','location','paymentMethod','price']
   .forEach(key => {
     url.searchParams.set(key, data[key] || '');
   });
@@ -192,13 +200,14 @@ document.addEventListener('DOMContentLoaded', () => {
     btnText.textContent = "מעביר לתשלום...";
 
     const data = {
-        name: form.name.value.trim(),
-        age: form.age.value.trim(),
-        address: form.address ? form.address.value.trim() : '',
-        city: form.city.value.trim(),
+        firstName: form.firstName.value.trim(),
+        lastName: form.lastName.value.trim(),
+        idNumber: form.idNumber.value.trim(),
         phone: form.phone.value.trim(),
-        mobile: form.mobile ? form.mobile.value.trim() : '',
         email: form.email.value.trim(),
+        city: form.city.value.trim(),
+        birthYear: form.birthYear.value.trim(),
+        notes: form.notes.value.trim(),
         course: form.courseName.value || (() => {
             const sel = document.getElementById('courseSelect');
             return sel.options[sel.selectedIndex] ? JSON.parse(sel.value).type : '';
@@ -207,8 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
         endDate: form.endDate.value,
         location: form.location.value,
         paymentMethod: form.paymentMethod.value,
-        price: form.price.value.trim(),
-        notes: form.notes.value.trim()
+        price: form.price.value.trim()
     };
 
     if(!data.email || !data.phone || !data.course ){
@@ -219,10 +227,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
-    // שמירה ב-localStorage
     localStorage.setItem('registrationData', JSON.stringify(data));
 
-    // השהייה של שנייה לפני המעבר
     setTimeout(() => {
         redirectToInvoice(data);
     }, 1000);
