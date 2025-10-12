@@ -3,104 +3,59 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>תשלום אושר</title>
+  <title>התשלום אושר</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
-
+    /* רקע צבעוני עם גרדיאנט נע */
     body {
       margin: 0;
-      font-family: 'Varela Round', sans-serif;
-      background: linear-gradient(135deg, #ffefba, #ffffff);
       height: 100vh;
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
-      overflow: hidden;
-      position: relative;
-      text-align: center;
+      background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #a1c4fd, #c2e9fb);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      font-family: 'Arial', sans-serif;
     }
 
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    /* כיתוב גדול וצבעוני */
     h1 {
-      font-size: 48px;
-      color: #27ae60;
-      margin: 0;
-      animation: bounce 2s infinite;
+      font-size: 5rem;
+      color: #fff;
+      text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+      animation: textPop 2s ease infinite alternate;
     }
 
-    p {
-      font-size: 24px;
-      margin-top: 20px;
-      color: #333;
-      animation: fadeIn 3s ease-in-out;
+    @keyframes textPop {
+      0% {transform: scale(1);}
+      50% {transform: scale(1.1);}
+      100% {transform: scale(1);}
     }
 
-    /* אנימציות */
-    @keyframes bounce {
-      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-      40% { transform: translateY(-20px); }
-      60% { transform: translateY(-10px); }
+    /* הוספת צבע משתנה לכיתוב */
+    h1 span {
+      display: inline-block;
+      animation: colorShift 3s infinite;
     }
 
-    @keyframes fadeIn {
-      0% { opacity: 0; }
-      100% { opacity: 1; }
+    @keyframes colorShift {
+      0% {color: #ff6b6b;}
+      25% {color: #feca57;}
+      50% {color: #48dbfb;}
+      75% {color: #1dd1a1;}
+      100% {color: #ff6b6b;}
     }
-
-    /* בועות צבעוניות */
-    .bubble {
-      position: absolute;
-      border-radius: 50%;
-      opacity: 0.7;
-      animation: rise 15s infinite linear;
-    }
-
-    @keyframes rise {
-      0% { transform: translateY(100vh) scale(0.5); opacity: 0.7; }
-      100% { transform: translateY(-50vh) scale(1); opacity: 0; }
-    }
-
-    /* כפתור למטה */
-    .btn {
-      margin-top: 40px;
-      padding: 15px 35px;
-      font-size: 20px;
-      color: white;
-      background: #ff6b6b;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      text-decoration: none;
-      transition: transform 0.2s, background 0.3s;
-      animation: fadeIn 4s ease-in-out;
-    }
-
-    .btn:hover {
-      transform: scale(1.1);
-      background: #e74c3c;
-    }
-
-    .btn:active {
-      transform: scale(0.95);
-    }
-
   </style>
 </head>
 <body>
-
-  <div class="bubble" style="width: 80px; height: 80px; background: #ff6b6b; left: 10%; animation-duration: 12s;"></div>
-  <div class="bubble" style="width: 50px; height: 50px; background: #6bc1ff; left: 30%; animation-duration: 18s;"></div>
-  <div class="bubble" style="width: 100px; height: 100px; background: #f1c40f; left: 50%; animation-duration: 20s;"></div>
-  <div class="bubble" style="width: 60px; height: 60px; background: #8e44ad; left: 70%; animation-duration: 16s;"></div>
-  <div class="bubble" style="width: 90px; height: 90px; background: #2ecc71; left: 85%; animation-duration: 14s;"></div>
-
-  <div>
-    <h1>התשלום אושר!</h1>
-    <p>ניפגש בהמשך…</p>
-
-    <!-- כפתור לצפייה בכל המוצרים -->
-    <a href="https://yourwebsite.com/products" class="btn">צפייה בכל המוצרים שלנו</a>
-  </div>
-
+  <h1>
+    <span>הת</span><span>שו</span><span>לם</span> <span>או</span><span>שר</span>
+  </h1>
 </body>
 </html>
