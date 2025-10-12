@@ -108,7 +108,7 @@ window.addEventListener('resize',()=>{ W=canvas.width=window.innerWidth; H=canva
 const data = JSON.parse(localStorage.getItem('registrationData') || '{}');
 
 if(Object.keys(data).length){
-  fetch('https://script.google.com/macros/s/AKfycbxGa2zDf2kng6gGla9JoRhK86zozGiacCeIXdFe0hWvgR_5Hcdb5gQUOGMyeGaKAU6g3g/exec', {
+  fetch('https://script.google.com/macros/s/AKfycbyE1yo5ORhzuQUnfQ83CkB8gpL5ZCppcSJqs2JBl6afv8CcXrx6O8YQRpmmD_NccUKK-A/exec', {
     method: 'POST',
     mode: 'no-cors', // מאפשר לשלוח בלי בעיית CORS
     headers: { 'Content-Type': 'application/json' },
@@ -126,4 +126,5 @@ if(Object.keys(data).length){
 
 </body>
 </html>
+
 
