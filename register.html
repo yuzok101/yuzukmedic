@@ -6,67 +6,26 @@
   <title>טופס הרשמה</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Assistant&display=swap');
-    html, body {
-      margin: 0; padding: 0; height: 100%;
-      font-family: 'Assistant', Arial, sans-serif;
-      direction: rtl;
-      background: url('images/11.jpg') no-repeat center center fixed;
-      background-size: cover;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+    html, body { margin:0; padding:0; height:100%; font-family:'Assistant', Arial, sans-serif; direction:rtl;
+      background:url('images/11.jpg') no-repeat center center fixed; background-size:cover; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
     }
-    .overlay {
-      background: rgba(255, 255, 255, 0.6);
-      min-height: 100vh;
-      padding: 40px 15px;
-      box-sizing: border-box;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    form {
-      position: relative;
-      background: rgba(255 255 255 / 0.7);
-      padding: 35px 30px;
-      border-radius: 14px;
-      max-width: 600px;
-      width: 100%;
-      box-shadow: 0 8px 25px rgba(0,0,0,0.25);
-      animation: fadeInUp 1s ease forwards;
-    }
-    h2 { text-align: center; margin-bottom: 28px; color: #1c3b6b; font-weight: 700; font-size: 2.2rem; animation: fadeIn 1.3s ease forwards; }
-    label { display: block; margin-top: 18px; font-weight: 700; color: #1c3b6b; font-size: 1.15rem; animation: fadeInLeft 1.5s ease forwards; }
-    input, select, textarea {
-      width: 100%; margin-top: 8px; padding: 12px 16px; font-size: 1.05rem;
-      border-radius: 8px; border: 2px solid #1c3b6b; transition: border-color 0.3s ease;
-      animation: fadeInRight 1.6s ease forwards; background: rgba(255,255,255,0.95); color: #1c3b6b;
-      box-sizing: border-box;
-    }
-    input:focus, select:focus, textarea:focus {
-      outline: none; border-color: #004080; box-shadow: 0 0 10px #004080; background: #fff;
-    }
-    textarea { resize: vertical; }
-    button {
-      position: relative; overflow: hidden; width: 100%; margin-top: 32px; padding: 16px;
-      font-size: 1.3rem; background-color: #1c3b6b; color: white; border: none; border-radius: 10px;
-      cursor: pointer; font-weight: 800; letter-spacing: 0.07em; transition: background-color 0.4s ease, box-shadow 0.3s ease;
-      animation: fadeInUp 1.8s ease forwards; display: flex; justify-content: center; align-items: center;
-    }
-    button:hover:not(:disabled), button:focus:not(:disabled) { background-color: #004080; box-shadow: 0 0 18px #004080; }
-    button:disabled { cursor: default; opacity: 0.7; }
-    .thankyou-message { display: none; margin-top: 15px; color: green; font-size: 1.4rem; font-weight: 700; text-align: center; animation: fadeIn 1s ease forwards; }
-    .error-message { display: none; margin-top: 15px; color: red; font-weight: 700; text-align: center; animation: fadeIn 1s ease forwards; }
-    @keyframes fadeInUp { 0% {opacity: 0; transform: translateY(30px);} 100% {opacity: 1; transform: translateY(0);} }
-    @keyframes fadeInLeft { 0% {opacity: 0; transform: translateX(20px);} 100% {opacity: 1; transform: translateX(0);} }
-    @keyframes fadeInRight { 0% {opacity: 0; transform: translateX(-20px);} 100% {opacity: 1; transform: translateX(0);} }
-    @keyframes fadeIn { 0% {opacity: 0;} 100% {opacity: 1;} }
-    @media (max-width: 480px) {
-      form { padding: 25px 20px; border-radius: 12px; }
-      h2 { font-size: 1.7rem; }
-      label { font-size: 1rem; }
-      input, select, textarea { font-size: 1rem; padding: 10px 14px; }
-      button { font-size: 1.15rem; padding: 14px; }
-    }
+    .overlay { background: rgba(255,255,255,0.6); min-height:100vh; padding:40px 15px; box-sizing:border-box; display:flex; justify-content:center; align-items:center; }
+    form { position:relative; background:rgba(255 255 255 / 0.7); padding:35px 30px; border-radius:14px; max-width:600px; width:100%; box-shadow:0 8px 25px rgba(0,0,0,0.25); animation:fadeInUp 1s ease forwards; }
+    h2 { text-align:center; margin-bottom:28px; color:#1c3b6b; font-weight:700; font-size:2.2rem; animation:fadeIn 1.3s ease forwards; }
+    label { display:block; margin-top:18px; font-weight:700; color:#1c3b6b; font-size:1.15rem; animation:fadeInLeft 1.5s ease forwards; }
+    input, select, textarea { width:100%; margin-top:8px; padding:12px 16px; font-size:1.05rem; border-radius:8px; border:2px solid #1c3b6b; transition:border-color 0.3s ease; animation:fadeInRight 1.6s ease forwards; background:rgba(255,255,255,0.95); color:#1c3b6b; box-sizing:border-box; }
+    input:focus, select:focus, textarea:focus { outline:none; border-color:#004080; box-shadow:0 0 10px #004080; background:#fff; }
+    textarea { resize:vertical; }
+    button { position:relative; overflow:hidden; width:100%; margin-top:32px; padding:16px; font-size:1.3rem; background-color:#1c3b6b; color:white; border:none; border-radius:10px; cursor:pointer; font-weight:800; letter-spacing:0.07em; transition:background-color 0.4s ease, box-shadow 0.3s ease; animation:fadeInUp 1.8s ease forwards; display:flex; justify-content:center; align-items:center; }
+    button:hover:not(:disabled), button:focus:not(:disabled) { background-color:#004080; box-shadow:0 0 18px #004080; }
+    button:disabled { cursor:default; opacity:0.7; }
+    .thankyou-message { display:none; margin-top:15px; color:green; font-size:1.4rem; font-weight:700; text-align:center; animation:fadeIn 1s ease forwards; }
+    .error-message { display:none; margin-top:15px; color:red; font-weight:700; text-align:center; animation:fadeIn 1s ease forwards; }
+    @keyframes fadeInUp { 0% {opacity:0; transform:translateY(30px);} 100% {opacity:1; transform:translateY(0);} }
+    @keyframes fadeInLeft { 0% {opacity:0; transform:translateX(20px);} 100% {opacity:1; transform:translateX(0);} }
+    @keyframes fadeInRight { 0% {opacity:0; transform:translateX(-20px);} 100% {opacity:1; transform:translateX(0);} }
+    @keyframes fadeIn { 0% {opacity:0;} 100% {opacity:1;} }
+    @media (max-width:480px) { form{padding:25px 20px;border-radius:12px;} h2{font-size:1.7rem;} label{font-size:1rem;} input, select, textarea{font-size:1rem; padding:10px 14px;} button{font-size:1.15rem;padding:14px;} }
   </style>
 </head>
 <body>
@@ -126,17 +85,17 @@
     const params = {};
     const query = window.location.search.substring(1);
     query.split("&").forEach(pair => {
-      const [key, value] = pair.split("=");
-      if (key) params[decodeURIComponent(key)] = decodeURIComponent(value || "");
+      const [key,value] = pair.split("=");
+      if(key) params[decodeURIComponent(key)] = decodeURIComponent(value||"");
     });
     return params;
   }
 
   function clearCourseFields() {
-    document.getElementById('courseName').value = '';
-    document.getElementById('startDate').value = '';
-    document.getElementById('endDate').value = '';
-    document.getElementById('location').value = '';
+    document.getElementById('courseName').value='';
+    document.getElementById('startDate').value='';
+    document.getElementById('endDate').value='';
+    document.getElementById('location').value='';
   }
 
   function fillCourseFields(courseObj) {
@@ -151,63 +110,76 @@
     const courseSelect = document.getElementById('courseSelect');
     const courseNameInput = document.getElementById('courseName');
 
-    if (params.type && params.startDate && params.endDate && params.location) {
+    if(params.type && params.startDate && params.endDate && params.location) {
       fillCourseFields(params);
-      courseNameInput.style.display = 'block';
-      courseSelect.style.display = 'none';
+      courseNameInput.style.display='block';
+      courseSelect.style.display='none';
     } else {
-      courseNameInput.style.display = 'none';
-      courseSelect.style.display = 'block';
+      courseNameInput.style.display='none';
+      courseSelect.style.display='block';
 
       fetch('https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec')
         .then(res => res.json())
         .then(data => {
-          if (!data || data.length === 0) {
-            courseSelect.innerHTML = '<option value="">אין קורסים זמינים</option>';
+          if(!data || data.length===0){
+            courseSelect.innerHTML='<option value="">אין קורסים זמינים</option>';
             return;
           }
-          courseSelect.innerHTML = '<option value="">-- בחר קורס מהרשימה --</option>';
-          data.forEach(course => {
+
+          const today = new Date();
+          const upcomingCourses = data.filter(course=>{
+            if(!course.endDate) return false;
+            // מניח תאריך בפורמט dd/mm/yyyy
+            const parts = course.endDate.split('/');
+            const endDate = new Date(parts[2], parts[1]-1, parts[0]);
+            return endDate >= today;
+          });
+
+          if(upcomingCourses.length===0){
+            courseSelect.innerHTML='<option value="">אין קורסים זמינים</option>';
+            return;
+          }
+
+          courseSelect.innerHTML='<option value="">-- בחר קורס מהרשימה --</option>';
+          upcomingCourses.forEach(course=>{
             const opt = document.createElement('option');
-            opt.value = JSON.stringify(course);
+            opt.value=JSON.stringify(course);
             opt.textContent = `${course.type} | ${course.startDate} - ${course.endDate} | ${course.location}`;
             courseSelect.appendChild(opt);
           });
         })
-        .catch(() => {
-          courseSelect.innerHTML = '<option value="">שגיאה בטעינת הקורסים</option>';
-        });
+        .catch(()=>{ courseSelect.innerHTML='<option value="">שגיאה בטעינת הקורסים</option>'; });
 
-      courseSelect.addEventListener('change', () => {
-        try {
+      courseSelect.addEventListener('change', ()=>{
+        try{
           const selectedCourse = JSON.parse(courseSelect.value);
           fillCourseFields(selectedCourse);
-        } catch {
+        } catch{
           clearCourseFields();
         }
       });
     }
 
-    const form = document.getElementById('registrationForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const thankyouMsg = document.getElementById('thankyouMessage');
-    const errorMsg = document.getElementById('errorMessage');
-    const btnText = submitBtn.querySelector('.btn-text');
+    const form=document.getElementById('registrationForm');
+    const submitBtn=document.getElementById('submitBtn');
+    const thankyouMsg=document.getElementById('thankyouMessage');
+    const errorMsg=document.getElementById('errorMessage');
+    const btnText=submitBtn.querySelector('.btn-text');
 
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', function(e){
       e.preventDefault();
-      errorMsg.style.display = 'none';
-      thankyouMsg.style.display = 'none';
-      submitBtn.disabled = true;
-      btnText.textContent = "שולח את הטופס שלך...";
+      errorMsg.style.display='none';
+      thankyouMsg.style.display='none';
+      submitBtn.disabled=true;
+      btnText.textContent="שולח את הטופס שלך...";
 
-      const data = {
+      const data={
         name: form.name.value.trim(),
         phone: form.phone.value.trim(),
         email: form.email.value.trim(),
-        course: form.courseName.value || (() => {
-          const sel = document.getElementById('courseSelect');
-          return sel.options[sel.selectedIndex] ? JSON.parse(sel.value).type : '';
+        course: form.courseName.value || (()=>{ 
+          const sel=document.getElementById('courseSelect');
+          return sel.options[sel.selectedIndex]? JSON.parse(sel.value).type:'';
         })(),
         startDate: form.startDate.value,
         endDate: form.endDate.value,
@@ -216,18 +188,17 @@
         notes: form.notes.value.trim()
       };
 
-      if (!data.email || !data.phone || !data.course) {
-        submitBtn.disabled = false;
-        btnText.textContent = "שלח הרשמה";
-        errorMsg.textContent = "אנא מלא את כל השדות החובה: מייל, טלפון וקורס.";
-        errorMsg.style.display = 'block';
+      if(!data.email || !data.phone || !data.course){
+        submitBtn.disabled=false;
+        btnText.textContent="שלח הרשמה";
+        errorMsg.textContent="אנא מלא את כל השדות החובה: מייל, טלפון וקורס.";
+        errorMsg.style.display='block';
         return;
       }
 
-      // כאן אין שליחת מייל - רק הצגת הודעה
-      submitBtn.disabled = false;
-      btnText.textContent = "שלח הרשמה";
-      thankyouMsg.style.display = 'block';
+      submitBtn.disabled=false;
+      btnText.textContent="שלח הרשמה";
+      thankyouMsg.style.display='block';
     });
   });
 </script>
