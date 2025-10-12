@@ -1,60 +1,58 @@
 <!DOCTYPE html>
 <html lang="he">
 <head>
-   <link rel="icon" type="image/png" href="images/logo.png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1"><!DOCTYPE html>
-<html lang="he">
-<head>
-   <link rel="icon" type="image/png" href="images/logo.png">
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>תודה על ההרשמה</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@400;700;900&display=swap');
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>תודה על ההרשמה</title>
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@400;700;900&display=swap');
 
-html, body {
-  margin:0; padding:0; height:100%;
-  font-family:'Assistant', Arial, sans-serif;
-  background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
-  display:flex; justify-content:center; align-items:center;
-  overflow:hidden; text-align:center; color:white;
-}
+    html, body {
+      margin:0; padding:0; height:100%;
+      font-family:'Assistant', Arial, sans-serif;
+      background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
+      display:flex; justify-content:center; align-items:center;
+      overflow:hidden; text-align:center; color:white;
+    }
 
-.thankyou-container {
-  position:relative;
-  max-width:800px; width:95%;
-  padding:60px; border-radius:25px;
-  background: rgba(10,25,50,0.9);
-  box-shadow: 0 30px 70px rgba(0,0,0,0.6);
-  animation:fadeIn 1s ease forwards;
-  z-index:2;
-}
+    .thankyou-container {
+      position:relative;
+      max-width:800px; width:95%;
+      padding:60px; border-radius:25px;
+      background: rgba(10,25,50,0.9);
+      box-shadow: 0 30px 70px rgba(0,0,0,0.6);
+      animation:fadeIn 1s ease forwards;
+      z-index:2;
+    }
 
-h1 {
-  font-size:4rem; font-weight:900;
-  margin-bottom:30px; color:#00bfff;
-  text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
-}
+    h1 {
+      font-size:4rem; font-weight:900;
+      margin-bottom:30px; color:#00bfff;
+      text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+    }
 
-p {
-  font-size:2rem; font-weight:800;
-  color:#a0d8ef; margin-bottom:40px;
-  text-shadow: 1px 1px 8px rgba(0,0,0,0.4);
-}
+    p {
+      font-size:2rem; font-weight:800;
+      color:#a0d8ef; margin-bottom:40px;
+      text-shadow: 1px 1px 8px rgba(0,0,0,0.4);
+    }
 
-canvas {
-  position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;
-}
+    canvas {
+      position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;
+    }
 
-@keyframes fadeIn { 0% {opacity:0; transform:translateY(40px);} 100% {opacity:1; transform:translateY(0);} }
+    @keyframes fadeIn { 
+      0% {opacity:0; transform:translateY(40px);} 
+      100% {opacity:1; transform:translateY(0);} 
+    }
 
-@media(max-width:480px){
-  h1{font-size:2.5rem;} 
-  p{font-size:1.5rem;} 
-  .thankyou-container{padding:30px;}
-}
-</style>
+    @media(max-width:480px){
+      h1{font-size:2.5rem;} 
+      p{font-size:1.5rem;} 
+      .thankyou-container{padding:30px;}
+    }
+  </style>
 </head>
 <body>
 
@@ -66,210 +64,98 @@ canvas {
 </div>
 
 <script>
-// ---- קונפטי מקצועי ----
-const canvas = document.getElementById('confetti');
-const ctx = canvas.getContext('2d');
-let W = canvas.width = window.innerWidth;
-let H = canvas.height = window.innerHeight;
+if(!window.confettiLoaded){
+  window.confettiLoaded = true;
 
-class Confetti {
-  constructor(){
-    this.x = Math.random()*W;
-    this.y = Math.random()*H - H;
-    this.r = Math.random()*6+4;
-    this.d = Math.random()*150;
-    this.color = `hsl(${Math.random()*50+180},100%,50%)`;
-    this.tilt = Math.random()*10-10;
-    this.tiltAngleIncrement = Math.random()*0.07 + 0.05;
+  // ---- קונפטי מקצועי ----
+  const canvas = document.getElementById('confetti');
+  const ctx = canvas.getContext('2d');
+  let W = canvas.width = window.innerWidth;
+  let H = canvas.height = window.innerHeight;
+
+  class Confetti {
+    constructor(){
+      this.x = Math.random()*W;
+      this.y = Math.random()*H - H;
+      this.r = Math.random()*6+4;
+      this.d = Math.random()*150;
+      this.color = `hsl(${Math.random()*50+180},100%,50%)`;
+      this.tilt = Math.random()*10-10;
+      this.tiltAngleIncrement = Math.random()*0.07 + 0.05;
+    }
+    update() {
+      this.tiltAngle += this.tiltAngleIncrement;
+      this.y += (Math.cos(this.d) + 3 + this.r/2)/2;
+      this.x += Math.sin(this.d)/2;
+      this.tilt = Math.sin(this.tiltAngle) * 15;
+      if(this.y > H) { this.y = -10; this.x = Math.random()*W; }
+    }
   }
-  update() {
-    this.tiltAngle += this.tiltAngleIncrement;
-    this.y += (Math.cos(this.d) + 3 + this.r/2)/2;
-    this.x += Math.sin(this.d)/2;
-    this.tilt = Math.sin(this.tiltAngle) * 15;
-    if(this.y > H) { this.y = -10; this.x = Math.random()*W; }
+
+  const confettiCount = 200;
+  const confettiArr = [];
+  for(let i=0;i<confettiCount;i++){ 
+    let c=new Confetti(); 
+    c.tiltAngle=Math.random()*Math.PI; 
+    confettiArr.push(c); 
   }
-}
-const confettiCount = 200;
-const confettiArr = [];
-for(let i=0;i<confettiCount;i++){ let c=new Confetti(); c.tiltAngle=Math.random()*Math.PI; confettiArr.push(c); }
 
-function drawConfetti(){
-  ctx.clearRect(0,0,W,H);
-  confettiArr.forEach(c=>{
-    ctx.beginPath();
-    ctx.lineWidth = c.r;
-    ctx.strokeStyle = c.color;
-    ctx.moveTo(c.x + c.tilt + c.r/2, c.y);
-    ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r/2);
-    ctx.stroke();
-    c.update();
-  });
-  requestAnimationFrame(drawConfetti);
-}
-drawConfetti();
-window.addEventListener('resize',()=>{ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; });
+  function drawConfetti(){
+    ctx.clearRect(0,0,W,H);
+    confettiArr.forEach(c=>{
+      ctx.beginPath();
+      ctx.lineWidth = c.r;
+      ctx.strokeStyle = c.color;
+      ctx.moveTo(c.x + c.tilt + c.r/2, c.y);
+      ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r/2);
+      ctx.stroke();
+      c.update();
+    });
+    requestAnimationFrame(drawConfetti);
+  }
+  drawConfetti();
+  window.addEventListener('resize',()=>{ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; });
 
-// ---- שליחת הנתונים לגוגל שיטס ----
-const data = JSON.parse(localStorage.getItem('registrationData') || '{}');
+  // ---- שליחת הנתונים לגוגל שיטס ----
+  const data = JSON.parse(localStorage.getItem('registrationData') || '{}');
 
-if(Object.keys(data).length){
-  // המפתח הוא שהשמות כאן תואמים בדיוק לשמות בשיטס
-  const payload = {
-    name1: data.name1 || "",      // שם פרטי
-    name: data.name || "",        // שם משפחה
-    idNumber: data.idNumber || "",// תעודת זהות
-    city: data.city || "",
-    phone: data.phone || "",
-    email: data.email || "",
-    course: data.course || "",
-    startDate: data.startDate || "",
-    endDate: data.endDate || "",
-    location: data.location || "",
-    paymentMethod: data.paymentMethod || "",
-    price: data.price || "",
-    notes: data.notes || ""
-  };
+  if(Object.keys(data).length){
+    const payload = {
+      name1: data.name1 || "",      // שם פרטי
+      name: data.name || "",        // שם משפחה
+      idNumber: data.idNumber || "",// תעודת זהות
+      city: data.city || "",
+      phone: data.phone || "",
+      email: data.email || "",
+      course: data.course || "",
+      startDate: data.startDate || "",
+      endDate: data.endDate || "",
+      location: data.location || "",
+      paymentMethod: data.paymentMethod || "",
+      price: data.price || "",
+      notes: data.notes || ""
+    };
 
-  const params = new URLSearchParams(payload).toString();
-  const url = `https://script.google.com/macros/s/AKfycbwtw8lVBDizJ8_z1EoUK203FgpZZAxL9Yu7NvD4_8moME6UFaFymxQ1Tds7gMPG-IB3vA/exec?${params}`;
+    const params = new URLSearchParams(payload).toString();
+    const url = `https://script.google.com/macros/s/AKfycbwtw8lVBDizJ8_z1EoUK203FgpZZAxL9Yu7NvD4_8moME6UFaFymxQ1Tds7gMPG-IB3vA/exec?${params}`;
 
-  fetch(url)
-    .then(res => res.text())
-    .then(txt => {
-      console.log('Data sent to Google Sheets:', txt);
-      localStorage.removeItem('registrationData'); // ניקוי
-    })
-    .catch(err => console.error('Error sending data:', err));
-} else {
-  console.log('אין נתונים לשליחה');
+    fetch(url)
+      .then(res => res.text())
+      .then(txt => {
+        console.log('Data sent to Google Sheets:', txt);
+        localStorage.removeItem('registrationData'); // ניקוי
+
+        // הסרת ה-query string מה-URL
+        if(window.history.replaceState){
+          window.history.replaceState(null, null, window.location.pathname);
+        }
+      })
+      .catch(err => console.error('Error sending data:', err));
+  } else {
+    console.log('אין נתונים לשליחה');
+  }
 }
 </script>
 
 </body>
 </html>
-
-<title>תודה על ההרשמה</title>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@400;700;900&display=swap');
-
-html, body {
-  margin:0; padding:0; height:100%;
-  font-family:'Assistant', Arial, sans-serif;
-  background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 100%);
-  display:flex; justify-content:center; align-items:center;
-  overflow:hidden; text-align:center; color:white;
-}
-
-.thankyou-container {
-  position:relative;
-  max-width:800px; width:95%;
-  padding:60px; border-radius:25px;
-  background: rgba(10,25,50,0.9);
-  box-shadow: 0 30px 70px rgba(0,0,0,0.6);
-  animation:fadeIn 1s ease forwards;
-  z-index:2;
-}
-
-h1 {
-  font-size:4rem; font-weight:900;
-  margin-bottom:30px; color:#00bfff;
-  text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
-}
-
-p {
-  font-size:2rem; font-weight:800;
-  color:#a0d8ef; margin-bottom:40px;
-  text-shadow: 1px 1px 8px rgba(0,0,0,0.4);
-}
-
-canvas {
-  position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;
-}
-
-@keyframes fadeIn { 0% {opacity:0; transform:translateY(40px);} 100% {opacity:1; transform:translateY(0);} }
-
-@media(max-width:480px){
-  h1{font-size:2.5rem;} 
-  p{font-size:1.5rem;} 
-  .thankyou-container{padding:30px;}
-}
-</style>
-</head>
-<body>
-
-<canvas id="confetti"></canvas>
-
-<div class="thankyou-container">
-  <h1>הרשמתך נקלטה בהצלחה</h1>
-  <p>😉 מחכים לעשות חיים ביחד</p>
-</div>
-
-<script>
-// ---- קונפטי מקצועי ----
-const canvas = document.getElementById('confetti');
-const ctx = canvas.getContext('2d');
-let W = canvas.width = window.innerWidth;
-let H = canvas.height = window.innerHeight;
-
-class Confetti {
-  constructor(){
-    this.x = Math.random()*W;
-    this.y = Math.random()*H - H;
-    this.r = Math.random()*6+4;
-    this.d = Math.random()*150;
-    this.color = `hsl(${Math.random()*50+180},100%,50%)`;
-    this.tilt = Math.random()*10-10;
-    this.tiltAngleIncrement = Math.random()*0.07 + 0.05;
-  }
-  update() {
-    this.tiltAngle += this.tiltAngleIncrement;
-    this.y += (Math.cos(this.d) + 3 + this.r/2)/2;
-    this.x += Math.sin(this.d)/2;
-    this.tilt = Math.sin(this.tiltAngle) * 15;
-    if(this.y > H) { this.y = -10; this.x = Math.random()*W; }
-  }
-}
-const confettiCount = 200;
-const confettiArr = [];
-for(let i=0;i<confettiCount;i++){ let c=new Confetti(); c.tiltAngle=Math.random()*Math.PI; confettiArr.push(c); }
-
-function drawConfetti(){
-  ctx.clearRect(0,0,W,H);
-  confettiArr.forEach(c=>{
-    ctx.beginPath();
-    ctx.lineWidth = c.r;
-    ctx.strokeStyle = c.color;
-    ctx.moveTo(c.x + c.tilt + c.r/2, c.y);
-    ctx.lineTo(c.x + c.tilt, c.y + c.tilt + c.r/2);
-    ctx.stroke();
-    c.update();
-  });
-  requestAnimationFrame(drawConfetti);
-}
-drawConfetti();
-window.addEventListener('resize',()=>{ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; });
-
-// ---- שליחת הנתונים לגוגל שיטס ----
-const data = JSON.parse(localStorage.getItem('registrationData') || '{}');
-
-if(Object.keys(data).length){
-  const params = new URLSearchParams(data).toString();
-  const url = `https://script.google.com/macros/s/AKfycbwtw8lVBDizJ8_z1EoUK203FgpZZAxL9Yu7NvD4_8moME6UFaFymxQ1Tds7gMPG-IB3vA/exec?${params}`;
-
-  fetch(url)
-    .then(res => res.text())
-    .then(txt => {
-      console.log('Data sent to Google Sheets:', txt);
-      localStorage.removeItem('registrationData'); // ניקוי
-    })
-    .catch(err => console.error('Error sending data:', err));
-} else {
-  console.log('אין נתונים לשליחה');
-}
-</script>
-
-</body>
-</html>
-
-
