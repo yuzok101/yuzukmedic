@@ -42,109 +42,31 @@
       font-size: 2.2rem;
       animation: fadeIn 1.3s ease forwards;
     }
-    label {
-      display: block;
-      margin-top: 18px;
-      font-weight: 700;
-      color: #1c3b6b;
-      font-size: 1.15rem;
-      animation: fadeInLeft 1.5s ease forwards;
-    }
+    label { display: block; margin-top: 18px; font-weight: 700; color: #1c3b6b; font-size: 1.15rem; animation: fadeInLeft 1.5s ease forwards; }
     input, select, textarea {
-      width: 100%;
-      margin-top: 8px;
-      padding: 12px 16px;
-      font-size: 1.05rem;
-      border-radius: 8px;
-      border: 2px solid #1c3b6b;
-      transition: border-color 0.3s ease;
-      animation: fadeInRight 1.6s ease forwards;
-      background: rgba(255,255,255,0.95);
-      color: #1c3b6b;
+      width: 100%; margin-top: 8px; padding: 12px 16px; font-size: 1.05rem;
+      border-radius: 8px; border: 2px solid #1c3b6b; transition: border-color 0.3s ease;
+      animation: fadeInRight 1.6s ease forwards; background: rgba(255,255,255,0.95); color: #1c3b6b;
       box-sizing: border-box;
     }
     input:focus, select:focus, textarea:focus {
-      outline: none;
-      border-color: #004080;
-      box-shadow: 0 0 10px #004080;
-      background: #fff;
+      outline: none; border-color: #004080; box-shadow: 0 0 10px #004080; background: #fff;
     }
-    textarea {
-      resize: vertical;
-    }
+    textarea { resize: vertical; }
     button {
-      position: relative;
-      overflow: hidden;
-      width: 100%;
-      margin-top: 32px;
-      padding: 16px;
-      font-size: 1.3rem;
-      background-color: #1c3b6b;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      font-weight: 800;
-      letter-spacing: 0.07em;
-      transition: background-color 0.4s ease, box-shadow 0.3s ease;
-      animation: fadeInUp 1.8s ease forwards;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      position: relative; overflow: hidden; width: 100%; margin-top: 32px; padding: 16px;
+      font-size: 1.3rem; background-color: #1c3b6b; color: white; border: none; border-radius: 10px;
+      cursor: pointer; font-weight: 800; letter-spacing: 0.07em; transition: background-color 0.4s ease, box-shadow 0.3s ease;
+      animation: fadeInUp 1.8s ease forwards; display: flex; justify-content: center; align-items: center;
     }
-    button:hover:not(:disabled), button:focus:not(:disabled) {
-      background-color: #004080;
-      box-shadow: 0 0 18px #004080;
-    }
-    button:disabled {
-      cursor: default;
-      opacity: 0.7;
-    }
-    .plane-icon {
-      width: 24px;
-      height: 24px;
-      margin-left: 12px;
-      fill: white;
-      animation: flyPlane 1.2s linear forwards;
-    }
-    @keyframes flyPlane {
-      0% { transform: translateX(0) translateY(0) rotate(0deg); opacity: 1; }
-      50% { transform: translateX(20px) translateY(-10px) rotate(15deg); opacity: 1; }
-      100% { transform: translateX(60px) translateY(-20px) rotate(15deg); opacity: 0; }
-    }
-    .thankyou-message {
-      display: none;
-      margin-top: 15px;
-      color: green;
-      font-size: 1.4rem;
-      font-weight: 700;
-      text-align: center;
-      animation: fadeIn 1s ease forwards;
-    }
-    .error-message {
-      display: none;
-      margin-top: 15px;
-      color: red;
-      font-weight: 700;
-      text-align: center;
-      animation: fadeIn 1s ease forwards;
-    }
-    @keyframes fadeInUp {
-      0% {opacity: 0; transform: translateY(30px);}
-      100% {opacity: 1; transform: translateY(0);}
-    }
-    @keyframes fadeInLeft {
-      0% {opacity: 0; transform: translateX(20px);}
-      100% {opacity: 1; transform: translateX(0);}
-    }
-    @keyframes fadeInRight {
-      0% {opacity: 0; transform: translateX(-20px);}
-      100% {opacity: 1; transform: translateX(0);}
-    }
-    @keyframes fadeIn {
-      0% {opacity: 0;}
-      100% {opacity: 1;}
-    }
+    button:hover:not(:disabled), button:focus:not(:disabled) { background-color: #004080; box-shadow: 0 0 18px #004080; }
+    button:disabled { cursor: default; opacity: 0.7; }
+    .thankyou-message { display: none; margin-top: 15px; color: green; font-size: 1.4rem; font-weight: 700; text-align: center; animation: fadeIn 1s ease forwards; }
+    .error-message { display: none; margin-top: 15px; color: red; font-weight: 700; text-align: center; animation: fadeIn 1s ease forwards; }
+    @keyframes fadeInUp { 0% {opacity: 0; transform: translateY(30px);} 100% {opacity: 1; transform: translateY(0);} }
+    @keyframes fadeInLeft { 0% {opacity: 0; transform: translateX(20px);} 100% {opacity: 1; transform: translateX(0);} }
+    @keyframes fadeInRight { 0% {opacity: 0; transform: translateX(-20px);} 100% {opacity: 1; transform: translateX(0);} }
+    @keyframes fadeIn { 0% {opacity: 0;} 100% {opacity: 1;} }
     @media (max-width: 480px) {
       form { padding: 25px 20px; border-radius: 12px; }
       h2 { font-size: 1.7rem; }
@@ -153,7 +75,6 @@
       button { font-size: 1.15rem; padding: 14px; }
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -199,62 +120,120 @@
 
     <button type="submit" id="submitBtn">
       <span class="btn-text">שלח טופס הרשמה</span>
-      <svg class="plane-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:none;">
-        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-      </svg>
     </button>
     <div class="thankyou-message" id="thankyouMessage">
-      השליחה הצליחה, ניצור איתך קשר בהקדם.
+      הטופס נשלח בהצלחה (ללא מייל).
     </div>
     <div class="error-message" id="errorMessage"></div>
   </form>
 </div>
 
+<script>
+  function getQueryParams() {
+    const params = {};
+    const query = window.location.search.substring(1);
+    query.split("&").forEach(pair => {
+      const [key, value] = pair.split("=");
+      if (key) params[decodeURIComponent(key)] = decodeURIComponent(value || "");
+    });
+    return params;
+  }
 
+  function clearCourseFields() {
+    document.getElementById('courseName').value = '';
+    document.getElementById('startDate').value = '';
+    document.getElementById('endDate').value = '';
+    document.getElementById('location').value = '';
+  }
 
-  <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('registrationForm');
+  function fillCourseFields(courseObj) {
+    document.getElementById('courseName').value = courseObj.type || '';
+    document.getElementById('startDate').value = courseObj.startDate || '';
+    document.getElementById('endDate').value = courseObj.endDate || '';
+    document.getElementById('location').value = courseObj.location || '';
+  }
 
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
+  document.addEventListener('DOMContentLoaded', () => {
+    const params = getQueryParams();
+    const courseSelect = document.getElementById('courseSelect');
+    const courseNameInput = document.getElementById('courseName');
 
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const phone = document.getElementById('phone').value.trim();
-    const courseSelect = document.getElementById('courseSelect').value;
+    if (params.type && params.startDate && params.endDate && params.location) {
+      fillCourseFields(params);
+      courseNameInput.style.display = 'block';
+      courseSelect.style.display = 'none';
+    } else {
+      courseNameInput.style.display = 'none';
+      courseSelect.style.display = 'block';
 
-    if(!name || !email || !phone || !courseSelect){
-      alert('אנא מלא את כל השדות החובה ובחר קורס');
-      return;
+      fetch('https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec')
+        .then(res => res.json())
+        .then(data => {
+          courseSelect.innerHTML = '<option value="">-- בחר קורס מהרשימה --</option>';
+          data.forEach(course => {
+            const opt = document.createElement('option');
+            opt.value = JSON.stringify(course);
+            opt.textContent = `${course.type} | ${course.startDate} - ${course.endDate} | ${course.location}`;
+            courseSelect.appendChild(opt);
+          });
+        })
+        .catch(() => {
+          courseSelect.innerHTML = '<option value="">שגיאה בטעינת הקורסים</option>';
+        });
+
+      courseSelect.addEventListener('change', () => {
+        try {
+          const selectedCourse = JSON.parse(courseSelect.value);
+          fillCourseFields(selectedCourse);
+        } catch {
+          clearCourseFields();
+        }
+      });
     }
 
-    const course = JSON.parse(courseSelect);
-    const price = course.price || '';
-    const courseName = course.type || '';
+    const form = document.getElementById('registrationForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const thankyouMsg = document.getElementById('thankyouMessage');
+    const errorMsg = document.getElementById('errorMessage');
+    const btnText = submitBtn.querySelector('.btn-text');
 
-    // בניית כתובת URL ליש חשבונית
-    const invoiceUrl = `https://user.yeshinvoice.co.il/payment/7fa9075d-1b2a-43aa-8078-173c2ae9eb2c?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&course=${encodeURIComponent(courseName)}&amount=${encodeURIComponent(price)}`;
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      errorMsg.style.display = 'none';
+      thankyouMsg.style.display = 'none';
+      submitBtn.disabled = true;
+      btnText.textContent = "שולח את הטופס שלך...";
 
-    // מעבר אוטומטי ליש חשבונית
-    window.location.href = invoiceUrl;
+      const data = {
+        name: form.name.value.trim(),
+        phone: form.phone.value.trim(),
+        email: form.email.value.trim(),
+        course: form.courseName.value || (() => {
+          const sel = document.getElementById('courseSelect');
+          return sel.options[sel.selectedIndex] ? JSON.parse(sel.value).type : '';
+        })(),
+        startDate: form.startDate.value,
+        endDate: form.endDate.value,
+        location: form.location.value,
+        paymentMethod: form.paymentMethod.value,
+        notes: form.notes.value.trim()
+      };
+
+      if (!data.email || !data.phone || !data.course) {
+        submitBtn.disabled = false;
+        btnText.textContent = "שלח הרשמה";
+        errorMsg.textContent = "אנא מלא את כל השדות החובה: מייל, טלפון וקורס.";
+        errorMsg.style.display = 'block';
+        return;
+      }
+
+      // כאן אין שליחת מייל - רק הצגת הודעה
+      submitBtn.disabled = false;
+      btnText.textContent = "שלח הרשמה";
+      thankyouMsg.style.display = 'block';
+    });
   });
-});
 </script>
-
-
-<script>
-  nl_pos = "bl";
-  nl_color = "gray";
-  nl_compact = "1";
-  nl_accordion = "1";
-  nl_contact = "n:יוזוק מדיק|p:0533562608";
-</script>
-<script src="https://yuzok101.github.io/yuzukmedic/data/nagishli.js" charset="utf-8" defer></script>
 
 </body>
 </html>
-
-
-
-
