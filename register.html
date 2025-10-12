@@ -35,23 +35,20 @@
   <form id="registrationForm" autocomplete="off" spellcheck="false" novalidate>
     <h2>טופס הרשמה לקורס</h2>
 
-    
-    <label for="name">שם התלמיד <span style="color:red">*</span></label>
+    <label for="name1">שם התלמיד <span style="color:red">*</span></label>
     <input type="text" id="name1" name="name1" autocomplete="name1" />
-    
+
     <label for="name">שם בעל הכרטיס <span style="color:red">*</span></label>
     <input type="text" id="name" name="name" autocomplete="name" />
 
-    <label for="numberid">תעודת זהות</label>
-    <input type="text" id="numberid" name="numberid" />
-
+    <label for="numberid">תעודת זהות <span style="color:red">*</span></label>
+    <input type="text" id="numberid" name="numberid" required pattern="[0-9]{5,9}" placeholder="ללא מקפים" />
 
     <label for="city">עיר</label>
     <input type="text" id="city" name="city" />
 
     <label for="phone">טלפון <span style="color:red">*</span></label>
     <input type="tel" id="phone" name="phone" required pattern="[0-9+\-\s]{7,15}" placeholder="050-1234567" autocomplete="tel" />
-
 
     <label for="email">אימייל <span style="color:red">*</span></label>
     <input type="email" id="email" name="email" required placeholder="example@mail.com" autocomplete="email" />
@@ -77,8 +74,8 @@
       <option value="אשראי">אשראי</option>
     </select>
 
-    <label for="price">מחיר (שדה חופשי)</label>
-    <input type="text" id="price" name="price" />
+    <label for="price">מחיר</label>
+    <input type="text" id="price" name="price" readonly />
 
     <label for="notes">הערות</label>
     <textarea id="notes" name="notes" rows="4" placeholder="הקלד הערות אם יש..."></textarea>
@@ -86,149 +83,147 @@
     <button type="submit" id="submitBtn">
       <span class="btn-text">עבור לתשלום מאובטח </span>
     </button>
-    <div class="thankyou-message" id="thankyouMessage">
-      עובר לתשלום מאובטח
-    </div>
+    <div class="thankyou-message" id="thankyouMessage">עובר לתשלום מאובטח</div>
     <div class="error-message" id="errorMessage"></div>
   </form>
 </div>
 
 <script>
-  function getQueryParams() {
-    const params = {};
-    const query = window.location.search.substring(1);
-    query.split("&").forEach(pair => {
-      const [key,value] = pair.split("=");
-      if(key) params[decodeURIComponent(key)] = decodeURIComponent(value||"");
-    });
-    return params;
-  }
+function getQueryParams() {
+  const params = {};
+  const query = window.location.search.substring(1);
+  query.split("&").forEach(pair => {
+    const [key,value] = pair.split("=");
+    if(key) params[decodeURIComponent(key)] = decodeURIComponent(value||"");
+  });
+  return params;
+}
 
-  function clearCourseFields() {
-    document.getElementById('courseName').value='';
-    document.getElementById('startDate').value='';
-    document.getElementById('endDate').value='';
-    document.getElementById('location').value='';
-  }
+function clearCourseFields() {
+  document.getElementById('courseName').value='';
+  document.getElementById('startDate').value='';
+  document.getElementById('endDate').value='';
+  document.getElementById('location').value='';
+  document.getElementById('price').value='';
+}
 
-  function fillCourseFields(courseObj) {
-    document.getElementById('courseName').value = courseObj.type || '';
-    document.getElementById('startDate').value = courseObj.startDate || '';
-    document.getElementById('endDate').value = courseObj.endDate || '';
-    document.getElementById('location').value = courseObj.location || '';
-  }
+function fillCourseFields(courseObj) {
+  document.getElementById('courseName').value = courseObj.type || '';
+  document.getElementById('startDate').value = courseObj.startDate || '';
+  document.getElementById('endDate').value = courseObj.endDate || '';
+  document.getElementById('location').value = courseObj.location || '';
+  document.getElementById('price').value = courseObj.price || '';
+}
 
-  // הפניה ל-YesInvoice עם כל הנתונים ב-URL
-  function redirectToInvoice(data) {
-    const baseURL = 'https://user.yeshinvoice.co.il/payment/7fa9075d-1b2a-43aa-8078-173c2ae9eb2c';
-    const url = new URL(baseURL);
+function redirectToInvoice(data) {
+  const baseURL = 'https://user.yeshinvoice.co.il/payment/7fa9075d-1b2a-43aa-8078-173c2ae9eb2c';
+  const url = new URL(baseURL);
 
-    ['name','numberid','address','city','phone','mobile','email','course','startDate','endDate','location','paymentMethod','price','notes']
-    .forEach(key => {
-      url.searchParams.set(key, data[key] || '');
-    });
+  ['name','numberid','address','city','phone','mobile','email','course','startDate','endDate','location','paymentMethod','price','notes']
+  .forEach(key => {
+    url.searchParams.set(key, data[key] || '');
+  });
 
-    window.location.href = url.toString();
-  }
+  window.location.href = url.toString();
+}
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const params = getQueryParams();
-    const courseSelect = document.getElementById('courseSelect');
-    const courseNameInput = document.getElementById('courseName');
+document.addEventListener('DOMContentLoaded', () => {
+  const params = getQueryParams();
+  const courseSelect = document.getElementById('courseSelect');
+  const courseNameInput = document.getElementById('courseName');
 
-    if(params.type && params.startDate && params.endDate && params.location) {
-      fillCourseFields(params);
-      courseNameInput.style.display='block';
-      courseSelect.style.display='none';
-    } else {
-      courseNameInput.style.display='none';
-      courseSelect.style.display='block';
+  if(params.type && params.startDate && params.endDate && params.location) {
+    fillCourseFields(params);
+    courseNameInput.style.display='block';
+    courseSelect.style.display='none';
+  } else {
+    courseNameInput.style.display='none';
+    courseSelect.style.display='block';
 
-      fetch('https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec')
-        .then(res => res.json())
-        .then(data => {
-          if(!data || data.length===0){
-            courseSelect.innerHTML='<option value="">אין קורסים זמינים</option>';
-            return;
-          }
-
-          const today = new Date();
-          const upcomingCourses = data.filter(course => {
-            if(!course.endDate) return false;
-            const parts = course.endDate.split('.');
-            if(parts.length !== 3) return false;
-            const endDate = new Date(parts[2], parts[1]-1, parts[0]);
-            return endDate >= today;
-          });
-
-          if(upcomingCourses.length===0){
-            courseSelect.innerHTML='<option value="">אין קורסים זמינים</option>';
-            return;
-          }
-
-          courseSelect.innerHTML='<option value="">-- בחר קורס מהרשימה --</option>';
-          upcomingCourses.forEach(course => {
-            const opt = document.createElement('option');
-            opt.value=JSON.stringify(course);
-            opt.textContent = `${course.type} | ${course.startDate} - ${course.endDate} | ${course.location}`;
-            courseSelect.appendChild(opt);
-          });
-        })
-        .catch(()=>{ courseSelect.innerHTML='<option value="">שגיאה בטעינת הקורסים</option>'; });
-
-      courseSelect.addEventListener('change', ()=>{
-        try{
-          const selectedCourse = JSON.parse(courseSelect.value);
-          fillCourseFields(selectedCourse);
-        } catch{
-          clearCourseFields();
+    fetch('https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec')
+      .then(res => res.json())
+      .then(data => {
+        if(!data || data.length===0){
+          courseSelect.innerHTML='<option value="">אין קורסים זמינים</option>';
+          return;
         }
-      });
+
+        const today = new Date();
+        const upcomingCourses = data.filter(course => {
+          if(!course.endDate) return false;
+          const parts = course.endDate.split('.');
+          if(parts.length !== 3) return false;
+          const endDate = new Date(parts[2], parts[1]-1, parts[0]);
+          return endDate >= today;
+        });
+
+        if(upcomingCourses.length===0){
+          courseSelect.innerHTML='<option value="">אין קורסים זמינים</option>';
+          return;
+        }
+
+        courseSelect.innerHTML='<option value="">-- בחר קורס מהרשימה --</option>';
+        upcomingCourses.forEach(course => {
+          const opt = document.createElement('option');
+          opt.value=JSON.stringify(course);
+          opt.textContent = `${course.type} | ${course.startDate} - ${course.endDate} | ${course.location} | ${course.price} ש"ח`;
+          courseSelect.appendChild(opt);
+        });
+      })
+      .catch(()=>{ courseSelect.innerHTML='<option value="">שגיאה בטעינת הקורסים</option>'; });
+
+    courseSelect.addEventListener('change', ()=>{
+      try{
+        const selectedCourse = JSON.parse(courseSelect.value);
+        fillCourseFields(selectedCourse);
+      } catch{
+        clearCourseFields();
+      }
+    });
+  }
+
+  const form=document.getElementById('registrationForm');
+  const submitBtn=document.getElementById('submitBtn');
+  const errorMsg=document.getElementById('errorMessage');
+  const btnText=submitBtn.querySelector('.btn-text');
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    errorMsg.style.display='none';
+    submitBtn.disabled=true;
+    btnText.textContent="מעביר לתשלום...";
+
+    const data={
+      name: form.name.value.trim(),
+      numberid: form.numberid.value.trim(),
+      address: form.address ? form.address.value.trim() : '',
+      city: form.city.value.trim(),
+      phone: form.phone.value.trim(),
+      mobile: form.mobile ? form.mobile.value.trim() : '',
+      email: form.email.value.trim(),
+      course: form.courseName.value || (()=>{ 
+        const sel=document.getElementById('courseSelect');
+        return sel.options[sel.selectedIndex]? JSON.parse(sel.value).type:'';
+      })(),
+      startDate: form.startDate.value,
+      endDate: form.endDate.value,
+      location: form.location.value,
+      paymentMethod: form.paymentMethod.value,
+      price: form.price.value.trim(),
+      notes: form.notes.value.trim()
+    };
+
+    if(!data.email || !data.phone || !data.course || !data.numberid){
+      submitBtn.disabled=false;
+      btnText.textContent="עבור לתשלום מאובטח";
+      errorMsg.textContent="אנא מלא את כל השדות החובה: מייל, טלפון, קורס ותעודת זהות.";
+      errorMsg.style.display='block';
+      return;
     }
 
-    const form=document.getElementById('registrationForm');
-    const submitBtn=document.getElementById('submitBtn');
-    const errorMsg=document.getElementById('errorMessage');
-    const btnText=submitBtn.querySelector('.btn-text');
-
-    form.addEventListener('submit', function(e){
-      e.preventDefault();
-      errorMsg.style.display='none';
-      submitBtn.disabled=true;
-      btnText.textContent="מעביר לתשלום...";
-
-      const data={
-        name: form.name.value.trim(),
-        numberid: form.numberid.value.trim(),
-        address: form.address.value.trim(),
-        city: form.city.value.trim(),
-        phone: form.phone.value.trim(),
-        mobile: form.mobile.value.trim(),
-        email: form.email.value.trim(),
-        course: form.courseName.value || (()=>{ 
-          const sel=document.getElementById('courseSelect');
-          return sel.options[sel.selectedIndex]? JSON.parse(sel.value).type:'';
-        })(),
-        startDate: form.startDate.value,
-        endDate: form.endDate.value,
-        location: form.location.value,
-        paymentMethod: form.paymentMethod.value,
-        price: form.price.value.trim(),
-        notes: form.notes.value.trim()
-      };
-
-      if(!data.email || !data.phone || !data.course){
-        submitBtn.disabled=false;
-        btnText.textContent="עבור לתשלום מאובטח";
-        errorMsg.textContent="אנא מלא את כל השדות החובה: מייל, טלפון וקורס.";
-        errorMsg.style.display='block';
-        return;
-      }
-
-      // הפניה ל-YesInvoice דרך URL
-      redirectToInvoice(data);
-    });
+    redirectToInvoice(data);
   });
+});
 </script>
 
 </body>
