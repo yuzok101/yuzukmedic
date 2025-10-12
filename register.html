@@ -77,10 +77,11 @@
     <label for="location">מיקום</label>
     <input type="text" id="location" name="location" readonly />
 
-    <label for="paymentMethod">אופן תשלום</label>
+    <label for="paymentMethod">אופן תשלום <span style="color:red">*</span></label>
     <select id="paymentMethod" name="paymentMethod" required>
       <option value="" disabled selected>בחר אופן תשלום</option>
       <option value="אשראי">אשראי</option>
+      <option value="אחר">אחר</option>
     </select>
 
     <label for="price">מחיר</label>
@@ -219,11 +220,18 @@ document.addEventListener('DOMContentLoaded', () => {
         price: form.price.value.trim()
     };
 
-    if(!data.email || !data.phone || !data.course ){
+    // בדיקה אם השדות החובה מלאים
+    if(!data.email || !data.phone || !data.course || !data.paymentMethod){
         submitBtn.disabled = false;
         btnText.textContent = "עבור לתשלום מאובטח";
-        errorMsg.textContent = "אנא מלא את כל השדות החובה: מייל, טלפון, וקורס.";
+        errorMsg.textContent = "אנא מלא את כל השדות החובה: מייל, טלפון, קורס ואופן תשלום.";
         errorMsg.style.display='block';
+        return;
+    }
+
+    // אם אופן התשלום אינו "אשראי" – הפניה לדף kesher
+    if(data.paymentMethod !== "אשראי"){
+        window.location.href = "kesher";
         return;
     }
 
