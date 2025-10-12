@@ -127,10 +127,11 @@
           }
 
           const today = new Date();
-          const upcomingCourses = data.filter(course=>{
+          const upcomingCourses = data.filter(course => {
             if(!course.endDate) return false;
-            // מניח תאריך בפורמט dd/mm/yyyy
-            const parts = course.endDate.split('/');
+            // פורמט dd.mm.yyyy
+            const parts = course.endDate.split('.');
+            if(parts.length !== 3) return false;
             const endDate = new Date(parts[2], parts[1]-1, parts[0]);
             return endDate >= today;
           });
@@ -141,7 +142,7 @@
           }
 
           courseSelect.innerHTML='<option value="">-- בחר קורס מהרשימה --</option>';
-          upcomingCourses.forEach(course=>{
+          upcomingCourses.forEach(course => {
             const opt = document.createElement('option');
             opt.value=JSON.stringify(course);
             opt.textContent = `${course.type} | ${course.startDate} - ${course.endDate} | ${course.location}`;
