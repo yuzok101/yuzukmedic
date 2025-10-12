@@ -1,105 +1,209 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="he">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>הרשמה לקורס</title>
-<style>
-  body {
-    font-family: 'Heebo', sans-serif;
-    background-color: #f5f5f5;
-    color: #222;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-  }
-  form {
-    background: white;
-    padding: 20px 30px;
-    border-radius: 15px;
-    box-shadow: 0 0 10px #ccc;
-    width: 350px;
-  }
-  input, select, button {
-    width: 100%;
-    margin: 10px 0;
-    padding: 10px;
-    font-size: 1em;
-  }
-  button {
-    background: #007bff;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>טופס הרשמה</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Assistant&display=swap');
+    html, body {
+      margin: 0; padding: 0; height: 100%;
+      font-family: 'Assistant', Arial, sans-serif;
+      direction: rtl;
+      background: url('images/11.jpg') no-repeat center center fixed;
+      background-size: cover;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    .overlay {
+      background: rgba(255, 255, 255, 0.6);
+      min-height: 100vh;
+      padding: 40px 15px;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    form {
+      position: relative;
+      background: rgba(255 255 255 / 0.7);
+      padding: 35px 30px;
+      border-radius: 14px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+      animation: fadeInUp 1s ease forwards;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 28px;
+      color: #1c3b6b;
+      font-weight: 700;
+      font-size: 2.2rem;
+      animation: fadeIn 1.3s ease forwards;
+    }
+    label {
+      display: block;
+      margin-top: 18px;
+      font-weight: 700;
+      color: #1c3b6b;
+      font-size: 1.15rem;
+      animation: fadeInLeft 1.5s ease forwards;
+    }
+    input, select, textarea {
+      width: 100%;
+      margin-top: 8px;
+      padding: 12px 16px;
+      font-size: 1.05rem;
+      border-radius: 8px;
+      border: 2px solid #1c3b6b;
+      transition: border-color 0.3s ease;
+      animation: fadeInRight 1.6s ease forwards;
+      background: rgba(255,255,255,0.95);
+      color: #1c3b6b;
+      box-sizing: border-box;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #004080;
+      box-shadow: 0 0 10px #004080;
+      background: #fff;
+    }
+    textarea { resize: vertical; }
+    button {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      margin-top: 32px;
+      padding: 16px;
+      font-size: 1.3rem;
+      background-color: #1c3b6b;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 800;
+      letter-spacing: 0.07em;
+      transition: background-color 0.4s ease, box-shadow 0.3s ease;
+      animation: fadeInUp 1.8s ease forwards;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    button:hover:not(:disabled), button:focus:not(:disabled) {
+      background-color: #004080;
+      box-shadow: 0 0 18px #004080;
+    }
+    button:disabled { cursor: default; opacity: 0.7; }
+    @keyframes fadeInUp { 0% {opacity: 0; transform: translateY(30px);} 100% {opacity: 1; transform: translateY(0);} }
+    @keyframes fadeInLeft { 0% {opacity: 0; transform: translateX(20px);} 100% {opacity: 1; transform: translateX(0);} }
+    @keyframes fadeInRight { 0% {opacity: 0; transform: translateX(-20px);} 100% {opacity: 1; transform: translateX(0);} }
+    @keyframes fadeIn { 0% {opacity: 0;} 100% {opacity: 1;} }
+    @media (max-width: 480px) {
+      form { padding: 25px 20px; border-radius: 12px; }
+      h2 { font-size: 1.7rem; }
+      label { font-size: 1rem; }
+      input, select, textarea { font-size: 1rem; padding: 10px 14px; }
+      button { font-size: 1.15rem; padding: 14px; }
+    }
+  </style>
 </head>
 <body>
 
-<h2>הרשמה לקורס</h2>
-<form id="registerForm">
-  <label>שם מלא:</label>
-  <input type="text" id="name" required>
+<div class="overlay">
+  <form id="registrationForm" autocomplete="off" spellcheck="false" novalidate>
+    <h2>טופס הרשמה לקורס</h2>
 
-  <label>אימייל:</label>
-  <input type="email" id="email" required>
+    <label for="name">שם מלא <span style="color:red">*</span></label>
+    <input type="text" id="name" name="name" autocomplete="name" />
 
-  <label>בחר קורס:</label>
-  <select id="course" required>
-    <option value="">בחר קורס...</option>
-  </select>
+    <label for="phone">טלפון <span style="color:red">*</span></label>
+    <input type="tel" id="phone" name="phone" required pattern="[0-9+\-\s]{7,15}" placeholder="050-1234567" autocomplete="tel" />
 
-  <label>תאריך התחלה:</label>
-  <input type="date" id="startDate" required>
+    <label for="email">אימייל <span style="color:red">*</span></label>
+    <input type="email" id="email" name="email" required placeholder="example@mail.com" autocomplete="email" />
 
-  <button type="submit">עבור לתשלום</button>
-</form>
+    <label for="courseSelect">בחר קורס</label>
+    <select id="courseSelect" name="courseSelect">
+      <option value="">-- טוען קורסים --</option>
+    </select>
+
+    <label for="startDate">תאריך התחלה</label>
+    <input type="text" id="startDate" name="startDate" readonly />
+
+    <label for="endDate">תאריך סיום</label>
+    <input type="text" id="endDate" name="endDate" readonly />
+
+    <label for="location">מיקום</label>
+    <input type="text" id="location" name="location" readonly />
+
+    <label for="paymentMethod">אופן תשלום</label>
+    <select id="paymentMethod" name="paymentMethod" required>
+      <option value="" disabled selected>בחר אופן תשלום</option>
+      <option value="אשראי">אשראי</option>
+      <option value="מזומן">מזומן</option>
+      <option value="העברה בנקאית">העברה בנקאית</option>
+      <option value="ביט">ביט</option>
+    </select>
+
+    <label for="notes">הערות</label>
+    <textarea id="notes" name="notes" rows="4" placeholder="הקלד הערות אם יש..."></textarea>
+
+    <button type="submit" id="submitBtn">המשך לתשלום</button>
+  </form>
+</div>
 
 <script>
-// כתובת Google Sheets שלך (פורמט JSON דרך published sheet)
-const SHEET_URL = 'https://script.google.com/macros/s/XXX/exec'; // לשים כאן את הסקריפט שלך
+document.addEventListener('DOMContentLoaded', () => {
+  const courseSelect = document.getElementById('courseSelect');
 
-// כתובת הבסיס של יש חשבונית (למשל https://www.yeshcheshbonit.co.il/pay/abc123xyz)
-const YESH_HASHBONIT_URL = 'https://www.yeshcheshbonit.co.il/pay/abc123xyz';
+  fetch('https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec')
+    .then(response => response.json())
+    .then(data => {
+      courseSelect.innerHTML = '<option value="">-- בחר קורס מהרשימה --</option>';
+      data.forEach(course => {
+        const option = document.createElement('option');
+        option.value = JSON.stringify(course);
+        option.textContent = `${course.type} | ${course.startDate} - ${course.endDate} | ${course.location} | ₪${course.price || ''}`;
+        courseSelect.appendChild(option);
+      });
+    })
+    .catch(err => {
+      console.error('שגיאה בטעינת הקורסים:', err);
+      courseSelect.innerHTML = '<option>שגיאה בטעינת הקורסים</option>';
+    });
 
-// טוען את הקורסים מה־Google Sheets
-async function loadCourses() {
-  const response = await fetch(SHEET_URL);
-  const data = await response.json();
-
-  const select = document.getElementById('course');
-  data.forEach(item => {
-    const option = document.createElement('option');
-    option.value = item.name;
-    option.textContent = `${item.name} - ${item.price} ₪`;
-    option.dataset.price = item.price;
-    select.appendChild(option);
+  courseSelect.addEventListener('change', () => {
+    try {
+      const selectedCourse = JSON.parse(courseSelect.value);
+      document.getElementById('startDate').value = selectedCourse.startDate || '';
+      document.getElementById('endDate').value = selectedCourse.endDate || '';
+      document.getElementById('location').value = selectedCourse.location || '';
+    } catch {
+      document.getElementById('startDate').value = '';
+      document.getElementById('endDate').value = '';
+      document.getElementById('location').value = '';
+    }
   });
-}
 
-loadCourses();
+  const form = document.getElementById('registrationForm');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
 
-// שליחת המשתמש לתשלום
-document.getElementById('registerForm').addEventListener('submit', (e) => {
-  e.preventDefault();
+    const selectedCourse = courseSelect.value ? JSON.parse(courseSelect.value) : null;
+    if(!selectedCourse){
+      alert('אנא בחר קורס');
+      return;
+    }
 
-  const name = encodeURIComponent(document.getElementById('name').value);
-  const email = encodeURIComponent(document.getElementById('email').value);
-  const courseSelect = document.getElementById('course');
-  const course = encodeURIComponent(courseSelect.value);
-  const price = encodeURIComponent(courseSelect.selectedOptions[0].dataset.price);
-  const date = encodeURIComponent(document.getElementById('startDate').value);
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
 
-  // יצירת קישור ליש חשבונית עם פרמטרים
-  const redirectUrl = encodeURIComponent(window.location.origin + '/1.html?name=' + name + '&email=' + email + '&course=' + course + '&date=' + date + '&price=' + price);
-  const paymentUrl = `${YESH_HASHBONIT_URL}?name=${name}&amount=${price}&redirect=${redirectUrl}`;
+    if(!name || !email || !phone){
+      alert('אנא מלא את כל השדות החובה');
+      return;
+    }
 
-  window.location.href = paymentUrl;
-});
-</script>
-
-</body>
-</html>
+    // יצירת כתובת URL ליש חשבונית עם פרטי קורס ושם
+    const invoiceUrl = `https://user.yeshinvoice.co.il/payment/7fa9075d-1b2a-43aa-8078-173c2ae9eb2c?name=${encodeURIComponent(name)}
