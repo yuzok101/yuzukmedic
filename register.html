@@ -122,7 +122,7 @@
       animation: fadeIn 1s ease forwards;
     }
     .error-message {
-      display: none;
+      display: false;
       margin-top: 15px;
       color: red;
       font-weight: 700;
@@ -162,13 +162,13 @@
     <h2>טופס הרשמה לקורס</h2>
 
     <label for="name">שם מלא <span style="color:red">*</span></label>
-    <input type="text" id="name" name="name" autocomplete="name" />
+    <input type="text" id="name" name="name" />
 
     <label for="phone">טלפון <span style="color:red">*</span></label>
-    <input type="tel" id="phone" name="phone" required pattern="[0-9+\-\s]{7,15}" placeholder="050-1234567" autocomplete="tel" />
+    <input type="tel" id="phone" name="phone" required pattern="[0-9+\-\s]{7,15}" placeholder="050-1234567" />
 
     <label for="email">אימייל <span style="color:red">*</span></label>
-    <input type="email" id="email" name="email" required placeholder="example@mail.com" autocomplete="email" />
+    <input type="email" id="email" name="email" required placeholder="example@mail.com" />
 
     <label for="courseSelect">בחר קורס</label>
     <select id="courseSelect" name="courseSelect" style="display:none;">
@@ -187,11 +187,8 @@
 
     <label for="paymentMethod">אופן תשלום</label>
     <select id="paymentMethod" name="paymentMethod" required>
-      <option value="" disabled selected>בחר אופן תשלום</option>
-      <option value="אשראי">אשראי</option>
-      <option value="מזומן">מזומן</option>
-      <option value="העברה בנקאית">העברה בנקאית</option>
-      <option value="ביט">ביט</option>
+      <option value="אשראי" selected>אשראי</option>
+      <!-- הסר את האפשרויות האחרות -->
     </select>
 
     <label for="notes">הערות</label>
@@ -250,7 +247,7 @@
       courseNameInput.style.display = 'none';
       courseSelect.style.display = 'block';
 
-      fetch('https://script.google.com/macros/s/AKfycbzX9DmUZ_Gekr62E9y1vLpoAaNcNbScqr0sD2dtG5X8wtGmj74r7i4kGRNdASwNBDOT/exec')
+      fetch('https://script.google.com/macros/s/AKfycbw13Ym4c0MLFGruTaq7WT08qoAqytQ5E66J6NiAs-H9muwnjkb1cvF2EgRUfdL2sr6UGQ/exec')
         .then(res => res.json())
         .then(data => {
           courseSelect.innerHTML = '<option value="">-- בחר קורס מהרשימה --</option>';
@@ -305,27 +302,36 @@
         startDate: form.startDate.value,
         endDate: form.endDate.value,
         location: form.location.value,
-        paymentMethod: form.paymentMethod.value,
+        paymentMethod: "אשראי",
         notes: form.notes.value.trim()
       };
 
-      // ולידציה על שדות חובה
       if (!data.email || !data.phone || !data.course) {
         submitBtn.disabled = false;
         planeIcon.style.display = 'none';
         btnText.textContent = "שלח הרשמה";
         errorMsg.textContent = "אנא מלא את כל השדות החובה: מייל, טלפון וקורס.";
         errorMsg.style.display = 'block';
-        thankyouMsg.style.display = 'none';
         return;
       }
 
+      // שליחה ל־EmailJS
       emailjs.send("service_45f1wyc", "template_18zogtj", data)
+        .then(() => {
+          // שליחה ל־Google Sheets
+          return fetch("https://script.google.com/macros/s/AKfycbw13Ym4c0MLFGruTaq7WT08qoAqytQ5E66J6NiAs-H9muwnjkb1cvF2EgRUfdL2sr6UGQ/exec", {
+            method: "POST",
+            body: JSON.stringify(data)
+          });
+        })
         .then(() => {
           submitBtn.disabled = false;
           planeIcon.style.display = 'none';
           btnText.textContent = "שלח הרשמה";
           thankyouMsg.style.display = 'block';
+
+          // הפנייה לדף תשלום באשראי
+          window.location.href = "https://app.yeshcheshbonit.co.il/paylink/YOUR_PAYMENT_PAGE";
         })
         .catch(() => {
           submitBtn.disabled = false;
@@ -337,15 +343,6 @@
     });
   });
 </script>
-
-<script>
-  nl_pos = "bl";
-  nl_color = "gray";
-  nl_compact = "1";
-  nl_accordion = "1";
-  nl_contact = "n:יוזוק מדיק|p:0533562608";
-</script>
-<script src="https://yuzok101.github.io/yuzukmedic/data/nagishli.js" charset="utf-8" defer></script>
 
 </body>
 </html>
