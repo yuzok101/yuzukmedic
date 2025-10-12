@@ -36,7 +36,7 @@
   <form id="registrationForm" autocomplete="off" spellcheck="false" novalidate>
     <h2>טופס הרשמה לקורס</h2>
 
-    <!-- סדר חדש -->
+    <!-- סדר השדות -->
     <label for="firstName">שם פרטי <span style="color:red">*</span></label>
     <input type="text" id="firstName" name="firstName" autocomplete="given-name" />
 
@@ -125,10 +125,7 @@ function redirectToInvoice(data) {
   const baseURL = 'https://user.yeshinvoice.co.il/payment/c24d17e2-fadf-4f5e-b232-00017476e1fe';
   const url = new URL(baseURL);
 
-  // כאן שם פרטי נשלח לשדה "שם" באתר התשלום
-  url.searchParams.set('שם', data.firstName || '');
-
-  ['lastName','idNumber','phone','email','city','birthYear','notes','course','startDate','endDate','location','paymentMethod','price']
+  ['name1','name','idNumber','city','phone','email','birthYear','notes','course','startDate','endDate','location','paymentMethod','price']
   .forEach(key => {
     url.searchParams.set(key, data[key] || '');
   });
@@ -203,9 +200,9 @@ document.addEventListener('DOMContentLoaded', () => {
     btnText.textContent = "מעביר לתשלום...";
 
     const data = {
-        firstName: form.firstName.value.trim(),
-        lastName: form.lastName.value.trim(),
-        idNumber: form.idNumber.value.trim(),
+        name1: form.firstName.value.trim(),   // שם פרטי
+        name: form.lastName.value.trim(),     // שם משפחה
+        idNumber: form.idNumber.value.trim(), // ת.ז
         phone: form.phone.value.trim(),
         email: form.email.value.trim(),
         city: form.city.value.trim(),
@@ -230,6 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    // שמירה ב-localStorage
     localStorage.setItem('registrationData', JSON.stringify(data));
 
     setTimeout(() => {
