@@ -25,6 +25,39 @@
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="yozok-style.css">
+
+  <style>
+.scroll-circle {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(5px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  animation: float 1.5s infinite alternate;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+.scroll-arrow {
+  width: 24px;
+  height: 24px;
+  fill: white;
+}
+
+@keyframes float {
+  0%   { transform: translateY(0) translateX(0); }
+  50%  { transform: translateY(-5px) translateX(5px); }
+  100% { transform: translateY(0) translateX(0); }
+}
+</style>
+
 </head>
 <body>
 
@@ -40,6 +73,14 @@
 <a href="courses.html" class="btn">להרשמה לקורס הקרוב</a>
 </div>
 </div>
+  
+  <!-- חץ בתוך עיגול מזוכך -->
+<div class="scroll-circle" onclick="window.scrollBy(0, window.innerHeight);">
+  <svg class="scroll-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <path d="M12 16.5l-6-6h12l-6 6z"/>
+  </svg>
+</div>
+
 </header>
 
 <nav class="main-nav">
@@ -104,5 +145,6 @@
 
 </body>
 </html>
+
 
 
