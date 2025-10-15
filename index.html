@@ -27,12 +27,24 @@
   <link rel="stylesheet" href="yozok-style.css">
 
   <style>
+/* טקסט מעל החץ */
+.scroll-text {
+  position: absolute;
+  bottom: 80px;       /* מעל החץ */
+  left: 40px;         /* קצת יותר ימינה */
+  color: white;
+  font-size: 1.4rem;  /* גדול יותר */
+  font-weight: bold;
+  text-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+/* החץ בתוך העיגול */
 .scroll-circle {
   position: absolute;
   bottom: 20px;
-  left: 20px;
-  width: 50px;
-  height: 50px;
+  left: 20px;           
+  width: 60px;          /* יותר גדול מהקודם */
+  height: 60px;
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(5px);
   border-radius: 50%;
@@ -46,8 +58,8 @@
 }
 
 .scroll-arrow {
-  width: 24px;
-  height: 24px;
+  width: 30px;   /* יותר גדול מהקודם */
+  height: 30px;
   fill: white;
 }
 
@@ -56,6 +68,7 @@
   50%  { transform: translateY(-5px) translateX(5px); }
   100% { transform: translateY(0) translateX(0); }
 }
+
 </style>
 
 </head>
@@ -73,13 +86,17 @@
 <a href="courses.html" class="btn">להרשמה לקורס הקרוב</a>
 </div>
 </div>
-  
+
+  <!-- טקסט מעל החץ -->
+<div class="scroll-text">לחצו כאן לגלילה</div>
+
   <!-- חץ בתוך עיגול מזוכך -->
-<div class="scroll-circle" onclick="window.scrollBy(0, window.innerHeight);">
+<div class="scroll-circle" onclick="scrollHalf();">
   <svg class="scroll-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
     <path d="M12 16.5l-6-6h12l-6 6z"/>
   </svg>
 </div>
+
 
 </header>
 
@@ -141,10 +158,20 @@
   </script>
   <script src="https://yuzok101.github.io/yuzukmedic/data/nagishli.js" charset="utf-8" defer></script>
 
+<script>
+function scrollHalf() {
+  window.scrollBy({
+    top: window.innerHeight / 2,  // חצי גובה המסך
+    left: 0,
+    behavior: 'smooth'            // גלילה חלקה
+  });
+}
+</script>
 
 
 </body>
 </html>
+
 
 
 
