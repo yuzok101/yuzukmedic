@@ -135,9 +135,20 @@ function redirectToInvoice(data) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+   
+   // החזרת צבע גבול רגיל בזמן שהמשתמש מקליד
+['firstName','lastName','idNumber','phone','email','courseSelect','paymentMethod'].forEach(id=>{
+    const el = document.getElementById(id);
+    el.addEventListener('input', ()=>{ 
+        el.style.borderColor = '#1c3b6b'; 
+    });
+});
+
+   
   const params = getQueryParams();
   const courseSelect = document.getElementById('courseSelect');
   const courseNameInput = document.getElementById('courseName');
+   
 
   if(params.type && params.startDate && params.endDate && params.location) {
     fillCourseFields(params);
@@ -225,13 +236,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const idRegex = /^[0-9]{5,10}$/;
     const yearRegex = /^(19|20)\d{2}$/;
 
-    if(!data.name1 || !data.name || !data.email || !data.phone || !data.course || !data.paymentMethod){
-        submitBtn.disabled = false;
-        btnText.textContent = "עבור לתשלום מאובטח";
-        errorMsg.textContent = "אנא מלא את כל השדות החובה: שם פרטי, שם משפחה, מייל, טלפון, קורס ואופן תשלום.";
-        errorMsg.style.display='block';
-        return;
+    // בדיקת שדות חובה והצגת צבע אדום רק לשדות החסרים
+let missingFields = [];
+if(!data.name1) missingFields.push('שם פרטי');
+if(!data.name) missingFields.push('שם משפחה');
+if(!data.idNumber) missingFields.push('ת.ז');
+if(!data.phone) missingFields.push('טלפון');
+if(!data.email) missingFields.push('מייל');
+if(!data.course) missingFields.push('קורס');
+if(!data.paymentMethod) missingFields.push('אופן תשלום');
+
+if(missingFields.length > 0){
+    submitBtn.disabled = false;
+    btnText.textContent = "עבור לתשלום מאובטח";
+    errorMsg.textContent = "אנא מלא את השדות החסרים: " + missingFields.join(', ') + ".";
+    errorMsg.style.display='block';
+    
+    if(!data.name1) document.getElementById('firstName').style.borderColor='red';
+    if(!data.name) document.getElementById('lastName').style.borderColor='red';
+    if(!data.idNumber) document.getElementById('idNumber').style.borderColor='red';
+    if(!data.phone) document.getElementById('phone').style.borderColor='red';
+    if(!data.email) document.getElementById('email').style.borderColor='red';
+    if(!data.course) {
+        document.getElementById('courseSelect').style.borderColor='red';
+        document.getElementById('courseName').style.borderColor='red';
     }
+    if(!data.paymentMethod) document.getElementById('paymentMethod').style.borderColor='red';
+
+    return;
+}
+
 
     if(!emailRegex.test(data.email)){
         submitBtn.disabled = false;
