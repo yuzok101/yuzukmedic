@@ -26,50 +26,67 @@
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="yozok-style.css">
 
-  <style>
-/* טקסט מעל החץ */
+<style>
+/* ========================================================
+   קונטיינר שמכיל את הטקסט מעל החץ והחץ עצמו
+   ======================================================== */
+.scroll-container {
+  position: absolute;       /* מיקום מוחלט ביחס למסך */
+  bottom: 20px;             /* מרחק מהתחתית של המסך */
+  left: 80px;               /* הזזה ימינה, ניתן לשנות לפי הצורך */
+  display: flex;            /* שימוש ב-flex כדי לסדר טקסט + חץ בעמודה */
+  flex-direction: column;   /* מיקום אנכי: טקסט מעל החץ */
+  align-items: center;      /* מרכז החץ ביחס לטקסט */
+}
+
+/* ========================================================
+   טקסט מעל החץ
+   ======================================================== */
 .scroll-text {
-  position: absolute;
-  bottom: 80px;       /* מעל החץ */
-  left: 40px;         /* קצת יותר ימינה */
-  color: white;
-  font-size: 1.4rem;  /* גדול יותר */
-  font-weight: bold;
-  text-shadow: 0 0 5px rgba(0,0,0,0.5);
+  font-size: 1.4rem;                   /* גודל הטקסט */
+  font-weight: bold;                    /* הדגשה */
+  color: white;                         /* צבע לבן */
+  text-shadow: 0 0 5px rgba(0,0,0,0.5);/* צל על הטקסט כדי שיהיה ברור על רקע */
+  margin-bottom: 8px;                   /* רווח בין הטקסט לחץ */
 }
 
-/* החץ בתוך העיגול */
+/* ========================================================
+   החץ בתוך עיגול מזוכך
+   ======================================================== */
 .scroll-circle {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;           
-  width: 60px;          /* יותר גדול מהקודם */
-  height: 60px;
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(5px);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  animation: float 1.5s infinite alternate;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  width: 60px;                          /* רוחב העיגול */
+  height: 60px;                         /* גובה העיגול */
+  background: rgba(255, 255, 255, 0.2); /* רקע חצי שקוף */
+  backdrop-filter: blur(5px);           /* אפקט זכוכית מטושטשת */
+  border-radius: 50%;                   /* עיגול מלא */
+  display: flex;                         /* כדי למרכז את החץ בתוך העיגול */
+  align-items: center;                  /* מיקום אנכי של החץ */
+  justify-content: center;              /* מיקום אופקי של החץ */
+  cursor: pointer;                      /* מצביע עכבר משתנה ללחיצה */
+  animation: float 1.5s infinite alternate; /* אנימציה קלה להקפצה של העיגול */
+  border: 1px solid rgba(255, 255, 255, 0.3); /* מסגרת שקופה */
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);     /* צל קל לעיגול */
 }
 
+/* ========================================================
+   החץ עצמו (SVG)
+   ======================================================== */
 .scroll-arrow {
-  width: 30px;   /* יותר גדול מהקודם */
-  height: 30px;
-  fill: white;
+  width: 30px;   /* רוחב החץ */
+  height: 30px;  /* גובה החץ */
+  fill: white;   /* צבע החץ */
 }
 
+/* ========================================================
+   אנימציה של "ציפה" קלה עבור העיגול
+   ======================================================== */
 @keyframes float {
-  0%   { transform: translateY(0) translateX(0); }
-  50%  { transform: translateY(-5px) translateX(5px); }
-  100% { transform: translateY(0) translateX(0); }
+  0%   { transform: translateY(0) translateX(0); }     /* מיקום התחלתי */
+  50%  { transform: translateY(-5px) translateX(5px); }/* קפיצה קלה למעלה ולימין */
+  100% { transform: translateY(0) translateX(0); }     /* חזרה למקום ההתחלתי */
 }
-
 </style>
+
 
 </head>
 <body>
@@ -87,15 +104,16 @@
 </div>
 </div>
 
-  <!-- טקסט מעל החץ -->
-<div class="scroll-text">לחצו כאן לגלילה</div>
-
-  <!-- חץ בתוך עיגול מזוכך -->
-<div class="scroll-circle" onclick="scrollHalf();">
-  <svg class="scroll-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-    <path d="M12 16.5l-6-6h12l-6 6z"/>
-  </svg>
+ <!-- טקסט וחץ בקונטיינר אחד -->
+<div class="scroll-container">
+  <div class="scroll-text">לחצו כאן לגלילה</div>
+  <div class="scroll-circle" onclick="scrollHalf();">
+    <svg class="scroll-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+      <path d="M12 16.5l-6-6h12l-6 6z"/>
+    </svg>
+  </div>
 </div>
+
 
 
 </header>
@@ -171,6 +189,7 @@ function scrollHalf() {
 
 </body>
 </html>
+
 
 
 
