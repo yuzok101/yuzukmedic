@@ -89,8 +89,7 @@
 
 
 </head>
-<body>
-<nav class="main-nav">
+<nav class="top-nav">
   <ul>
     <li><a href="index.html">ראשי</a></li>
     <li><a href="register.html">הרשמה</a></li>
@@ -99,6 +98,7 @@
     <li><a href="kesher.html">צור קשר</a></li>
   </ul>
 </nav>
+
 
 <a href="index.html" class="banner">
   <img src="logo.png" alt="הלוגו של יוז'וק">
@@ -196,9 +196,27 @@ function scrollHalf() {
 }
 </script>
 
+  <script>
+let lastScroll = 0;
+const topNav = document.querySelector('.top-nav');
+
+window.addEventListener('scroll', () => {
+  const currentScroll = window.pageYOffset;
+
+  if (currentScroll > lastScroll) {
+    topNav.style.transform = 'translateY(-100%)';
+  } else {
+    topNav.style.transform = 'translateY(0)';
+  }
+
+  lastScroll = currentScroll;
+});
+</script>
+
 
 </body>
 </html>
+
 
 
 
