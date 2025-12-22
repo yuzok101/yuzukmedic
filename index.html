@@ -108,7 +108,13 @@
 <div class="hero-overlay">
 <div class="hero-content">
 <h1>יוז'וק מדיק</h1>
-<p>לדעת, להציל חיים.</p>
+
+<p class="slogan">
+  לדעת,
+  <span class="red-line"></span>
+  להציל חיים.
+</p>
+
 <a href="courses.html" class="btn">להרשמה לקורס הקרוב</a>
 </div>
 </div>
@@ -213,9 +219,17 @@ window.addEventListener('scroll', () => {
 });
 </script>
 
+<script>
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.querySelector('.red-line')?.classList.add('show');
+    }, 2000);
+  });
+</script>
 
 </body>
 </html>
+
 
 
 
