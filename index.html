@@ -20,7 +20,7 @@
 
   <meta name="google-site-verification" content="google7e943e3c115acdef.html">
   <meta name="description" content="יוז'וק מדיק מציע קורסי עזרה ראשונה, החייאה וקורסים מצילי חיים לכל הגילאים.">
-  <meta name="keywords" content="יוז'וק, עזרה ראשונה, קורס החייאה, קורסים מד&quot;א, קורסים לציבור, חובשים, מדיק">
+  <meta name="keywords" content="יוז'וק, עזרה ראשונה, קורס החייאה, קורסים מד\"א, קורסים לציבור, חובשים, מדיק">
   <meta name="author" content="יוז'וק מדיק">
   <meta name="google-site-verification" content="aC-ePXwsjuaAo7geUG50htYCa0ObI1amQf3DIk9v_lU" />
   
@@ -139,13 +139,7 @@
   <main class="main-section">
     <section class="about">
       <h2>למה לבחור ביוז'וק מדיק?</h2>
-      <p>הקורסים שלנו מועברים באופן ייחודי ובהתאמה מלאה לאופי משתתפי הקורס, כל חניך בקורס מגיש עזרה ראשונה מקבל חוברת מיוחדת שעוצבה, נערכה ונכתבה במיוחדת ע''י פראמדיק מוסמך, שהנגיש את התכנים שיהיו מובנים לכל חניך.
-
-      במפגשים המעשיים, תחשפו לאופן הטיפול והגישה הנכונה והמקצועית למטופל הזקוק לסיוע, ע''מ להעשיר את הידע, נוספו לקורס תכנים שאינם ביסלבוס משרד הבריאות.
-
-      בוגרי קורסי יוז'וק מדיק לא נשארים לבד, הבוגרים מחוברים לפורום הבוגרים בפלטפורמות החברתיות השונות ויכולים להתייעץ בכל רגע נתון עם אחד ממדריכי הקורסים.
-
-      בנוסף הקמנו קו טלפוני מיוחד לבוגרי הקורסים שאינם חשופים למדיה שם נשלח מידי שבוע פודקאסט רפואי מפי פראמדיקים ובעלי מקצוע.
+      <p>הקורסים שלנו מועברים באופן ייחודי ובהתאמה מלאה לאופי משתתפי הקורס, כל חניך בקורס מגיש עזרה ראשונה מקבל ח�[...]>
       </p>
     </section>
 
@@ -215,10 +209,7 @@
 
 
 
-
-  
-
-<!-- כפתור צף לפתיחת הצ'אט -->
+  <!-- כפתור צף לפתיחת הצ'אט -->
 <button id="ai-chat-toggle" onclick="toggleChat()">🚑 צ'אט עזרה ראשונה</button>
 
 <!-- חלון הצ'אט -->
@@ -299,10 +290,6 @@
 </style>
 
 <script>
-  // המפתח מפתח ה-API מהצילום מסך שלך
-  const API_KEY = "AQ.Ab8RN6IAMdEwa3Ftuh_YgMHq6W8qcD0COLddgoOOuBHOmY64dg"; 
-
-  // הגדרת הידע של הבוט
   const SYSTEM_PROMPT = `אתה נציג שירות וירטואלי עבור האתר "קורסי עזרה ראשונה" (https://yuzok101.github.io/yuzukmedic/).
 תפקידך לענות על שאלות הגולשים, לתת מידע על הקורסים הקרובים ולהפנות אותם לעמודים הרלוונטיים באתר.
 
@@ -333,31 +320,21 @@
     const loadingMsg = appendMessage("חושב...", "bot");
 
     try {
-      // קישור מעודכן שמעביר את המפתח בפרמטר key ישירות
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(API_KEY)}`;
-
-      const response = await fetch(url, {
-        method: "POST",
-        headers: { 
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          contents: [
-            { role: "user", parts: [{ text: `${SYSTEM_PROMPT}\n\nשאלה של הגולש: ${text}` }] }
-          ]
-        })
+      // שלח את השאלה לפרוקסי בצד השרת במקום לשים מפתח ב-client
+      const resp = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, systemPrompt: SYSTEM_PROMPT })
       });
 
-      const data = await response.json();
-      
-      if (data.error) {
-        loadingMsg.innerText = "שגיאה: " + data.error.message;
-        console.error("API Error:", data.error);
-        return;
-      }
+      const json = await resp.json();
 
-      const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "מצטער, הייתה שגיאה בקבלת התשובה.";
-      loadingMsg.innerHTML = reply;
+      if (resp.ok && json.reply) {
+        loadingMsg.innerHTML = json.reply;
+      } else {
+        loadingMsg.innerText = "שגיאה בקבלת תשובה.";
+        console.error(json);
+      }
     } catch (err) {
       loadingMsg.innerText = "שגיאה בתקשורת עם השרת.";
       console.error(err);
@@ -378,8 +355,6 @@
     if (e.key === 'Enter') sendMessage();
   }
 </script>
-
-
 
 
   
