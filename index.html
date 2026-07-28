@@ -299,8 +299,8 @@
 </style>
 
 <script>
-  // מפתח ה-API מהצילום מסך שלך
-  const API_KEY = "AQ.Ab8RN6KKRhqWkV8dXdOCnDj9jHCSGf4VWiCwGwQo4FHPdBCPYg"; 
+  // המפתח מפתח ה-API מהצילום מסך שלך
+  const API_KEY = "AQ.Ab8RN6IAMdEwa3Ftuh_YgMHq6W8qcD0COLddgoOOuBHOmY64dg"; 
 
   // הגדרת הידע של הבוט
   const SYSTEM_PROMPT = `אתה נציג שירות וירטואלי עבור האתר "קורסי עזרה ראשונה" (https://yuzok101.github.io/yuzukmedic/).
@@ -333,12 +333,13 @@
     const loadingMsg = appendMessage("חושב...", "bot");
 
     try {
-      // שליחת המפתח ב-Header
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`, {
+      // קישור מעודכן שמעביר את המפתח בפרמטר key ישירות
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(API_KEY)}`;
+
+      const response = await fetch(url, {
         method: "POST",
         headers: { 
-          "Content-Type": "application/json",
-          "x-goog-api-key": API_KEY 
+          "Content-Type": "application/json"
         },
         body: JSON.stringify({
           contents: [
@@ -350,7 +351,7 @@
       const data = await response.json();
       
       if (data.error) {
-        loadingMsg.innerText = "שגיאת שרת: " + data.error.message;
+        loadingMsg.innerText = "שגיאה: " + data.error.message;
         console.error("API Error:", data.error);
         return;
       }
@@ -367,7 +368,7 @@
     const container = document.getElementById("chat-messages");
     const msgDiv = document.createElement("div");
     msgDiv.className = `msg ${sender}`;
-    msgDiv.innerHTML = text; // מאפשר תגיות HTML מהבוט
+    msgDiv.innerHTML = text;
     container.appendChild(msgDiv);
     container.scrollTop = container.scrollHeight;
     return msgDiv;
@@ -377,7 +378,6 @@
     if (e.key === 'Enter') sendMessage();
   }
 </script>
-
 
 
 
