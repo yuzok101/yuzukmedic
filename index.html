@@ -211,5 +211,168 @@
   });
   </script>
 
+
+
+
+
+
+  
+
+  <!-- כפתור צף לפתיחת הצ'אט -->
+<button id="ai-chat-toggle" onclick="toggleChat()">🚑 צ'אט עזרה ראשונה</button>
+
+<!-- חלון הצ'אט -->
+<div id="ai-chat-widget" style="display: none;">
+  <div id="chat-header">
+    <span>🤖 עוזר AI - קורסי עזרה ראשונה</span>
+    <button onclick="toggleChat()" style="background:none; border:none; color:white; font-size:16px; cursor:pointer;">✖</button>
+  </div>
+  <div id="chat-messages">
+    <div class="msg bot">שלום! אני העוזר הוירטואלי של קורסי עזרה ראשונה. איך אוכל לעזור לך היום?</div>
+  </div>
+  <div id="chat-input-area">
+    <input type="text" id="chat-input" placeholder="שאל על קורסים, תאריכים..." onkeypress="handleKeyPress(event)">
+    <button onclick="sendMessage()">שלח</button>
+  </div>
+</div>
+
+<style>
+  /* כפתור צף */
+  #ai-chat-toggle {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: #e63946;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    z-index: 9999;
+  }
+  /* חלון צ'אט */
+  #ai-chat-widget {
+    position: fixed;
+    bottom: 80px;
+    left: 20px;
+    width: 320px;
+    height: 430px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    font-family: Arial, sans-serif;
+    direction: rtl;
+    z-index: 9999;
+  }
+  #chat-header {
+    background: #e63946;
+    color: white;
+    padding: 12px;
+    font-weight: bold;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  #chat-messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+  }
+  .msg { margin-bottom: 10px; padding: 8px 12px; border-radius: 8px; max-width: 85%; line-height: 1.4; word-wrap: break-word; }
+  .user { background: #e3f2fd; align-self: flex-end; }
+  .bot { background: #f1f1f1; align-self: flex-start; }
+  .bot a { color: #e63946; font-weight: bold; text-decoration: underline; }
+  #chat-input-area { display: flex; padding: 10px; border-top: 1px solid #eee; }
+  #chat-input { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; outline: none; }
+  #chat-input-area button { background: #e63946; color: white; border: none; padding: 8px 12px; margin-right: 5px; border-radius: 4px; cursor: pointer; }
+</style>
+
+<script>
+  // 1. הדבק כאן את מפתח ה-API החדש שלך מ-Google AI Studio
+  const API_KEY = "AQ.Ab8RN6JuuJwan-EzPxy6BM_TURU2793JRG4lq3-M3UgNqQFqUQ"; 
+
+  // 2. הגדרת הידע של הבוט והקישורים באתר
+  const SYSTEM_PROMPT = `אתה נציג שירות וירטואלי עבור האתר "קורסי עזרה ראשונה" (https://yuzok101.github.io/yuzukmedic/).
+תפקידך לענות על שאלות הגולשים, לתת מידע על הקורסים הקרובים ולהפנות אותם לעמודים הרלוונטיים באתר.
+
+מידע על קורסים וקישורים באתר:
+- דף הבית והרשמה לקורסים: <a href="https://yuzok101.github.io/yuzukmedic/" target="_blank">לחץ כאן לצפייה בקורסים דף הבית</a>
+- קורסים זמינים: קורס מגישי עזרה ראשונה (84 שעות), קורס החייאה ורענונים תקופתיים.
+- קביעת תור/הרשמה/יצירת קשר: הפנה את הגולש ליצירת קשר או להרשמה בטופס באתר.
+
+הוראות להתנהגות:
+1. ענה תמיד באדיבות, בקצרה ובשפה ברורה.
+2. בכל תשובה שבה נדרשת הרשמה, צפייה בתאריכים או יצירת קשר - הוסף קישור מתאים בפורמט HTML.
+3. אם שואלים מתי הקורסים הקרובים, תענה שהתאריכים והמועדים מעודכנים בדף הבית והוסף קישור להרשמה.
+4. אם אינך יודע את התשובה, הפנה אותם להשארת פרטים בדף הבית.`;
+
+  function toggleChat() {
+    const chat = document.getElementById("ai-chat-widget");
+    chat.style.display = chat.style.display === "none" ? "flex" : "none";
+  }
+
+  async function sendMessage() {
+    const input = document.getElementById("chat-input");
+    const text = input.value.trim();
+    if (!text) return;
+
+    appendMessage(text, "user");
+    input.value = "";
+
+    const loadingMsg = appendMessage("חושב...", "bot");
+
+    try {
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [
+            { role: "user", parts: [{ text: `${SYSTEM_PROMPT}\n\nשאלה של הגולש: ${text}` }] }
+          ]
+        })
+      });
+
+      const data = await response.json();
+      const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "מצטער, הייתה שגיאה בקבלת התשובה.";
+      
+      loadingMsg.innerHTML = reply;
+    } catch (err) {
+      loadingMsg.innerText = "שגיאה בתקשורת עם השרת.";
+      console.error(err);
+    }
+  }
+
+  function appendMessage(text, sender) {
+    const container = document.getElementById("chat-messages");
+    const msgDiv = document.createElement("div");
+    msgDiv.className = `msg ${sender}`;
+    msgDiv.innerHTML = text;
+    container.appendChild(msgDiv);
+    container.scrollTop = container.scrollHeight;
+    return msgDiv;
+  }
+
+  function handleKeyPress(e) {
+    if (e.key === 'Enter') sendMessage();
+  }
+</script>
+
+
+
+
+
+  
+  
 </body>
 </html>
