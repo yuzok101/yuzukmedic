@@ -1,183 +1,181 @@
-
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-  <link rel="icon" type="image/png" href="images/logo.png">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>יוז'וק מדיק | קורסי עזרה ראשונה</title>
 
+  <!-- Favicon / הלוגו של האתר בתוצאות החיפוש ובכרטיסיית הדפדפן -->
+  <link rel="icon" type="image/png" href="images/logo.png">
+
+  <!-- Schema.org - סכמה עבור גוגל -->
   <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "url": "https://yuzok101.github.io/yuzukmedic/",
-  "logo": "https://yuzok101.github.io/yuzukmedic/images/logo.png"
-}
-</script>
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "url": "https://yuzok101.github.io/yuzukmedic/",
+    "logo": "https://yuzok101.github.io/yuzukmedic/images/logo.png"
+  }
+  </script>
 
   <meta name="google-site-verification" content="google7e943e3c115acdef.html">
   <meta name="description" content="יוז'וק מדיק מציע קורסי עזרה ראשונה, החייאה וקורסים מצילי חיים לכל הגילאים.">
-  <meta name="keywords" content="יוז'וק, עזרה ראשונה, קורס החייאה, קורסים מד"א, קורסים לציבור, חובשים, מדיק">
+  <meta name="keywords" content="יוז'וק, עזרה ראשונה, קורס החייאה, קורסים מד&quot;א, קורסים לציבור, חובשים, מדיק">
   <meta name="author" content="יוז'וק מדיק">
   <meta name="google-site-verification" content="aC-ePXwsjuaAo7geUG50htYCa0ObI1amQf3DIk9v_lU" />
- 
+  
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="yozok-style.css">
 
-<style>
-/* ========================================================
-   קונטיינר שמכיל את הטקסט מעל החץ והחץ עצמו
-   ======================================================== */
-.scroll-container {
-  position: absolute;       /* מיקום מוחלט ביחס למסך */
-  bottom: 20px;             /* מרחק מהתחתית של המסך */
-  left: 80px;               /* הזזה ימינה, ניתן לשנות לפי הצורך */
-  display: flex;            /* שימוש ב-flex כדי לסדר טקסט + חץ בעמודה */
-  flex-direction: column;   /* מיקום אנכי: טקסט מעל החץ */
-  align-items: center;      /* מרכז החץ ביחס לטקסט */
-}
+  <style>
+  /* ========================================================
+     קונטיינר שמכיל את הטקסט מעל החץ והחץ עצמו
+     ======================================================== */
+  .scroll-container {
+    position: absolute;       /* מיקום מוחלט ביחס למסך */
+    bottom: 20px;             /* מרחק מהתחתית של המסך */
+    left: 80px;               /* הזזה ימינה, ניתן לשנות לפי הצורך */
+    display: flex;            /* שימוש ב-flex כדי לסדר טקסט + חץ בעמודה */
+    flex-direction: column;   /* מיקום אנכי: טקסט מעל החץ */
+    align-items: center;      /* מרכז החץ ביחס לטקסט */
+  }
 
-/* ========================================================
-   טקסט מעל החץ
-   ======================================================== */
-.scroll-text {
-  font-size: 1.4rem;                   /* גודל הטקסט */
-  font-weight: bold;                    /* הדגשה */
-  color: white;                         /* צבע לבן */
-  text-shadow: 0 0 5px rgba(0,0,0,0.5);/* צל על הטקסט כדי שיהיה ברור על רקע */
-  margin-bottom: 8px;                   /* רווח בין הטקסט לחץ */
-}
+  /* ========================================================
+     טקסט מעל החץ
+     ======================================================== */
+  .scroll-text {
+    font-size: 1.4rem;                    /* גודל הטקסט */
+    font-weight: bold;                    /* הדגשה */
+    color: white;                         /* צבע לבן */
+    text-shadow: 0 0 5px rgba(0,0,0,0.5);/* צל על הטקסט כדי שיהיה ברור על רקע */
+    margin-bottom: 8px;                   /* רווח בין הטקסט לחץ */
+  }
 
-/* ========================================================
-   החץ בתוך עיגול מזוכך
-   ======================================================== */
-.scroll-circle {
-  width: 60px;                          /* רוחב העיגול */
-  height: 60px;                         /* גובה העיגול */
-  background: rgba(255, 255, 255, 0.2); /* רקע חצי שקוף */
-  backdrop-filter: blur(5px);           /* אפקט זכוכית מטושטשת */
-  border-radius: 50%;                   /* עיגול מלא */
-  display: flex;                         /* כדי למרכז את החץ בתוך העיגול */
-  align-items: center;                  /* מיקום אנכי של החץ */
-  justify-content: center;              /* מיקום אופקי של החץ */
-  cursor: pointer;                      /* מצביע עכבר משתנה ללחיצה */
-  animation: float 1.5s infinite alternate; /* אנימציה קלה להקפצה של העיגול */
-  border: 1px solid rgba(255, 255, 255, 0.3); /* מסגרת שקופה */
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);     /* צל קל לעיגול */
-}
+  /* ========================================================
+     החץ בתוך עיגול מזוכך
+     ======================================================== */
+  .scroll-circle {
+    width: 60px;                          /* רוחב העיגול */
+    height: 60px;                         /* גובה העיגול */
+    background: rgba(255, 255, 255, 0.2); /* רקע חצי שקוף */
+    backdrop-filter: blur(5px);           /* אפקט זכוכית מטושטשת */
+    border-radius: 50%;                   /* עיגול מלא */
+    display: flex;                         /* כדי למרכז את החץ בתוך העיגול */
+    align-items: center;                  /* מיקום אנכי של החץ */
+    justify-content: center;              /* מיקום אופקי של החץ */
+    cursor: pointer;                      /* מצביע עכבר משתנה ללחיצה */
+    animation: float 1.5s infinite alternate; /* אנימציה קלה להקפצה של העיגול */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* מסגרת שקופה */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);     /* צל קל לעיגול */
+  }
 
-/* ========================================================
-   החץ עצמו (SVG)
-   ======================================================== */
-.scroll-arrow {
-  width: 30px;   /* רוחב החץ */
-  height: 30px;  /* גובה החץ */
-  fill: white;   /* צבע החץ */
-}
+  /* ========================================================
+     החץ עצמו (SVG)
+     ======================================================== */
+  .scroll-arrow {
+    width: 30px;   /* רוחב החץ */
+    height: 30px;  /* גובה החץ */
+    fill: white;   /* צבע החץ */
+  }
 
-/* ========================================================
-   אנימציה של "ציפה" קלה עבור העיגול
-   ======================================================== */
-@keyframes float {
-  0%   { transform: translateY(0) translateX(0); }     /* מיקום התחלתי */
-  50%  { transform: translateY(-5px) translateX(5px); }/* קפיצה קלה למעלה ולימין */
-  100% { transform: translateY(0) translateX(0); }     /* חזרה למקום ההתחלתי */
-}
-</style>
-
-
+  /* ========================================================
+     אנימציה של "ציפה" קלה עבור העיגול
+     ======================================================== */
+  @keyframes float {
+    0%   { transform: translateY(0) translateX(0); }     /* מיקום התחלתי */
+    50%  { transform: translateY(-5px) translateX(5px); }/* קפיצה קלה למעלה ולימין */
+    100% { transform: translateY(0) translateX(0); }     /* חזרה למקום ההתחלתי */
+  }
+  </style>
 </head>
-<nav class="top-nav">
-  <ul>
-    <li><a href="index.html">ראשי</a></li>
-    <li><a href="register.html">הרשמה</a></li>
-    <li><a href="courses.html">קורסים קרובים</a></li>
-    <li><a href="https://yuzok101.github.io/limud/login1.html">איזור אישי</a></li>
-    <li><a href="kesher.html">צור קשר</a></li>
-  </ul>
-</nav>
 
+<body>
 
-<a href="index.html" class="banner">
-  <img src="logo.png" alt="הלוגו של יוז'וק">
-</a>
+  <nav class="top-nav">
+    <ul>
+      <li><a href="index.html">ראשי</a></li>
+      <li><a href="register.html">הרשמה</a></li>
+      <li><a href="courses.html">קורסים קרובים</a></li>
+      <li><a href="https://yuzok101.github.io/limud/login1.html">איזור אישי</a></li>
+      <li><a href="kesher.html">צור קשר</a></li>
+    </ul>
+  </nav>
 
-<header class="hero">
-<div class="hero-overlay">
-<div class="hero-content">
-<h1>יוז'וק מדיק</h1>
-<p>לדעת, להציל חיים.</p>
-<a href="courses.html" class="btn">להרשמה לקורס הקרוב</a>
-</div>
-</div>
+  <a href="index.html" class="banner">
+    <img src="images/logo.png" alt="הלוגו של יוז'וק">
+  </a>
 
- <!-- טקסט וחץ בקונטיינר אחד -->
-<div class="scroll-container">
-  <div class="scroll-text">לחצו כאן לגלילה</div>
-  <div class="scroll-circle" onclick="scrollHalf();">
-    <svg class="scroll-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-      <path d="M12 16.5l-6-6h12l-6 6z"/>
-    </svg>
-  </div>
-</div>
+  <header class="hero">
+    <div class="hero-overlay">
+      <div class="hero-content">
+        <h1>יוז'וק מדיק</h1>
+        <p>לדעת, להציל חיים.</p>
+        <a href="courses.html" class="btn">להרשמה לקורס הקרוב</a>
+      </div>
+    </div>
 
+    <!-- טקסט וחץ בקונטיינר אחד -->
+    <div class="scroll-container">
+      <div class="scroll-text">לחצו כאן לגלילה</div>
+      <div class="scroll-circle" onclick="scrollHalf();">
+        <svg class="scroll-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M12 16.5l-6-6h12l-6 6z"/>
+        </svg>
+      </div>
+    </div>
+  </header>
 
+  <nav class="main-nav">
+    <ul>
+      <li><a href="index.html">ראשי</a></li>
+      <li><a href="register.html">הרשמה</a></li>
+      <li><a href="courses.html">קורסים קרובים</a></li>
+      <li><a href="https://yuzok101.github.io/limud/login1.html">איזור אישי</a></li>
+      <li><a href="kesher.html">צור קשר</a></li>
+    </ul>
+  </nav>
 
-</header>
+  <main class="main-section">
+    <section class="about">
+      <h2>למה לבחור ביוז'וק מדיק?</h2>
+      <p>הקורסים שלנו מועברים באופן ייחודי ובהתאמה מלאה לאופי משתתפי הקורס, כל חניך בקורס מגיש עזרה ראשונה מקבל חוברת מיוחדת שעוצבה, נערכה ונכתבה במיוחדת ע''י פראמדיק מוסמך, שהנגיש את התכנים שיהיו מובנים לכל חניך.
 
-<nav class="main-nav">
-<ul>
-<li><a href="index.html">ראשי</a></li>
-<li><a href="register.html">הרשמה</a></li>
-<li><a href="courses.html">קורסים קרובים</a></li>
- <li><a href="https://yuzok101.github.io/limud/login1.html">איזור אישי</a></li>
-<li><a href="kesher.html">צור קשר</a></li>
-</ul>
-</nav>
+      במפגשים המעשיים, תחשפו לאופן הטיפול והגישה הנכונה והמקצועית למטופל הזקוק לסיוע, ע''מ להעשיר את הידע, נוספו לקורס תכנים שאינם ביסלבוס משרד הבריאות.
 
-<main class="main-section">
-<section class="about">
-<h2>למה לבחור ביוז'וק מדיק?</h2>
-<p>הקורסים שלנו מועברים באופן ייחודי ובהתאמה מלאה לאופי משתתפי הקורס, כל חניך בקורס מגיש עזרה ראשונה מקבל חוברת מיוחדת שעוצבה, נערכה ונכתבה במיוחדת ע''י פראמדיק מוסמך, שהנגיש את התכנים שיהיו מובנים לכל חניך.
+      בוגרי קורסי יוז'וק מדיק לא נשארים לבד, הבוגרים מחוברים לפורום הבוגרים בפלטפורמות החברתיות השונות ויכולים להתייעץ בכל רגע נתון עם אחד ממדריכי הקורסים.
 
-במפגשים המעשיים, תחשפו לאופן הטיפול והגישה הנכונה והמקצועית למטופל הזקוק לסיוע, ע''מ להעשיר את הידע, נוספו לקורס תכנים שאינם ביסלבוס משרד הבריאות.
+      בנוסף הקמנו קו טלפוני מיוחד לבוגרי הקורסים שאינם חשופים למדיה שם נשלח מידי שבוע פודקאסט רפואי מפי פראמדיקים ובעלי מקצוע.
+      </p>
+    </section>
 
-בוגרי קורסי יוז'וק מדיק לא נשארים לבד, הבוגרים מחוברים לפורום הבוגרים בפלטפורמות החברתיות השונות ויכולים להתייעץ בכל רגע נתון עם אחד ממדריכי הקורסים.
+    <section class="features">
+      <div class="feature-box">
+        <h3>מקצועיות</h3>
+        <p>לא מתפשרים על רף הגבוה של ההדרכה ומסננים מדריכים כדי להעביר קורס מקצועי ככל הניתן.</p>
+      </div>
+      <div class="feature-box">
+        <h3>קהילתיות</h3>
+        <p>שמירה על קשר עם בוגרי הקורסים וקבוצות מידע והעשרות רפואיות.</p>
+      </div>
+      <div class="feature-box">
+        <h3>נגישות</h3>
+        <p>כל קבוצת חניכים לפי האופי שלה ובהתאמה למגזר.</p>
+      </div>
+    </section>
+  </main>
 
-בנוסף הקמנו קו טלפוני מיוחד לבוגרי הקורסים שאינם חשופים למדיה שם נשלח מידי שבוע פודקאסט רפואי מפי פראמדיקים ובעלי מקצוע.
-</p>
-</section>
+  <section class="cta-banner">
+    <h2>מוכן להציל חיים?</h2>
+    <p>הצטרף לקורסי העזרה הראשונה שלנו עכשיו!</p>
+    <a href="courses.html" class="cta-button">להרשמה לקורס</a>
+  </section>
 
-<section class="features">
-<div class="feature-box">
-<h3>מקצועיות</h3>
-<p>לא מתפשרים על רף הגבוה של ההדרכה ומסננים מדריכים כדי להעביר קורס מקצועי ככל הניתן.
-</p>
-</div>
-<div class="feature-box">
-<h3>קהילתיות</h3>
-<p>שמירה על קשר עם בוגרי הקורסים וקבוצות מידע והעשרות רפואיות.</p>
-</div>
-<div class="feature-box">
-<h3>נגישות</h3>
-<p>כל קבוצת חניכים לפי האופי שלה ובהתאמה למגזר.</p>
-</div>
-</section>
-</main>
+  <footer>
+    <p>&copy; 2025 יוזו'ק מדיק - כל הזכויות שמורות</p>
+  </footer>
 
-<section class="cta-banner">
-  <h2>מוכן להציל חיים?</h2>
-  <p>הצטרף לקורסי העזרה הראשונה שלנו עכשיו!</p>
-  <a href="courses.html" class="cta-button">להרשמה לקורס</a>
-</section>
-
-<footer>
-<p>&copy; 2025 יוזו'ק מדיק - כל הזכויות שמורות</p>
-</footer>
-
- <script>
+  <script>
     nl_pos = "bl";
     nl_color = "gray";
     nl_compact = "1";
@@ -186,41 +184,32 @@
   </script>
   <script src="https://yuzok101.github.io/yuzukmedic/data/nagishli.js" charset="utf-8" defer></script>
 
-<script>
-function scrollHalf() {
-  window.scrollBy({
-    top: window.innerHeight / 2,  // חצי גובה המסך
-    left: 0,
-    behavior: 'smooth'            // גלילה חלקה
-  });
-}
-</script>
+  <script>
+  function scrollHalf() {
+    window.scrollBy({
+      top: window.innerHeight / 2,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }
+  </script>
 
   <script>
-let lastScroll = 0;
-const topNav = document.querySelector('.top-nav');
+  let lastScroll = 0;
+  const topNav = document.querySelector('.top-nav');
 
-window.addEventListener('scroll', () => {
-  const currentScroll = window.pageYOffset;
+  window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset;
 
-  if (currentScroll > lastScroll) {
-    topNav.style.transform = 'translateY(-100%)';
-  } else {
-    topNav.style.transform = 'translateY(0)';
-  }
+    if (currentScroll > lastScroll) {
+      topNav.style.transform = 'translateY(-100%)';
+    } else {
+      topNav.style.transform = 'translateY(0)';
+    }
 
-  lastScroll = currentScroll;
-});
-</script>
-
+    lastScroll = currentScroll;
+  });
+  </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
