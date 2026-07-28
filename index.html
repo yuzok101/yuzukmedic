@@ -218,7 +218,7 @@
 
   
 
-  <!-- כפתור צף לפתיחת הצ'אט -->
+<!-- כפתור צף לפתיחת הצ'אט -->
 <button id="ai-chat-toggle" onclick="toggleChat()">🚑 צ'אט עזרה ראשונה</button>
 
 <!-- חלון הצ'אט -->
@@ -237,7 +237,7 @@
 </div>
 
 <style>
-  /* כפתור צף */
+  /* עיצוב כפתור צף */
   #ai-chat-toggle {
     position: fixed;
     bottom: 20px;
@@ -253,7 +253,7 @@
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     z-index: 9999;
   }
-  /* חלון צ'אט */
+  /* עיצוב חלון הצ'אט */
   #ai-chat-widget {
     position: fixed;
     bottom: 80px;
@@ -299,15 +299,15 @@
 </style>
 
 <script>
-  // 1. הדבק כאן את מפתח ה-API החדש שלך מ-Google AI Studio
-  const API_KEY = "AQ.Ab8RN6JH7E6UbnpzvU50fU-3MDkeDtB_qml_5EtSf4hXV_aIyA"; 
+  // מפתח ה-API מהצילום מסך שלך
+  const API_KEY = "AQ.Ab8RN6KKRhqWkV8dXdOCnDj9jHCSGf4VWiCwGwQo4FHPdBCPYg"; 
 
-  // 2. הגדרת הידע של הבוט והקישורים באתר
+  // הגדרת הידע של הבוט
   const SYSTEM_PROMPT = `אתה נציג שירות וירטואלי עבור האתר "קורסי עזרה ראשונה" (https://yuzok101.github.io/yuzukmedic/).
 תפקידך לענות על שאלות הגולשים, לתת מידע על הקורסים הקרובים ולהפנות אותם לעמודים הרלוונטיים באתר.
 
 מידע על קורסים וקישורים באתר:
-- דף הבית והרשמה לקורסים: <a href="https://yuzok101.github.io/yuzukmedic/" target="_blank">לחץ כאן לצפייה בקורסים דף הבית</a>
+- דף הבית והרשמה לקורסים: <a href="https://yuzok101.github.io/yuzukmedic/" target="_blank">לחץ כאן לצפייה בקורסים בדף הבית</a>
 - קורסים זמינים: קורס מגישי עזרה ראשונה (84 שעות), קורס החייאה ורענונים תקופתיים.
 - קביעת תור/הרשמה/יצירת קשר: הפנה את הגולש ליצירת קשר או להרשמה בטופס באתר.
 
@@ -333,9 +333,13 @@
     const loadingMsg = appendMessage("חושב...", "bot");
 
     try {
-      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`, {
+      // שליחת המפתח ב-Header
+      const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "x-goog-api-key": API_KEY 
+        },
         body: JSON.stringify({
           contents: [
             { role: "user", parts: [{ text: `${SYSTEM_PROMPT}\n\nשאלה של הגולש: ${text}` }] }
@@ -344,8 +348,14 @@
       });
 
       const data = await response.json();
-      const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "מצטער, הייתה שגיאה בקבלת התשובה.";
       
+      if (data.error) {
+        loadingMsg.innerText = "שגיאת שרת: " + data.error.message;
+        console.error("API Error:", data.error);
+        return;
+      }
+
+      const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "מצטער, הייתה שגיאה בקבלת התשובה.";
       loadingMsg.innerHTML = reply;
     } catch (err) {
       loadingMsg.innerText = "שגיאה בתקשורת עם השרת.";
@@ -357,7 +367,7 @@
     const container = document.getElementById("chat-messages");
     const msgDiv = document.createElement("div");
     msgDiv.className = `msg ${sender}`;
-    msgDiv.innerHTML = text;
+    msgDiv.innerHTML = text; // מאפשר תגיות HTML מהבוט
     container.appendChild(msgDiv);
     container.scrollTop = container.scrollHeight;
     return msgDiv;
