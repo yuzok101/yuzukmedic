@@ -154,23 +154,12 @@ app.post("/api/generate", async (req, res) => {
 });
 
 
-// בדיקת המודלים הזמינים
-app.get("/models", async (req, res) => {
-  try {
-    const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(API_KEY)}`
-    );
+app.get("/", (req, res) => {
+  res.send("SERVER WORKING");
+});
 
-    const data = await response.json();
-    res.status(response.status).json(data);
-
-  } catch (err) {
-    console.error(err);
-
-    res.status(500).json({
-      error: err.message
-    });
-  }
+app.get("/models", (req, res) => {
+  res.send("MODELS ROUTE WORKS");
 });
 
 const PORT = process.env.PORT || 3000;
