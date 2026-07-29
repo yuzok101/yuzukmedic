@@ -113,6 +113,14 @@ app.get("/models", async (req, res) => {
   }
 });
 
+app.get("/keycheck", (req, res) => {
+  const key = process.env.GOOGLE_API_KEY || "";
+  res.json({
+    exists: !!key,
+    start: key.substring(0, 8),
+    end: key.substring(key.length - 6)
+  });
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`AI proxy server listening on ${PORT}`));
