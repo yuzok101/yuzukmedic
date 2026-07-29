@@ -53,34 +53,100 @@ const DEFAULT_SYSTEM_PROMPT = `אתה נציג שירות וירטואלי עב�
 3. אם שואלים מתי הקורסים הקרובים, תענה שהתאריכים והמועדים מעודכנים בדף הבית והוסף קישור להרשמה.
 4. אם אינך יודע את התשובה, הפנה אותם להשארת פרטים בדף הבית.`;
 
+// Preferred models to try (in order). gemini-2.5-flash preferred; fallbacks: 2.0, 1.5
+const MODEL_PREFERENCE = [
+  'gemini-2.5-flash',
+  'gemini-2.0-flash',
+  'gemini-1.5-flash'
+];
+
+async function callGenerateContent(model, apiKey, userText, systemPrompt) {
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
+  const body = {
+    contents: [
+      { role: "user", parts: [{ text: `${systemPrompt}\n\nשאלה של הגולש: ${userText}` }] }
+    ]
+  };
+
+  let gRes;
+  let data;
+  try {
+    gRes = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+  } catch (networkErr) {
+    // network-level error (DNS, timeout, etc.)
+    console.error(`Network error calling Google model ${model}:`, networkErr);
+    throw { type: 'network', model, error: networkErr };
+  }
+
+  try {
+    data = await gRes.json();
+  } catch (parseErr) {
+    console.error(`Failed to parse JSON from Google response for model ${model}. status=${gRes.status} ${gRes.statusText}`, parseErr);
+    throw { type: 'parse', model, status: gRes.status, statusText: gRes.statusText };
+  }
+
+  // Log full details (for debugging in server logs). Do NOT log API_KEY.
+  console.error("Google API call for model:", model, "HTTP status:", gRes.status, gRes.statusText);
+  console.error("Google API response body:", JSON.stringify(data));
+
+  return { gRes, data };
+}
+
 app.post("/api/generate", async (req, res) => {
   try {
     const userText = (req.body.text || "").toString();
     const systemPrompt = (req.body.systemPrompt || DEFAULT_SYSTEM_PROMPT).toString();
 
-    // Use the requested Gemini model endpoint (gemini-2.5-flash)
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(API_KEY)}`;
-    const body = {
-      contents: [
-        { role: "user", parts: [{ text: `${systemPrompt}\n\nשאלה של הגולש: ${userText}` }] }
-      ]
-    };
+    const attempts = [];
+    let finalReply = null;
+    let lastError = null;
 
-    const gRes = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    });
+    for (const model of MODEL_PREFERENCE) {
+      try {
+        const { gRes, data } = await callGenerateContent(model, API_KEY, userText, systemPrompt);
 
-    const data = await gRes.json();
-    if (!gRes.ok) {
-      console.error("Google API error:", data);
-      return res.status(502).json({ error: "Google API error", details: data });
+        if (!gRes.ok) {
+          // record attempt
+          attempts.push({ model, status: gRes.status, statusText: gRes.statusText, error: data?.error || data });
+
+          // If 404 specifically, try next model. For other statuses (403/429/etc.) still record and try next to allow fallbacks
+          lastError = { model, status: gRes.status, statusText: gRes.statusText, body: data };
+          continue; // try next model in preference list
+        }
+
+        // success path: extract reply
+        const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+                      data?.candidates?.[0]?.output ||
+                      // some responses might use data.output
+                      (Array.isArray(data?.output) ? data.output.map(o => o.content?.map(c=>c.text||'').join('\n')).join('\n') : null) ||
+                      '';
+
+        attempts.push({ model, status: gRes.status, statusText: gRes.statusText });
+        finalReply = reply;
+        break; // stop after first successful model
+
+      } catch (err) {
+        // network/parse level errors
+        console.error('Error while calling model', model, err);
+        attempts.push({ model, error: err });
+        lastError = err;
+        continue; // try next
+      }
     }
 
-    // extract reply - gemini generateContent returns candidates/content/parts text in existing code
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-    return res.json({ reply });
+    if (finalReply !== null) {
+      return res.json({ reply: finalReply, attempts });
+    }
+
+    // If we get here, all attempts failed
+    console.error('All model attempts failed:', attempts);
+    const clientMessage = lastError?.body?.error?.message || lastError?.error?.message || 'No usable response from Google Generative API';
+    return res.status(502).json({ error: 'Google API error', message: clientMessage, attempts });
+
   } catch (err) {
     console.error("Server error:", err);
     return res.status(500).json({ error: "Server error" });
