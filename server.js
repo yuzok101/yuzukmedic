@@ -94,11 +94,19 @@ app.get("/models", async (req, res) => {
     );
 
     const data = await response.json();
-    res.status(response.status).json(data);
+
+    if (data.models) {
+      const models = data.models.map(m => ({
+        name: m.name,
+        supportedGenerationMethods: m.supportedGenerationMethods
+      }));
+
+      return res.json(models);
+    }
+
+    return res.json(data);
 
   } catch (err) {
-    console.error(err);
-
     res.status(500).json({
       error: err.message
     });
