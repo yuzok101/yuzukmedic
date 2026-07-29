@@ -53,11 +53,11 @@ const DEFAULT_SYSTEM_PROMPT = `אתה נציג שירות וירטואלי עב�
 3. אם שואלים מתי הקורסים הקרובים, תענה שהתאריכים והמועדים מעודכנים בדף הבית והוסף קישור להרשמה.
 4. אם אינך יודע את התשובה, הפנה אותם להשארת פרטים בדף הבית.`;
 
-// Preferred models to try (in order). gemini-2.5-flash preferred; fallbacks: 2.0, 1.5
+// Updated preferred models to use -latest / pro names that are commonly available
 const MODEL_PREFERENCE = [
-  'gemini-2.5-flash',
-  'gemini-2.0-flash',
-  'gemini-1.5-flash'
+  'gemini-1.5-flash-latest',
+  'gemini-1.5-pro-latest',
+  'gemini-pro'
 ];
 
 async function callGenerateContent(model, apiKey, userText, systemPrompt) {
