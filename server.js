@@ -4,6 +4,7 @@ import helmet from "helmet";
 import cors from "cors";
 
 const app = express();
+console.log("SERVER VERSION 12345");
 app.set('trust proxy', true); // trust proxy (Render, Cloud Run) so express-rate-limit reads correct client IP
 app.use(helmet());
 app.use(express.json());
