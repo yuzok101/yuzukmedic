@@ -8,7 +8,7 @@
   <!-- Favicon / הלוגו של האתר בתוצאות החיפוש ובכרטיסיית הדפדפן -->
   <link rel="icon" type="image/png" href="images/logo.png">
 
-  <!-- Schema.org - סכמה עבור גוגל -->
+  <!-- Schema.org - סHEMA עבור גוגל -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -20,7 +20,7 @@
 
   <meta name="google-site-verification" content="google7e943e3c115acdef.html">
   <meta name="description" content="יוז'וק מדיק מציע קורסי עזרה ראשונה, החייאה וקורסים מצילי חיים לכל הגילאים.">
-  <meta name="keywords" content="יוז'וק, עזרה ראשונה, קורס החייאה, קורסים מד&quot;א, קורסים לציבור, חובשים, מדיק">
+  <meta name="keywords" content="יוז'וק, עזרה ראשונה, קורס החייאה, קורסים מד\"א, קורסים לציבור, חובשים, מדיק">
   <meta name="author" content="יוז'וק מדיק">
   <meta name="google-site-verification" content="aC-ePXwsjuaAo7geUG50htYCa0ObI1amQf3DIk9v_lU" />
   
@@ -139,13 +139,7 @@
   <main class="main-section">
     <section class="about">
       <h2>למה לבחור ביוז'וק מדיק?</h2>
-      <p>הקורסים שלנו מועברים באופן ייחודי ובהתאמה מלאה לאופי משתתפי הקורס, כל חניך בקורס מגיש עזרה ראשונה מקבל חוברת מיוחדת שעוצבה, נערכה ונכתבה במיוחדת ע''י פראמדיק מוסמך, שהנגיש את התכנים שיהיו מובנים לכל חניך.
-
-      במפגשים המעשיים, תחשפו לאופן הטיפול והגישה הנכונה והמקצועית למטופל הזקוק לסיוע, ע''מ להעשיר את הידע, נוספו לקורס תכנים שאינם ביסלבוס משרד הבריאות.
-
-      בוגרי קורסי יוז'וק מדיק לא נשארים לבד, הבוגרים מחוברים לפורום הבוגרים בפלטפורמות החברתיות השונות ויכולים להתייעץ בכל רגע נתון עם אחד ממדריכי הקורסים.
-
-      בנוסף הקמנו קו טלפוני מיוחד לבוגרי הקורסים שאינם חשופים למדיה שם נשלח מידי שבוע פודקאסט רפואי מפי פראמדיקים ובעלי מקצוע.
+      <p>הקורסים שלנו מועברים באופן ייחודי ובהתאמה מלאה לאופי משתתפי הקורס, כל חניך בקורס מגיש עזרה ראשונה מקב�[...]>
       </p>
     </section>
 
@@ -182,6 +176,8 @@
     nl_accordion = "1";
     nl_contact = "n:יוזוק מדיק|p:0533562608";
   </script>
+  <!-- Load jQuery first so nagishli.js doesn't inject its own copy -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJ+Y2h2bY6k2b8e1rQWvVbW4d5m3b9Z9fXh2I=" crossorigin="anonymous"></script>
   <script src="https://yuzok101.github.io/yuzukmedic/data/nagishli.js" charset="utf-8" defer></script>
 
   <script>
@@ -210,7 +206,6 @@
     lastScroll = currentScroll;
   });
   </script>
-
 
 
 
@@ -298,6 +293,18 @@
 </style>
 
 <script>
+  // Remove aria-hidden from option elements that would hide the accessibility tree
+  document.addEventListener('DOMContentLoaded', function() {
+    try {
+      document.querySelectorAll('option[aria-hidden="true"]').forEach(opt => {
+        opt.removeAttribute('aria-hidden');
+        console.warn('Removed aria-hidden from option to improve accessibility:', opt);
+      });
+    } catch (e) {
+      console.error('Error while sanitizing option aria-hidden attributes', e);
+    }
+  });
+
   // הגדרת הידע של הבוט
   const SYSTEM_PROMPT = `אתה נציג שירות וירטואלי עבור האתר "קורסי עזרה ראשונה" (https://yuzok101.github.io/yuzukmedic/).
 תפקידך לענות על שאלות הגולשים, לתת מידע על הקורסים הקרובים ולהפנות אותם לעמודים הרלוונטיים באתר.
