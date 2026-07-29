@@ -217,7 +217,6 @@
 
 
   
-
 <!-- כפתור צף לפתיחת הצ'אט -->
 <button id="ai-chat-toggle" onclick="toggleChat()">🚑 צ'אט עזרה ראשונה</button>
 
@@ -299,9 +298,6 @@
 </style>
 
 <script>
-  // המפתח מפתח ה-API מהצילום מסך שלך
-  const API_KEY = "AQ.Ab8RN6IAMdEwa3Ftuh_YgMHq6W8qcD0COLddgoOOuBHOmY64dg"; 
-
   // הגדרת הידע של הבוט
   const SYSTEM_PROMPT = `אתה נציג שירות וירטואלי עבור האתר "קורסי עזרה ראשונה" (https://yuzok101.github.io/yuzukmedic/).
 תפקידך לענות על שאלות הגולשים, לתת מידע על הקורסים הקרובים ולהפנות אותם לעמודים הרלוונטיים באתר.
@@ -333,31 +329,26 @@
     const loadingMsg = appendMessage("חושב...", "bot");
 
     try {
-      // קישור מעודכן שמעביר את המפתח בפרמטר key ישירות
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${encodeURIComponent(API_KEY)}`;
-
-      const response = await fetch(url, {
-        method: "POST",
-        headers: { 
-          "Content-Type": "application/json"
+      // קריאה לשרת ה-Proxy המאובטח שהעלית ל-Render
+      const resp = await fetch('https://yuzukmedic.onrender.com/api/generate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          contents: [
-            { role: "user", parts: [{ text: `${SYSTEM_PROMPT}\n\nשאלה של הגולש: ${text}` }] }
-          ]
+          text: text,
+          systemPrompt: SYSTEM_PROMPT
         })
       });
 
-      const data = await response.json();
-      
-      if (data.error) {
-        loadingMsg.innerText = "שגיאה: " + data.error.message;
-        console.error("API Error:", data.error);
-        return;
-      }
+      const json = await resp.json();
 
-      const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "מצטער, הייתה שגיאה בקבלת התשובה.";
-      loadingMsg.innerHTML = reply;
+      if (resp.ok && json.reply) {
+        loadingMsg.innerHTML = json.reply;
+      } else {
+        loadingMsg.innerText = "שגיאה בקבלת תשובה.";
+        console.error(json);
+      }
     } catch (err) {
       loadingMsg.innerText = "שגיאה בתקשורת עם השרת.";
       console.error(err);
