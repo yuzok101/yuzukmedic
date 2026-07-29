@@ -58,7 +58,7 @@ app.post("/api/generate", async (req, res) => {
     const userText = (req.body.text || "").toString();
     const systemPrompt = (req.body.systemPrompt || DEFAULT_SYSTEM_PROMPT).toString();
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(API_KEY)}`;
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${encodeURIComponent(API_KEY)}`;
     const body = {
       contents: [
         { role: "user", parts: [{ text: `${systemPrompt}\n\nשאלה של הגולש: ${userText}` }] }
