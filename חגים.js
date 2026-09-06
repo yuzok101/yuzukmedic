@@ -1,5 +1,5 @@
 (function() {
-    // 1. עיצוב ה-CSS לפופ-אפ מרשים עם אנימציית כניסה (Fade In & Zoom)
+    // 1. עיצוב ה-CSS לפופ-אפ מרשים עם אנימציית כניסה
     const style = document.createElement('style');
     style.innerHTML = `
         @keyframes popupOpen {
@@ -131,7 +131,7 @@
             { start: d(2030,12,13), end: d(2030,12,23), img: "חגים/chanukah.jpg" },
             { start: d(2030,4,11), end: d(2030,4,26), img: "חגים/pesach.jpg" },
             { start: d(2030,5,30), end: d(2030,6,7), img: "חגים/shavuot.jpg" },
-            { state: d(2030,6,30), end: d(2030,7,8), img: "חגים/tisha-beav.jpg" }
+            { start: d(2030,6,30), end: d(2030,7,8), img: "חגים/tisha-beav.jpg" }
         ];
 
         let activeImage = "";
@@ -144,11 +144,9 @@
         }
 
         if (activeImage) {
-            // יצירת שכבת הרקע הכהה והמעומעמת
             const overlay = document.createElement("div");
             overlay.className = "holiday-overlay";
 
-            // יצירת קופסת הפופ-אפ המרכזית עם אנימציה
             const modal = document.createElement("div");
             modal.className = "holiday-modal";
             modal.innerHTML = `
@@ -156,16 +154,12 @@
                 <button class="close-btn" title="סגור">✕</button>
             `;
 
-            // פונקציית סגירה שמסירה גם את הפופ-אפ וגם את הרקע
             const closePopup = function() {
                 overlay.remove();
                 modal.remove();
             };
 
-            // סגירה בלחיצה על כפתור ה-X
             modal.querySelector(".close-btn").addEventListener("click", closePopup);
-            
-            // סגירה גם בלחיצה על הרקע הכהה מסביב לתמונה
             overlay.addEventListener("click", closePopup);
 
             document.body.appendChild(overlay);
