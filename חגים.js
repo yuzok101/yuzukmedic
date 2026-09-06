@@ -132,8 +132,6 @@
             { start: d(2030,4,11), end: d(2030,4,26), img: "חגים/pesach.jpg" },
             { start: d(2030,5,30), end: d(2030,6,7), img: "חגים/shavuot.jpg" },
             { state: d(2030,6,30), end: d(2030,7,8), img: "חגים/tisha-beav.jpg" }
-            
-         
         ];
 
         let activeImage = "";
