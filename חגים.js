@@ -48,81 +48,85 @@
     `;
     document.head.appendChild(style);
 
-    // 2. מילון התאמה בין שמות החגים של Hebcal לקבצי התמונות שלך בתיקייה "חגים"
-    const holidayImages = {
-        "Rosh Hashana": "חגים/rosh-hashana.jpg",
-        "Yom Kippur": "חגים/kippur.jpg",
-        "Sukkot": "חגים/sukkot.jpg",
-        "Shmini Atzeret": "חגים/sukkot.jpg", // נכלל בחגי סוכות
-        "Chanukah": "חגים/chanukah.jpg",
-        "Pesach": "חגים/pesach.jpg",
-        "Shavuot": "חגים/shavuot.jpg",
-        "Tish'a B'Av": "חגים/tisha-beav.jpg"
-    };
-
-    // 3. פנייה לשרת Hebcal לקבלת לוח החגים השנתי המעודכן
-    document.addEventListener("DOMContentLoaded", function() {
+    function initBanner() {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        
-        const year = today.getFullYear();
-        
-        // שליפת אירועים לטווחי החודשים הנוכחיים מה-API של Hebcal
-        fetch(`https://www.hebcal.com/hebcal?v=1&cfg=json&year=${year}&month=x&geonameid=281184` /* 281184 = ירושלים / ישראל */)
-            .then(response => response.json())
-            .then(data => {
-                if (!data || !data.items) return;
 
-                let activeImage = "";
+        function d(y, m, day) {
+            return new Date(y, m - 1, day);
+        }
 
-                data.items.forEach(item => {
-                    if (holidayImages[item.title] || Object.keys(holidayImages).some(h => item.title.includes(h))) {
-                        const holidayDate = new Date(item.date);
-                        holidayDate.setHours(0, 0, 0, 0);
+        // טבלת טווחי תאריכים לכל החגים לשנים הקרובות (כולל שבוע לפני / כל משך החג בסוכות ופסח)
+        const holidays = [
+            // --- שנת 2026 ---
+            { start: d(2026,9,5), end: d(2026,9,13), img: "חגים/rosh-hashana.jpg" }, // ראש השנה
+            { start: d(2026,9,14), end: d(2026,9,22), img: "חגים/kippur.jpg" },     // יום כיפור
+            { start: d(2026,9,24), end: d(2026,10,5), img: "חגים/sukkot.jpg" },    // סוכות
+            { start: d(2026,12,2), end: d(2026,12,12), img: "חגים/chanukah.jpg" }, // חנוכה
+            { start: d(2026,3,25), end: d(2026,4,9), img: "חגים/pesach.jpg" },     // פסח
+            { start: d(2026,5,14), end: d(2026,5,22), img: "חגים/shavuot.jpg" },   // שבועות
+            { start: d(2026,7,14), end: d(2026,7,22), img: "חגים/tisha-beav.jpg" }, // תשעה באב
 
-                        // הגדרת טווח הצגה לפי סוג החג שביקשת
-                        let daysBefore = 7; // ברירת מחדל שבוע לפני
-                        let isMultiDay = false;
+            // --- שנת 2027 ---
+            { start: d(2027,9,24), end: d(2027,10,3), img: "חגים/rosh-hashana.jpg" },
+            { start: d(2027,10,4), end: d(2027,10,12), img: "חגים/kippur.jpg" },
+            { start: d(2027,10,14), end: d(2027,10,25), img: "חגים/sukkot.jpg" },
+            { start: d(2027,12,17), end: d(2027,12,27), img: "חגים/chanukah.jpg" },
+            { start: d(2027,4,14), end: d(2027,4,29), img: "חגים/pesach.jpg" },
+            { start: d(2027,6,3), end: d(2027,6,11), img: "חגים/shavuot.jpg" },
+            { start: d(2027,7,4), end: d(2027,7,12), img: "חגים/tisha-beav.jpg" },
 
-                        if (item.title.includes("Sukkot") || item.title.includes("Pesach")) {
-                            daysBefore = item.title.includes("Sukkot") ? 3 : 7;
-                            isMultiDay = true; // כל משך החג
-                        }
+            // --- שנת 2028 ---
+            { start: d(2028,9,13), end: d(2028,9,22), img: "חגים/rosh-hashana.jpg" },
+            { start: d(2028,9,23), end: d(2028,10,1), img: "חגים/kippur.jpg" },
+            { start: d(2028,10,3), end: d(2028,10,14), img: "חגים/sukkot.jpg" },
+            { start: d(2028,12,5), end: d(2028,12,15), img: "חגים/chanukah.jpg" },
+            { start: d(2028,4,2), end: d(2028,4,17), img: "חגים/pesach.jpg" },
+            { start: d(2028,5,22), end: d(2028,5,30), img: "חגים/shavuot.jpg" },
+            { start: d(2028,7,22), end: d(2028,7,30), img: "חגים/tisha-beav.jpg" },
 
-                        // חישוב תאריך התחלה ותאריך סיום לבאנר
-                        let startDate = new Date(holidayDate);
-                        startDate.setDate(startDate.getDate() - daysBefore);
+            // --- שנת 2029 ---
+            { start: d(2029,9,2), end: d(2029,9,11), img: "חגים/rosh-hashana.jpg" },
+            { start: d(2029,9,12), end: d(2029,9,20), img: "חגים/kippur.jpg" },
+            { start: d(2029,9,22), end: d(2029,10,3), img: "חגים/sukkot.jpg" },
+            { start: d(2029,11,24), end: d(2029,12,4), img: "חגים/chanukah.jpg" },
+            { start: d(2029,3,22), end: d(2029,4,6), img: "חגים/pesach.jpg" },
+            { start: d(2029,5,11), end: d(2029,5,19), img: "חגים/shavuot.jpg" },
+            { start: d(2029,7,11), end: d(2029,7,19), img: "חגים/tisha-beav.jpg" },
 
-                        let endDate = new Date(holidayDate);
-                        if (isMultiDay) {
-                            // הוספת משך ימי החג (סוכות/פסח נמשכים כ-7-8 ימים)
-                            endDate.setDate(endDate.getDate() + (item.title.includes("Sukkot") ? 7 : 7));
-                        }
+            // --- שנת 2030 ---
+            { start: d(2030,9,20), end: d(2030,9,29), img: "חגים/rosh-hashana.jpg" },
+            { start: d(2030,9,30), end: d(2030,10,8), img: "חגים/kippur.jpg" },
+            { start: d(2030,10,10), end: d(2030,10,21), img: "חגים/sukkot.jpg" },
+            { start: d(2030,12,13), end: d(2030,12,23), img: "חגים/chanukah.jpg" },
+            { start: d(2030,4,11), end: d(2030,4,26), img: "חגים/pesach.jpg" },
+            { start: d(2030,5,30), end: d(2030,6,7), img: "חגים/shavuot.jpg" },
+            { start: d(2030,6,30), end: d(2030,7,8), img: "חגים/tisha-beav.jpg" }
+        ];
 
-                        // בדיקה האם היום נמצא בטווח
-                        if (today >= startDate && today <= endDate) {
-                            // מציאת התמונה המתאימה מתוך המילון
-                            for (let key in holidayImages) {
-                                if (item.title.includes(key)) {
-                                    activeImage = holidayImages[key];
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                });
+        let activeImage = "";
 
-                // אם נמצא חג פעיל בתאריך הנוכחי - הצג את הבאנר
-                if (activeImage) {
-                    const banner = document.createElement("div");
-                    banner.className = "holiday-banner";
-                    banner.innerHTML = `
-                        <img src="${activeImage}" alt="חג שמח">
-                        <button class="close-btn" onclick="this.parentElement.remove()" title="סגור">✕</button>
-                    `;
-                    document.body.prepend(banner);
-                }
-            })
-            .catch(err => console.log("Holiday banner error:", err));
-    });
+        for (let hol of holidays) {
+            if (today >= hol.start && today <= hol.end) {
+                activeImage = hol.img;
+                break;
+            }
+        }
+
+        if (activeImage) {
+            const banner = document.createElement("div");
+            banner.className = "holiday-banner";
+            banner.innerHTML = `
+                <img src="${activeImage}" alt="חג שמח" onerror="this.style.display='none'">
+                <button class="close-btn" onclick="this.parentElement.remove()" title="סגור">✕</button>
+            `;
+            document.body.prepend(banner);
+        }
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initBanner);
+    } else {
+        initBanner();
+    }
 })();
