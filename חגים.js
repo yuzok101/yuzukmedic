@@ -8,7 +8,7 @@
             left: 0;
             width: 100%;
             background-color: #1a365d;
-            color: #ffffff;
+            color: #ffffff; 
             text-align: center;
             padding: 15px 20px;
             z-index: 9999;
