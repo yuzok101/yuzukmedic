@@ -1,49 +1,79 @@
 (function() {
-    // 1. עיצוב ה-CSS לבאנר
+    // 1. עיצוב ה-CSS לפופ-אפ מרשים עם אנימציית כניסה (Fade In & Zoom)
     const style = document.createElement('style');
     style.innerHTML = `
-        .holiday-banner {
+        @keyframes popupOpen {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .holiday-overlay {
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            background-color: #1a365d;
-            color: #ffffff; 
-            text-align: center;
-            padding: 15px 20px;
-            z-index: 9999;
-            font-family: inherit;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 15px;
-            box-sizing: border-box;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.65);
+            z-index: 99998;
+            backdrop-filter: blur(3px);
         }
-        .holiday-banner img {
-            max-height: 45px;
-            border-radius: 4px;
-        }
-        .holiday-banner .close-btn {
-            position: absolute;
-            left: 15px;
+
+        .holiday-modal {
+            position: fixed;
             top: 50%;
-            transform: translateY(-50%);
-            background: transparent;
-            border: 1px solid #ffffff;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            z-index: 99999;
+            max-width: 90vw;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+            animation: popupOpen 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        .holiday-modal img {
+            max-width: 100%;
+            max-height: 75vh;
+            border-radius: 8px;
+            display: block;
+            object-fit: contain;
+        }
+
+        .holiday-modal .close-btn {
+            position: absolute;
+            top: -12px;
+            left: -12px;
+            background-color: #1a365d;
             color: #ffffff;
-            width: 28px;
-            height: 28px;
+            border: 2px solid #ffffff;
+            width: 36px;
+            height: 36px;
             cursor: pointer;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 18px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: background-color 0.2s, transform 0.2s;
         }
-        .holiday-banner .close-btn:hover {
-            background-color: rgba(255,255,255,0.2);
+
+        .holiday-modal .close-btn:hover {
+            background-color: #e53e3e;
+            transform: scale(1.1);
         }
     `;
     document.head.appendChild(style);
@@ -56,16 +86,16 @@
             return new Date(y, m - 1, day);
         }
 
-        // טבלת טווחי תאריכים לכל החגים לשנים הקרובות (כולל שבוע לפני / כל משך החג בסוכות ופסח)
+        // טבלת טווחי תאריכים ל-10 שנים הקרובות
         const holidays = [
             // --- שנת 2026 ---
-            { start: d(2026,9,5), end: d(2026,9,13), img: "חגים/rosh-hashana.jpg" }, // ראש השנה
-            { start: d(2026,9,14), end: d(2026,9,22), img: "חגים/kippur.jpg" },     // יום כיפור
-            { start: d(2026,9,24), end: d(2026,10,5), img: "חגים/sukkot.jpg" },    // סוכות
-            { start: d(2026,12,2), end: d(2026,12,12), img: "חגים/chanukah.jpg" }, // חנוכה
-            { start: d(2026,3,25), end: d(2026,4,9), img: "חגים/pesach.jpg" },     // פסח
-            { start: d(2026,5,14), end: d(2026,5,22), img: "חגים/shavuot.jpg" },   // שבועות
-            { start: d(2026,7,14), end: d(2026,7,22), img: "חגים/tisha-beav.jpg" }, // תשעה באב
+            { start: d(2026,9,5), end: d(2026,9,13), img: "חגים/rosh-hashana.jpg" },
+            { start: d(2026,9,14), end: d(2026,9,22), img: "חגים/kippur.jpg" },
+            { start: d(2026,9,24), end: d(2026,10,5), img: "חגים/sukkot.jpg" },
+            { start: d(2026,12,2), end: d(2026,12,12), img: "חגים/chanukah.jpg" },
+            { start: d(2026,3,25), end: d(2026,4,9), img: "חגים/pesach.jpg" },
+            { start: d(2026,5,14), end: d(2026,5,22), img: "חגים/shavuot.jpg" },
+            { start: d(2026,7,14), end: d(2026,7,22), img: "חגים/tisha-beav.jpg" },
 
             // --- שנת 2027 ---
             { start: d(2027,9,24), end: d(2027,10,3), img: "חגים/rosh-hashana.jpg" },
@@ -101,7 +131,7 @@
             { start: d(2030,12,13), end: d(2030,12,23), img: "חגים/chanukah.jpg" },
             { start: d(2030,4,11), end: d(2030,4,26), img: "חגים/pesach.jpg" },
             { start: d(2030,5,30), end: d(2030,6,7), img: "חגים/shavuot.jpg" },
-            { start: d(2030,6,30), end: d(2030,7,8), img: "חגים/tisha-beav.jpg" }
+            { state: d(2030,6,30), end: d(2030,7,8), img: "חגים/tisha-beav.jpg" }
         ];
 
         let activeImage = "";
@@ -114,13 +144,32 @@
         }
 
         if (activeImage) {
-            const banner = document.createElement("div");
-            banner.className = "holiday-banner";
-            banner.innerHTML = `
+            // יצירת שכבת הרקע הכהה והמעומעמת
+            const overlay = document.createElement("div");
+            overlay.className = "holiday-overlay";
+
+            // יצירת קופסת הפופ-אפ המרכזית עם אנימציה
+            const modal = document.createElement("div");
+            modal.className = "holiday-modal";
+            modal.innerHTML = `
                 <img src="${activeImage}" alt="חג שמח" onerror="this.style.display='none'">
-                <button class="close-btn" onclick="this.parentElement.remove()" title="סגור">✕</button>
+                <button class="close-btn" title="סגור">✕</button>
             `;
-            document.body.prepend(banner);
+
+            // פונקציית סגירה שמסירה גם את הפופ-אפ וגם את הרקע
+            const closePopup = function() {
+                overlay.remove();
+                modal.remove();
+            };
+
+            // סגירה בלחיצה על כפתור ה-X
+            modal.querySelector(".close-btn").addEventListener("click", closePopup);
+            
+            // סגירה גם בלחיצה על הרקע הכהה מסביב לתמונה
+            overlay.addEventListener("click", closePopup);
+
+            document.body.appendChild(overlay);
+            document.body.appendChild(modal);
         }
     }
 
